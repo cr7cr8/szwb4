@@ -50,10 +50,23 @@ app.prepare().then(
 
         express.get('/api', (req, res) => {
             res.send("api")
-        }) 
+        })
 
 
-        express.get(/(^\/$)|(^\/home$)/i,
+        // express.get(/(^\/$)|(^\/home$)/i,
+        //     function (req, res, next) {
+
+        //         if (!(req?.signedCookies?.userCookie?.userName)) {
+        //             app.render(req, res, "/LoginPage", {})
+        //         }
+        //         else {
+        //             //   console.log(req.signedCookies)
+
+        //             app.render(req, res, "/Home", {})
+        //         }
+        //     }
+        // )
+        express.get(/(^\/home$)/i,
             function (req, res, next) {
 
                 if (!(req?.signedCookies?.userCookie?.userName)) {
@@ -61,7 +74,7 @@ app.prepare().then(
                 }
                 else {
                     //   console.log(req.signedCookies)
-                 
+
                     app.render(req, res, "/Home", {})
                 }
             }

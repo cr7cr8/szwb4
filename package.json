@@ -22,11 +22,16 @@
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "draft-js": "^0.11.7",
+    "draft-js-export-html": "^1.4.1",
+    "draft-js-import-html": "^1.4.1",
+    "emoji-regex": "^10.1.0",
     "express": "^4.17.3",
+    "immutable": "^3.8.2",
     "jsonwebtoken": "^8.5.1",
     "next": "12.1.5",
     "react": "18.0.0",
-    "react-dom": "18.0.0"
+    "react-dom": "18.0.0",
+    "react-easy-crop": "^4.1.5"
   },
   "devDependencies": {
     "eslint": "8.13.0",

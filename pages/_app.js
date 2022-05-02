@@ -1,7 +1,7 @@
 import '../styles/globals.css'
 import React, { useContext } from "react"
-import { context, ContextProvider } from "../ContextProvider"
-import ThemeContextProvider from "../ThemeContextProvider"
+import { context, AppContextProvider } from "../context/AppContextProvider"
+import ThemeContextProvider from "../context/ThemeContextProvider"
 
 
 function MyApp({ Component, pageProps }) {
@@ -10,9 +10,9 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <ThemeContextProvider >
-      <ContextProvider>
+      <AppContextProvider>
         <Component {...pageProps} />
-      </ContextProvider>
+      </AppContextProvider>
     </ThemeContextProvider>
   )
 }

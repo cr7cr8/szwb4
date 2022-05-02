@@ -1,17 +1,17 @@
 import React, { useState, createContext } from "react"
 
-export const Context = createContext()
+export const EditorContext = createContext()
 
-export function ContextProvider({ children, ...props }) {
+export function EditorContextProvider({ children, ...props }) {
 
     const [count, setCount] = useState(0)
 
     return (
 
-        <Context.Provider value={{
+        <EditorContext.Provider value={{
             count, setCount
         }}>
             {children}
-        </Context.Provider>
+        </EditorContext.Provider>
     )
 }
