@@ -1,5 +1,5 @@
 {
-  "name": "next-app",
+  "name": "szwb4",
   "version": "0.1.0",
   "private": false,
   "scripts": {
@@ -9,7 +9,7 @@
     "start-prod": "set NODE_ENV=production&nodemon server.js",
     "start-dev": "set NODE_ENV=development&nodemon server.js",
     "start": "set NODE_ENV=production&node server.js",
-    "export":"next export",
+    "export": "next export",
     "lint": "next lint"
   },
   "dependencies": {
@@ -21,6 +21,7 @@
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
+    "draft-js": "^0.11.7",
     "express": "^4.17.3",
     "jsonwebtoken": "^8.5.1",
     "next": "12.1.5",
