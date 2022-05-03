@@ -18,8 +18,11 @@ import { EditorContext } from "../EditorContextProvider"
 
 import { isChrome, useDeviceData } from 'react-device-detect';
 
+import EditingBlock from './EditingBlock';
 import createEmojiPlugin from './EmojiPlugin';
+import createImagePlugin from './ImagePlugin';
 const { emojiPlugin, EmojiComp } = createEmojiPlugin()
+const { imagePlugin, markingImageBlock, ImageBlock } = createImagePlugin()
 
 
 const isWindow = (typeof window === "undefined") ? false : true
@@ -28,7 +31,7 @@ export default function DraftEditor() {
 
 
 
-    const { editorState, setEditorState } = useContext(EditorContext)
+    const { editorState, setEditorState, currentBlockKey, setCurrentBlockKey } = useContext(EditorContext)
 
 
     const deviceData = isWindow && useDeviceData()
@@ -69,20 +72,78 @@ export default function DraftEditor() {
                 editorState={editorState}
                 ref={function (element) { editorRef.current = element; }}
                 onChange={(newState) => {
-                    return setEditorState(newState)
 
+                    const selection = newState.getSelection()
+                    const isCollapsed = selection.isCollapsed()
+                    const startKey = selection.getStartKey()
+
+
+
+                    isCollapsed && setCurrentBlockKey(startKey)
+
+                    return setEditorState(newState)
                 }}
 
                 plugins={[
 
 
                     emojiPlugin,
-                    // imagePlugin,
+                    imagePlugin,
                     // linkPlugin,
                     // votePlugin,
                     // mentionPlugin,
                     // personPlugin,
                 ]}
+
+
+                blockRenderMap={
+                    Immutable.Map({
+
+                        "unstyled": {
+                            element: "div",
+                            wrapper: <EditingBlock
+                                editorRef={editorRef}
+                                markingImageBlock={markingImageBlock}
+                            // markingVoteBlock={markingVoteBlock}
+                            // VoteBlock={VoteBlock}
+                            // readOnly={readOnly}
+                            // setReadOnly={setReadOnly}
+                            />
+                        },
+                    })
+                }
+
+
+
+
+                blockRendererFn={function (block) {
+
+                    const text = block.getText()
+                    const data = block.getData().toObject()
+                    const type = block.getType()
+                    const blockKey = block.getKey()
+                    const selection = editorState.getSelection()
+
+                    if (type === "imageBlock") {
+                        return {
+                            component: ImageBlock,
+                            editable: false,
+                            props: {
+                                blockKey,
+                                markingImageBlock,
+                            },
+                        }
+                    }
+
+                }}
+
+
+
+
+
+
+
+
 
 
                 keyBindingFn={function (e, { getEditorState, setEditorState, ...obj }) {

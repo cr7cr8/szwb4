@@ -1,4 +1,4 @@
-import React, { useState, createContext } from "react"
+import React, { useState, createContext, useMemo, useId } from "react"
 
 import {
     EditorState, ContentState, ContentBlock, CharacterMetadata, SelectionState, convertToRaw, convertFromRaw,
@@ -12,52 +12,7 @@ export const EditorContext = createContext()
 
 
 
-const rawJsText = {
-    "entityMap": {},
-    "blocks": [
-        // {
-        //     "key": "e4brl",
-        //     "text": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit.",
-           
-        //     "type": "unstyled",
-        //     "depth": 0,
-        //     "inlineStyleRanges": [
-        //         // {
-        //         //     "offset": 0,
-        //         //     "length": 11,
-        //         //     "style": "BOLD"
-        //         // },
-        //         // {
-        //         //     "offset": 28,
-        //         //     "length": 29,
-        //         //     "style": "BOLD"
-        //         // },
-        //         // {
-        //         //     "offset": 12,
-        //         //     "length": 15,
-        //         //     "style": "ITALIC"
-        //         // },
-        //         // {
-        //         //     "offset": 28,
-        //         //     "length": 28,
-        //         //     "style": "ITALIC"
-        //         // }
-        //     ],
-        //     "entityRanges": [],
-        //     "data": {}
-        // },
-        {
-            "key": "3bflg",
-            "text": "",
-            "type": "unstyled",
-            "depth": 0,
-            "inlineStyleRanges": [],
-            "entityRanges": [],
-            "data": {}
-        }
-    ]
-};
-const content = convertFromRaw(rawJsText);
+
 
 export function EditorContextProvider({
 
@@ -70,12 +25,53 @@ export function EditorContextProvider({
 
 }) {
 
-    const [editorState, setEditorState] = useState(savedEditorState || EditorState.createWithContent(content) || EditorState.createEmpty())
+    // const key1 = useId().replace(":", "").replace(":", "")
+    const rawJsText = useMemo(() => {
+
+        return {
+            "entityMap": {},
+            "blocks": [
+                {
+                    "key": "1111",
+                    "text": "",
+                    "type": "unstyled",
+                    "depth": 0,
+                    "inlineStyleRanges": [],
+                    "entityRanges": [],
+                    "data": {}
+                },
+                {
+                    "key": "2222",
+                    "text": "",
+                    "type": "imageBlock",
+                    "depth": 0,
+                    "inlineStyleRanges": [],
+                    "entityRanges": [],
+                    "data": {}
+                }
+            ]
+        }
+    }, []);
+
+
+    const [editorState, setEditorState] = useState(savedEditorState || EditorState.createWithContent(convertFromRaw(rawJsText)) || EditorState.createEmpty())
+
+    const [currentBlockKey, setCurrentBlockKey] = useState("ddd")
+
+    const [imageObj, setImageObj] = useState(savedImageObj || {})
+    const imageBlockNum = editorState.getCurrentContent().getBlocksAsArray().filter(block => block.getType() === "imageBlock").length
 
     return (
 
         <EditorContext.Provider value={{
-            editorState, setEditorState
+
+            editorState, setEditorState,
+            currentBlockKey, setCurrentBlockKey,
+
+            savedImageObj, setSavedImageObj,
+            imageObj, setImageObj,
+            imageBlockNum,
+
         }}>
             <DraftEditor />
         </EditorContext.Provider>
