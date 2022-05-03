@@ -40,15 +40,15 @@ export function EditorContextProvider({
                     "entityRanges": [],
                     "data": {}
                 },
-                {
-                    "key": "2222",
-                    "text": "",
-                    "type": "imageBlock",
-                    "depth": 0,
-                    "inlineStyleRanges": [],
-                    "entityRanges": [],
-                    "data": {}
-                }
+                // {
+                //     "key": "2222",
+                //     "text": "",
+                //     "type": "imageBlock",
+                //     "depth": 0,
+                //     "inlineStyleRanges": [],
+                //     "entityRanges": [],
+                //     "data": {}
+                // }
             ]
         }
     }, []);
