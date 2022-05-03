@@ -98,7 +98,7 @@ export default function DraftEditor() {
 
                         //  alert("a")
                         console.log("a==---")
-                        return "not-handled"
+                        return undefined
                     }
                     if (command === "bold") {
 
