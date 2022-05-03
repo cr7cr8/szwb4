@@ -25,9 +25,12 @@ import { ThemeProvider, useTheme, createTheme } from '@mui/material/styles';
 import EditingBlock from './EditingBlock';
 import createEmojiPlugin from './EmojiPlugin';
 import createImagePlugin from './ImagePlugin';
+import createMentionPlugin from './MentionPlugin';
+
+
 const { emojiPlugin, EmojiComp } = createEmojiPlugin()
 const { imagePlugin, markingImageBlock, ImageBlock } = createImagePlugin()
-
+const { mentionPlugin, taggingMention, checkShowing } = createMentionPlugin()
 
 const isWindow = (typeof window === "undefined") ? false : true
 
@@ -215,7 +218,7 @@ export default function DraftEditor() {
                         imagePlugin,
                         // linkPlugin,
                         // votePlugin,
-                        // mentionPlugin,
+                         mentionPlugin,
                         // personPlugin,
                     ]}
 

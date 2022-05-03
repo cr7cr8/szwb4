@@ -61,6 +61,9 @@ export function EditorContextProvider({
     const [imageObj, setImageObj] = useState(savedImageObj || {})
     const imageBlockNum = editorState.getCurrentContent().getBlocksAsArray().filter(block => block.getType() === "imageBlock").length
 
+
+    const [peopleList, setPeopleList] = useState(["UweF23", "UweF22", "TonyCerl", "JimWil", "大发发", "Jimberg", "m大Gsd哈"])
+
     return (
 
         <EditorContext.Provider value={{
@@ -71,6 +74,7 @@ export function EditorContextProvider({
             savedImageObj, setSavedImageObj,
             imageObj, setImageObj,
             imageBlockNum,
+            peopleList, setPeopleList,
 
         }}>
             <DraftEditor />
