@@ -39,7 +39,7 @@ export default function DraftEditor() {
 
     const theme = useTheme()
 
-    const deviceData = isWindow && useDeviceData()
+    
 
 
 

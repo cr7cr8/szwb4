@@ -147,7 +147,7 @@ import {
     { symbolStr: emojiArr1, category: "😃", },
     { symbolStr: emojiArr2, category: "👋" },
   
-    isChrome ? { symbolStr: emojiArr3Chrome, category: "👨" } : { symbolStr: emojiArr3, category: "🧑‍⚕️" },
+    isChrome ? { symbolStr: emojiArr3Chrome, category: "👨" } : { symbolStr: emojiArr3, category: "👨" },
     isChrome ? { symbolStr: emojiArr4Chrome, category: "👕" } : { symbolStr: emojiArr4, category: "👕" },
   
     !isChrome && { symbolStr: emojiArr5, category: "👦🏻" },
