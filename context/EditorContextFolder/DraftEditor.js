@@ -1,13 +1,16 @@
-import React, { useState, useRef, useEffect, useLayoutEffect, useContext, useCallback, createContext, useMemo } from 'react';
+import React, { useState, useRef, useEffect, useLayoutEffect, useContext, useCallback, createContext, useMemo, useId } from 'react';
 
 import {
     EditorState, ContentState, ContentBlock, CharacterMetadata, SelectionState, convertToRaw, convertFromRaw,
     RichUtils, Modifier, convertFromHTML, AtomicBlockUtils, getDefaultKeyBinding, KeyBindingUtil
 } from 'draft-js';
 
-import NoSSR from 'react-no-ssr';
 
-import Editor from "draft-js-plugins-editor";
+import NoSsr from '@mui/material/NoSsr';
+
+
+import Editor from "@draft-js-plugins/editor";
+
 import Immutable from 'immutable';
 
 
@@ -53,34 +56,74 @@ export default function DraftEditor() {
 
 
 
+
+
+
     return (
         <>
-           <EmojiComp editorRef={editorRef} />
-            <NoSSR onSSR={<></>}>
-                <Editor
-                    editorState={editorState}
-                    ref={function (element) { editorRef.current = element; }}
-                    onChange={(newState) => {
-                        return setEditorState(newState)
+            {/* <NoSsr fallback={<></>}> */}
+            <EmojiComp editorRef={editorRef} />
 
-                    }}
+            <Editor
+                editorKey={useId()}
+                editorState={editorState}
+                ref={function (element) { editorRef.current = element; }}
+                onChange={(newState) => {
+                    return setEditorState(newState)
 
-                    plugins={[
+                }}
 
-
-                         emojiPlugin,
-                        // imagePlugin,
-                        // linkPlugin,
-                        // votePlugin,
-                        // mentionPlugin,
-                        // personPlugin,
-                    ]}
-                /> 
-            </NoSSR>
+                plugins={[
 
 
-            <h1>DraftEditor</h1>
+                    emojiPlugin,
+                    // imagePlugin,
+                    // linkPlugin,
+                    // votePlugin,
+                    // mentionPlugin,
+                    // personPlugin,
+                ]}
 
+
+                keyBindingFn={function (e, { getEditorState, setEditorState, ...obj }) {
+
+                    if ((e.keyCode === 65)) {
+                        return "fire-arrow";
+                    }
+                    return undefined
+                }}
+                handleKeyCommand={function (command, editorState, evenTimeStamp, { setEditorState }) {
+
+                    if (command === "fire-arrow") {
+
+                        //  alert("a")
+                        console.log("a==---")
+                        return "not-handled"
+                    }
+                    if (command === "bold") {
+
+                        setEditorState(RichUtils.handleKeyCommand(editorState, command))
+                    }
+                    if (command === "italic") {
+
+                        setEditorState(RichUtils.handleKeyCommand(editorState, command))
+                    }
+                    if (command === "underline") {
+
+                        setEditorState(RichUtils.handleKeyCommand(editorState, command))
+                    }
+                    return undefined
+                }}
+            />
+            {/* </NoSsr> */}
+
+
+
+            <div style={{ whiteSpace: "pre-wrap", display: "flex", fontSize: 15 }}>
+                <div>{JSON.stringify(editorState.getCurrentContent(), null, 2)}</div>
+                <hr />
+                <div>{JSON.stringify(convertToRaw(editorState.getCurrentContent()), null, 2)}</div>
+            </div>
 
         </>
     )

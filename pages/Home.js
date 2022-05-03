@@ -7,7 +7,7 @@ import React, { useContext, useEffect } from "react"
 
 
 
-import { Context, ContextProvider } from "../ContextProvider"
+import { Context } from "../context/AppContextProvider"
 
 import Link from "next/link"
 import axios from "axios"

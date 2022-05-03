@@ -1,5 +1,5 @@
 import React, { useContext } from "react"
-import { Context, ContextProvider } from "../context/AppContextProvider"
+import { Context } from "../context/AppContextProvider"
 
 import { Button } from "@mui/material"
 import Link from "next/link"

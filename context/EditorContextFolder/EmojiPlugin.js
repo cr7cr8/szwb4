@@ -126,6 +126,8 @@ export default function createImagePlugin() {
         component: Emoji
       }],
 
+
+
     },
     EmojiComp,
 
