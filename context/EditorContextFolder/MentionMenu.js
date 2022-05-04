@@ -104,13 +104,9 @@ export function MenuItem({ name, index, inTab, insertMention }) {
                 // ...inTab === index && { bgcolor: "pink" }
                 ...theme.isLight && {
                     bgcolor: inTab === index ? "background.default" : "lightgray",
-
-
-
                 },
                 ...!theme.isLight && {
                     bgcolor: inTab === index ? "background.default" : "darkgray",
-
                 },
                 ...inTab === index && {
 
