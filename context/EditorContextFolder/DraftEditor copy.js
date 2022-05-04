@@ -3,8 +3,8 @@ import React, { useState, useRef, useEffect, useLayoutEffect, useContext, useCal
 import {
     EditorState, ContentState, ContentBlock, CharacterMetadata, SelectionState, convertToRaw, convertFromRaw,
     RichUtils, Modifier, convertFromHTML, AtomicBlockUtils, getDefaultKeyBinding, KeyBindingUtil
-  } from 'draft-js';
-  
+} from 'draft-js';
+
 
 import NoSsr from '@mui/material/NoSsr';
 
@@ -33,7 +33,7 @@ const { emojiPlugin, EmojiComp } = createEmojiPlugin()
 const { imagePlugin, markingImageBlock, ImageBlock } = createImagePlugin()
 const { mentionPlugin, taggingMention, checkShowing } = createMentionPlugin()
 const { personPlugin } = createPersonPlugin()
-const { hasCommandModifier } = KeyBindingUtil;
+
 const isWindow = (typeof window === "undefined") ? false : true
 
 
@@ -49,7 +49,7 @@ export default function DraftEditor() {
 
 
     const editorRef = useRef()
-    const specialBackSpace = useRef(false)
+
     const [autoFocused, setAutoFocused] = useState(false)
     useEffect(function () {
         setTimeout(function () {
@@ -209,17 +209,10 @@ export default function DraftEditor() {
 
                     onChange={(newState) => {
 
-                        newState.getCurrentContent()
-
                         const selection = newState.getSelection()
                         const isCollapsed = selection.isCollapsed()
                         const startKey = selection.getStartKey()
-            
-                        if (specialBackSpace.current) {
-                          const newContentState = Modifier.replaceText(newState.getCurrentContent(), newState.getSelection(), "")
-                          newState = EditorState.push(newState, newContentState, "insert-characters")
-                          specialBackSpace.current = false
-                        }
+
 
 
                         isCollapsed && setCurrentBlockKey(startKey)
@@ -281,201 +274,43 @@ export default function DraftEditor() {
                     }}
 
 
+
+
+
+
+
+
+
+
                     keyBindingFn={function (e, { getEditorState, setEditorState, ...obj }) {
-                        //return undefined to carry on
-                        const editorState = getEditorState()
-                        const selection = editorState.getSelection();
-            
-                        const startKey = selection.getStartKey()
-                        const startOffset = selection.getStartOffset()
-            
-                        const endKey = selection.getEndKey()
-                        const endOffset = selection.getEndOffset()
-            
-                        const anchorKey = selection.getAnchorKey()
-                        const anchorOffset = selection.getAnchorOffset()
-                        const focusKey = selection.getFocusKey()
-                        const focusOffset = selection.getFocusOffset()
-            
-                        const isCollapsed = selection.isCollapsed()
-                        const isInOrder = !selection.getIsBackward()
-                        const hasFocus = selection.getHasFocus()
-            
-                        // console.log(startKey, startOffset, endKey, endOffset, anchorKey, anchorOffset, focusKey, focusOffset, isCollapsed, isInOrder, hasFocus)
-            
-            
-                        const contentState = editorState.getCurrentContent();
-                        const allBlocks = contentState.getBlockMap()
-            
-                        const block = contentState.getBlockForKey(startKey);
-                        const blockText = block.getText()
-            
-                        const keyBefore = contentState.getKeyBefore(startKey)
-                        const blockBefore = contentState.getBlockBefore(startKey)
-            
-                        const firstBlockKey = allBlocks.slice(0, 1).toArray().shift().getKey()
-            
-            
-                        if ((e.keyCode === 8) && (isCollapsed) && (blockText.length === 0) && (startOffset === 0) && (startKey !== firstBlockKey)) {
-            
-                          let newContentState = Modifier.replaceText(contentState, selection, "#")
-                          let es = EditorState.push(editorState, newContentState, "insert-characters")
-            
-            
-                          es = deleteBlock2(es, startKey, setEditorState)
-                          let newSelection = es.getSelection()
-            
-                          newSelection = newSelection.merge({
-            
-                            anchorOffset: newSelection.getAnchorOffset() + 0,  //hilight +0   ,not hilight +1
-                            focusOffset: newSelection.getFocusOffset() + 1
-                          })
-            
-                          es = EditorState.forceSelection(es, newSelection)
-            
-                          specialBackSpace.current = true
-            
-                          setCurrentBlockKey(es.getSelection().getStartKey())
-                          setEditorState(es)
-            
-                          return "dummy"
-                        }
-                        else if ((e.keyCode === 8) && (isCollapsed) && (startOffset === 0) && (startKey !== firstBlockKey)) {
-                          deleteBlock1(editorState, startKey, setEditorState)
-                          return ("done")
-                        }
-                        else if (checkShowing() && e.keyCode === 38) {
-                          return undefined
-                        }
-                        else if (checkShowing() && e.keyCode === 40) {
-                          return undefined
-                        }
-            
-                        // if ((block.getType() === "imageBlock")) {
-                        //   return "cancel-delete"
+
+                        // if ((e.keyCode === 65)) {
+                        //     return "fire-arrow";
                         // }
-            
-                        else if (e.shiftKey || hasCommandModifier(e) || e.altKey) {
-                          return getDefaultKeyBinding(e);
-                        }
                         return undefined
-            
-                      }}
-            
-                      handleKeyCommand={function (command, editorState, evenTimeStamp, { getEditorState }) {
-                        // return undefiend and return not-handled will be igonred in handleKeyCommand
-            
-                        //  const newState = RichUtils.handleKeyCommand(editorState, command);
-            
-                        if (command === "deletemore") {
-                          alert("fff")
-                          //RichUtils.handleKeyCommand(editorState, "deletemore")
-                          return editorState
-                          //  alert("dfdf")
-                        }
-            
-                        // if (command === "backspace") {    //builtin command when hit backspace if not binded in keypress
-                        //   //   RichUtils.handleKeyCommand(editorState, "deletemore")
+                    }}
+                    handleKeyCommand={function (command, editorState, evenTimeStamp, { setEditorState }) {
+
+                        // if (command === "fire-arrow") {
+
+                        //     //  alert("a")
+                        //     console.log("a==---")
+                        //     return undefined
                         // }
-            
-            
-                        if (command === "moveUp" || command === "moveDown") {
-                          const selection = editorState.getSelection();
-                          const startKey = selection.getStartKey();
-                          const endKey = selection.getEndKey();
-                          const isCollapsed = selection.isCollapsed()
-            
-            
-                          const upperBlockKey = editorState.getCurrentContent().getKeyBefore(startKey)
-                          const block = editorState.getCurrentContent().getBlockForKey(command === "moveUp" ? startKey : endKey)
-                          const lowerBlockKey = editorState.getCurrentContent().getKeyAfter(endKey)
-            
-                          if ((command === "moveUp" && upperBlockKey) || ((command === "moveDown" && lowerBlockKey))) {
-            
-                            const adjacentBlock = command === "moveUp"
-                              ? editorState.getCurrentContent().getBlockBefore(startKey)
-                              : editorState.getCurrentContent().getBlockAfter(endKey)
-                            const text = adjacentBlock.getText()
-            
-                            let newSelection = selection.merge({
-            
-                              ...isCollapsed && { anchorKey: adjacentBlock.getKey() },
-                              ...isCollapsed && { anchorOffset: text ? text.length : 0 },
-            
-                              focusKey: adjacentBlock.getKey(),
-                              focusOffset: adjacentBlock.getKey() ? text.length : 0,
-            
-                              isBackward: false,
-                              hasFocus: true,
-                            })
-                            //  externalES = EditorState.push(externalES, newContent, "insert-characters");
-                            let es = EditorState.forceSelection(editorState, newSelection)
-                            setEditorState(es)
-                          }
-                          else if ((command === "moveUp" && !upperBlockKey) || ((command === "moveDown" && !lowerBlockKey))) {
-            
-                            const text = block.getText()
-            
-                            let newSelection = selection.merge({
-                              anchorKey: block.getKey(),
-                              anchorOffset: command === "moveUp" ? 0 : text ? text.length : 0,
-                              focusKey: block.getKey(),
-                              focusOffset: command === "moveUp" ? 0 : text ? text.length : 0,
-                              isBackward: false,
-                              hasFocus: true,
-                            })
-                            let es = EditorState.forceSelection(editorState, newSelection)
-                            setEditorState(es)
-                          }
-                        }
-            
-            
                         if (command === "bold") {
-            
-                          setEditorState(RichUtils.handleKeyCommand(editorState, command))
+
+                            setEditorState(RichUtils.handleKeyCommand(editorState, command))
                         }
                         if (command === "italic") {
-            
-                          setEditorState(RichUtils.handleKeyCommand(editorState, command))
+
+                            setEditorState(RichUtils.handleKeyCommand(editorState, command))
                         }
                         if (command === "underline") {
-            
-                          setEditorState(RichUtils.handleKeyCommand(editorState, command))
+
+                            setEditorState(RichUtils.handleKeyCommand(editorState, command))
                         }
-                        return 'not-handled';
-            
-                      }}
-            
-                      handleBeforeInput={function (aaa, editorState) {
-            
-            
-                      }}
-            
-                      handleReturn={function (e, newState, { getEditorState, setEditorState }) {
-                        const editorState = newState;// getEditorState()
-                        const selectionState = editorState.getSelection();
-                        let contentState = newState.getCurrentContent();
-                        const block = contentState.getBlockForKey(selectionState.getStartKey());
-                        //    console.log(block.getType())
-                        if (block.getType() === "imageBlock") {
-                          return "handled"
-                        }
-                        else if (block.getType() === "voteBlock") {
-                          return "handled"
-                        }
-                        // else if (checkShowing()) {
-                        //   return "handled"
-                        // }
-            
-                      }}
-
-
-
-
-
-
-
-
+                        return undefined
+                    }}
                 />
             </Paper>
             {/* </NoSsr> */}

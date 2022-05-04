@@ -9,7 +9,7 @@ import { EditorContext } from "../EditorContextProvider";
 
 
 import { ThemeProvider, useTheme, createTheme } from '@mui/material/styles';
-
+import MentionMenu from "./MentionMenu"
 
 export default function createMentionPlugin() {
 
@@ -256,34 +256,31 @@ export default function createMentionPlugin() {
 
         if ((mentionType === "mentionOn") && (nameList.length !== 0)) {
 
+
             return (
-                <Box sx={{ display: "inline-block" }} >
-                    <Typography sx={cssObj} variant="body2">
+
+                <Box sx={{ display: "inline-block", ...cssObj }} >
+                    {/* <Typography sx={cssObj} variant="body2"> */}
                         {children}
-                    </Typography>
+                    {/* </Typography> */}
 
-
-
-                    <PeopleList tabIndex={tabIndex} setShowing={setShowing} setTabName={setTabName} nameList={nameList} insertMention={insertMention} blockType={blockType} />
-
+                    <MentionMenu tabIndex={tabIndex} setShowing={setShowing} setTabName={setTabName} nameList={nameList} insertMention={insertMention} blockType={blockType} />
 
                 </Box>
+
             )
         }
 
         else {
-            return <Typography sx={cssObj} variant="body2">
-                {children}
-            </Typography>
-            // return (
-            //   <Box sx={{ display: "inline-block" }}>
-            //     <Typography aria-describedby={"sssd"} sx={cssObj} variant="body2" //ref={anchor}
-            //     >
-            //       {children}
-            //     </Typography>
-            //     <PeopleList tabIndex={tabIndex} setShowing={setShowing} setTabName={setTabName} nameList={nameList} insertMention={insertMention} blockType={blockType} />
-            //   </Box>
-            // )
+
+            return (
+                <Box sx={{ display: "inline-block", ...cssObj }} >
+                {/* <Typography sx={cssObj} variant="body2"> */}
+                    {children}
+                {/* </Typography> */}
+
+            </Box>
+            )
         }
 
     }

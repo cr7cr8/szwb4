@@ -50,11 +50,11 @@ export default function EditingBlock({ VoteBlock, readOnly, setReadOnly, marking
                 const isCurrentRow = (blockKey === currentBlockKey) && (hasfocus) && (isCollapsed)
 
                 if (blockType === "imageBlock") {
-                    //  return <div className="image-block">{block}</div>
+           
                     return <Box key={blockKey} sx={{ "& + &": { paddingTop: "2px" } }}>{block}</Box>
                 }
                 else if (blockType === "voteBlock") {
-                    //   return <VoteBlock readOnly={readOnly} setReadOnly={setReadOnly} />
+               
                     return <Box key={blockKey} sx={{ "& + &": { paddingTop: "2px" } }}>{block}</Box>
                 }
 
@@ -64,30 +64,29 @@ export default function EditingBlock({ VoteBlock, readOnly, setReadOnly, marking
 
                         key={blockKey}
                         style={{
-                            // transition: "box-shadow transform 300ms",
-                            //  WebkitTransition: "background-color box-shadow transform 300ms",
-                            // backgroundColor:"yellow"
+                      
                         }}
 
                         sx={{
-                            //     boxSizing: "border-box",
+                         
                             ...(blockData.isSmallFont) && { fontSize: theme.scaleSizeObj(0.8) },
                             ...(blockType === "unstyled") && { "& > div": { textAlign: "left", width: "100%" } },
                             ...(blockType === "centerBlock") && { "& > div": { textAlign: "center", width: "100%" } },
                             ...(blockType === "rightBlock") && { "& > div": { textAlign: "right", width: "100%" } },
 
-                            // ...(blockType === "centerBlock") && { display: "flex", justifyContent: "center" },
-                            // ...(blockType === "rightBlock") && { display: "flex", justifyContent: "flex-end" },
+                        
 
-                            // bgcolor: "yellow",
+                        
                             paddingLeft: "2px",
                             paddingRight: "2px",
-                            boxShadow: isCurrentRow ? 3 : 0,
-                            transform: isCurrentRow ? `scale(1.03)` : `scale(1)`,
-                            ...isCurrentRow && { backgroundColor: theme.palette.background.default },
 
-                            ...isCurrentRow && (currentBlockType !== "unstyled") && { transform: `scale(1)` },
-                            //backgroundColor: isCurrentRow ? "wheat" : "transparent",
+                            // boxShadow: isCurrentRow ? 3 : 0,
+                            // transform: isCurrentRow ? `scale(1.03)` : `scale(1)`,
+                            // ...isCurrentRow && { backgroundColor: theme.palette.background.default },
+                            // ...isCurrentRow && (currentBlockType !== "unstyled") && { transform: `scale(1)` },
+          
+
+
                             transition: "box-shadow, background-color, transform, 300ms",
 
                             position: "relative",
@@ -95,11 +94,9 @@ export default function EditingBlock({ VoteBlock, readOnly, setReadOnly, marking
                             display: "flex",
                             alignItems: "center",
                             ...(theme.palette.mode === "dark") && isCurrentRow && {
-                                //   backgroundColor:""
+                            
                                 backgroundColor: "rgba(80, 80, 80, 1)"
-                                //   borderWidth: 1,
-                                //   borderStyle: "solid",
-                                //    boxSizing: "border-box",
+                             
                             }
 
 
@@ -111,14 +108,14 @@ export default function EditingBlock({ VoteBlock, readOnly, setReadOnly, marking
                             opacity: (isCurrentRow && !Boolean(currentBlockText) && (imageBlockNum < 3) && (blockType !== "imageBlock") && (blockType !== "voteBlock")) ? 1 : 0,
                             transform: (isCurrentRow && !Boolean(currentBlockText) && (imageBlockNum < 3) && (blockType !== "imageBlock") && (blockType !== "voteBlock")) ? "scale(1)" : "scale(0)",
                             transition: "opacity, 300ms"
-                            // backgroundColor: "pink"
+                         
 
                         }}
                             size="small"
 
                             contentEditable={false} suppressContentEditableWarning={true}
                             onClick={function () {
-                                // setEmojiIndex(index)
+                              
                                 markingImageBlock(blockKey)
                             }}
                         >
@@ -135,15 +132,14 @@ export default function EditingBlock({ VoteBlock, readOnly, setReadOnly, marking
                             transition: "opacity, 300ms",
                             ...hasVoteBlock && { transform: "scale(0)" }
 
-                            // backgroundColor: "pink"
+                  
 
                         }}
                             size="small"
 
                             contentEditable={false} suppressContentEditableWarning={true}
                             onClick={function () {
-                                // setEmojiIndex(index)
-                                //markingImageBlock(blockKey)
+                            
                                 markingVoteBlock(blockKey)
                             }}
                         >

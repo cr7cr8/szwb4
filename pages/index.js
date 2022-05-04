@@ -49,7 +49,7 @@ export default function App() {
 
 
     return (
-        <Container disableGutters={true} fixed={false} maxWidth={windowObj?.innerWidth >= 3000 ? false : "lg"} sx={{ bgcolor: "pink" }} >
+        <Container disableGutters={true} fixed={false} maxWidth={windowObj?.innerWidth >= 3000 ? false : "lg"} sx={{}} >
 
             <Head>
                 <title>Draft Page</title>
@@ -60,17 +60,28 @@ export default function App() {
             {/*  <h1>fff</h1>
             <h1>{random2}</h1>
             <h1>{useId()}</h1> */}
-            <EditorCtx
 
-                {...{
-                    savedEditorState, setSavedEditorState,
-                    savedImageObj, setSavedImageObj,
-                    savedVoteArr, setSavedVoteArr,
-                    savedVoteTopic, setSavedVoteTopic,
-                    savedPollDuration, setSavedPollDuration
-                }}
+            <Grid container
+                direction="row"
+                justifyContent="space-around"
+                alignItems="flex-start"
+                spacing={0}
+                sx={{}}
+            >
+                <Grid item xs={10} sm={10} md={10} lg={10} xl={10} sx={{}}>
+                    <EditorCtx
 
-            />
+                        {...{
+                            savedEditorState, setSavedEditorState,
+                            savedImageObj, setSavedImageObj,
+                            savedVoteArr, setSavedVoteArr,
+                            savedVoteTopic, setSavedVoteTopic,
+                            savedPollDuration, setSavedPollDuration
+                        }}
+
+                    />
+                </Grid>
+            </Grid>
 
         </Container>
     )
