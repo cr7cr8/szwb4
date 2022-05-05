@@ -61,8 +61,12 @@ export function EditorContextProvider({
     const [imageObj, setImageObj] = useState(savedImageObj || {})
     const imageBlockNum = editorState.getCurrentContent().getBlocksAsArray().filter(block => block.getType() === "imageBlock").length
 
-
     const [peopleList, setPeopleList] = useState(["UweF23", "UweF22", "TonyCerl", "JimWil", "大发发", "Jimberg", "m大Gsd哈"])
+
+    const [voteArr, setVoteArr] = useState(savedVoteArr || [])
+    const [voteTopic, setVoteTopic] = useState(savedVoteTopic || "")
+    const [pollDuration, setPollDuration] = useState(savedPollDuration || { d: 3, h: 0, m: 0 })
+
 
     return (
 
@@ -75,6 +79,10 @@ export function EditorContextProvider({
             imageObj, setImageObj,
             imageBlockNum,
             peopleList, setPeopleList,
+
+            voteArr, setVoteArr,
+            voteTopic, setVoteTopic,
+            pollDuration, setPollDuration
 
         }}>
             <DraftEditor />

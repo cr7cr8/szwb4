@@ -21,6 +21,9 @@ export default function createMentionPlugin() {
     let tagStartPos = 0
     let tagEndPos = 0
 
+    let tagCurrentStartPos = 0
+    let tagCurrentEndPos = 0
+
 
     let tabIndex = 1006;
     let isShowing = false;
@@ -100,6 +103,9 @@ export default function createMentionPlugin() {
                     tagStartPos = start
                     tagEndPos = end
 
+                    tagCurrentStartPos= start
+                    tagCurrentEndPos = end
+
                     newSelection = newSelection.merge({
                         anchorKey: blockKey,
                         focusKey: blockKey,
@@ -162,9 +168,9 @@ export default function createMentionPlugin() {
 
         let newSelection = selection.merge({
             anchorKey: anchorStartKey,
-            anchorOffset: tagStartPos,
+            anchorOffset: tagCurrentStartPos,
             focusKey: anchorStartKey,
-            focusOffset: tagEndPos,
+            focusOffset: tagCurrentEndPos,
             isBackward: false,
             hasFocus: true,
 
@@ -179,20 +185,20 @@ export default function createMentionPlugin() {
         newContent = Modifier.applyEntity(newContent, editorState.getSelection().merge({
 
             anchorKey: anchorStartKey,
-            anchorOffset: tagStartPos + 1,  // +1 for extra space added in tabName
+            anchorOffset: tagCurrentStartPos + 1,  // +1 for extra space added in tabName
             focusKey: anchorStartKey,
-            focusOffset: tagStartPos + text.length,
+            focusOffset: tagCurrentStartPos + text.length,
             isBackward: false,
             hasFocus: true,
         }), entityKeyObj[`personTag`])
-
+       
 
         newSelection = editorState.getSelection().merge({
 
             anchorKey: anchorStartKey,
-            anchorOffset: tagStartPos + text.length,
+            anchorOffset: tagCurrentStartPos + text.length,
             focusKey: anchorStartKey,
-            focusOffset: tagStartPos + text.length,
+            focusOffset: tagCurrentStartPos + text.length,
             isBackward: false,
             hasFocus: true,
         })
@@ -261,7 +267,7 @@ export default function createMentionPlugin() {
 
                 <Box sx={{ display: "inline-block", ...cssObj }} >
                     {/* <Typography sx={cssObj} variant="body2"> */}
-                        {children}
+                    {children}
                     {/* </Typography> */}
 
                     <MentionMenu tabIndex={tabIndex} setShowing={setShowing} setTabName={setTabName} nameList={nameList} insertMention={insertMention} blockType={blockType} />
@@ -275,11 +281,11 @@ export default function createMentionPlugin() {
 
             return (
                 <Box sx={{ display: "inline-block", ...cssObj }} >
-                {/* <Typography sx={cssObj} variant="body2"> */}
+                    {/* <Typography sx={cssObj} variant="body2"> */}
                     {children}
-                {/* </Typography> */}
+                    {/* </Typography> */}
 
-            </Box>
+                </Box>
             )
         }
 
