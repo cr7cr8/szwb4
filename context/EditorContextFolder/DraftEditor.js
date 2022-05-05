@@ -79,7 +79,7 @@ export default function DraftEditor() {
       <Stack direction="row"
         sx={{
           position: "sticky", top: 0, justifyContent: "space-between",
-          zIndex: 100,
+          zIndex: 600,
           // bgcolor:"background.default",
 
         }}

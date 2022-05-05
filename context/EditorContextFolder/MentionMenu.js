@@ -53,7 +53,7 @@ export default function MentionMenu({ tabIndex, setShowing, setTabName, nameList
                 width: "fit-content", position: "absolute",
                 bgcolor: "transparent",
 
-                zIndex: 5000,
+                zIndex: 500,
                 opacity,
                 ...Boolean(right) && { right: 0 },
                 // backgroundColor: theme.palette.action.disabledBackground,
