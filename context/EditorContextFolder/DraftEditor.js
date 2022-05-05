@@ -22,9 +22,12 @@ import { EmojiEmotions, FormatSize, FormatAlignLeft, FormatAlignCenter, FormatAl
 
 import { ThemeProvider, useTheme, createTheme } from '@mui/material/styles';
 
+import { blue, red } from '@mui/material/colors';
+
 import EditingBlock from './EditingBlock';
 import createEmojiPlugin from './EmojiPlugin';
 import createImagePlugin from './ImagePlugin';
+import createLinkPlugin from './LinkPlugin';
 import createMentionPlugin from './MentionPlugin';
 import createPersonPlugin from './PersonPlugin';
 import createVotePlugin from './VotePlugin';
@@ -32,7 +35,7 @@ import createVotePlugin from './VotePlugin';
 
 const { emojiPlugin, EmojiComp } = createEmojiPlugin()
 const { imagePlugin, markingImageBlock, ImageBlock } = createImagePlugin()
-
+const { linkPlugin } = createLinkPlugin()
 const { votePlugin, markingVoteBlock, VoteBlock } = createVotePlugin()
 
 const { mentionPlugin, taggingMention, checkShowing } = createMentionPlugin()
@@ -238,12 +241,30 @@ export default function DraftEditor() {
 
             emojiPlugin,
             imagePlugin,
-            // linkPlugin,
+            linkPlugin,
             votePlugin,
             mentionPlugin,
             personPlugin,
           ]}
 
+          customStyleFn={function (style, block) {
+            const styleNameArr = style.toArray();
+            const styleObj = {}
+
+            styleNameArr.forEach(item => {
+              if (item === "linkTagOn") {
+                styleObj.color = blue[500]
+                styleObj.textDecoration = "underline"
+              }
+              if (item === "linkTagOff") {
+                styleObj.color = blue[500]
+              }
+            })
+            if (styleNameArr.length > 0) {
+              return styleObj
+            }
+
+          }}
 
           blockRenderMap={
             Immutable.Map({
