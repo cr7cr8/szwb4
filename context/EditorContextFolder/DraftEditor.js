@@ -59,7 +59,9 @@ export default function DraftEditor() {
     imageObj,
     imageBlockNum,
 
-    onSubmit
+    onChange,
+    onLocalSubmit,
+    onRemoteSubmit,
 
   } = useContext(EditorContext)
 
@@ -78,11 +80,35 @@ export default function DraftEditor() {
       }
     }, 50)
 
+
   }, [editorState, autoFocused])
 
 
   const [shadowValue, setShadowValue] = useState(3)
 
+
+  useEffect(function () {
+
+    onChange && setTimeout(function () {
+      onChange(toPreHtml(
+        {
+          editorState,
+          theme,
+          voteArr,
+          voteTopic,
+          pollDuration,
+          imageObj,
+          imageBlockNum
+        }
+      ))
+    }, 0)
+
+
+
+
+
+
+  })
 
 
   return (
@@ -292,9 +318,6 @@ export default function DraftEditor() {
             })
           }
 
-
-
-
           blockRendererFn={function (block) {
 
             const text = block.getText()
@@ -327,7 +350,6 @@ export default function DraftEditor() {
             }
 
           }}
-
 
           keyBindingFn={function (e, { getEditorState, setEditorState, ...obj }) {
             //return undefined to carry on
@@ -517,21 +539,14 @@ export default function DraftEditor() {
 
           }}
 
-
-
-
-
-
-
-
         />
       </Paper>
       {/* </NoSsr> */}
 
       <Button fullWidth onClick={function () {
 
-        setTimeout(() => {
-          onSubmit(
+        onLocalSubmit && setTimeout(() => {
+          onLocalSubmit(
             toPreHtml(
               {
                 editorState,
@@ -548,6 +563,22 @@ export default function DraftEditor() {
 
         }, 0);
 
+        onRemoteSubmit && setTimeout(() => {
+          onRemoteSubmit(toPreHtml,
+            {
+              editorState,
+              theme,
+              voteArr,
+              voteTopic,
+              pollDuration,
+              imageObj,
+              imageBlockNum,
+            }
+          )
+
+
+
+        }, 0);
 
 
 
@@ -733,16 +764,6 @@ function deleteBlock2(store, blockKey) {
 }
 
 
-
-/////////
-////////
-///////
-//////
-/////
-////
-///
-//
-
 export function toPreHtml({ editorState, theme, voteArr, voteTopic, pollDuration, imageObj, imageBlockNum }) {
 
 
@@ -842,6 +863,7 @@ export function toPreHtml({ editorState, theme, voteArr, voteTopic, pollDuration
           const key = block.getKey()
 
           // object Tag caanot self close
+          if (!imageObj[key]) { return }
           const imageHtml = imageObj[key].reduce(function (imageHtml, currentValue, index, arr) {
             return imageHtml = imageHtml + `<object data-imageIndex="${index}" data-imgUrl="${arr[index].imgUrl}" data-imgSnap="${arr[index].imgSnap}" data-blockKey="${key}" ></object>`
           }, "")
@@ -852,7 +874,7 @@ export function toPreHtml({ editorState, theme, voteArr, voteTopic, pollDuration
         voteBlock: function (block) {
 
 
-          const voteTopicHtml = `<object data-topic>${voteTopic||""}</object>`
+          const voteTopicHtml = `<object data-topic>${voteTopic || ""}</object>`
           const pollDurationHtml = `<object data-duration>${JSON.stringify(pollDuration).trim()}</object>`
           const voteArrHtml = voteArr.map((vote, index) => `<object data-item-${index}>${vote}</object>`)
 
