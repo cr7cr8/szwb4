@@ -24,9 +24,60 @@ import { EmojiEmotions, FormatSize, FormatAlignLeft, FormatAlignCenter, FormatAl
 import myImageSrc from "../public/vercel.svg";
 
 
-import parse, { domToReact, attributesToProps } from 'html-react-parser';
+
 
 import { EditorContextProvider as EditorCtx } from "../context/EditorContextProvider";
+
+import parse, { domToReact, attributesToProps } from 'html-react-parser';
+import reactDom from 'react-dom'
+
+
+const options = {
+    replace: (domNode) => {
+        const { name, type, attribs, children } = domNode
+
+
+
+        if (name === "object" && attribs["data-type"] === "image-block") {
+            return <div>{children.map((item, index) => {
+                return <img key={index} src={item.attribs["data-imgsnap"]} style={{ width: 100, height: 100 }} />
+            })}</div>
+        }
+        else if (name === "object" && attribs["data-type"] === "vote-block") {
+
+            // const voteArrHtml = voteArr.map((vote, index) => `<object data-item-${index}>${escape(vote)}</object>`)
+            // const voteTopicHtml = `<object data-topic>${escape(voteTopic)}</object>`
+            // const pollDurationHtml = `<object data-duration>${JSON.stringify(pollDuration).trim()}</object>`
+
+           
+
+            const topic = children?.[0]?.children?.[0]?.data ?? ""
+            const duration = children?.[1]?.children?.[0]?.data
+
+            const [{ }, { }, ...voteArr_] = children
+            //console.log(topic, duration)
+
+            const voteArr = voteArr_.map(item => {
+                return item?.children?.[0]?.data??""
+            })
+
+            console.log(topic)
+            console.log(duration)
+            console.log(voteArr)
+
+
+
+            return <span>{topic}</span>
+            // console.log(topic,duration,voteArr)
+            // console.log(children[0].children[0].data)
+            // console.log(children[1].children[0].data)
+
+        }
+
+
+
+    }
+}
 
 
 export default function App() {
@@ -46,7 +97,7 @@ export default function App() {
     const random = useId()
     const random2 = useId()
 
-
+    const [html, setHtml] = useState("")
 
     return (
         <Container disableGutters={true} fixed={false} maxWidth={windowObj?.innerWidth >= 3000 ? false : "lg"} sx={{}} >
@@ -78,11 +129,17 @@ export default function App() {
                             savedVoteTopic, setSavedVoteTopic,
                             savedPollDuration, setSavedPollDuration
                         }}
+                        onSubmit={function (preHtml) {
+
+                            console.log("--------------------")
+                            //    console.log(preHtml)
+                            setHtml(parse(preHtml, options))
+                        }}
 
                     />
                 </Grid>
             </Grid>
-
+            <>{html}</>
         </Container>
     )
 

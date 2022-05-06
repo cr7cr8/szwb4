@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useLayoutEffect, useContext, useCallback, createContext, useMemo, useId } from 'react';
-
+import { stateToHTML } from 'draft-js-export-html';
 import {
   EditorState, ContentState, ContentBlock, CharacterMetadata, SelectionState, convertToRaw, convertFromRaw,
   RichUtils, Modifier, convertFromHTML, AtomicBlockUtils, getDefaultKeyBinding, KeyBindingUtil
@@ -50,7 +50,18 @@ export default function DraftEditor() {
 
 
 
-  const { editorState, setEditorState, currentBlockKey, setCurrentBlockKey } = useContext(EditorContext)
+  const { editorState, setEditorState, currentBlockKey, setCurrentBlockKey,
+
+    voteArr,
+    voteTopic,
+    pollDuration,
+
+    imageObj,
+    imageBlockNum,
+
+    onSubmit
+
+  } = useContext(EditorContext)
 
   const theme = useTheme()
   const editorRef = useRef()
@@ -237,8 +248,6 @@ export default function DraftEditor() {
           }}
 
           plugins={[
-
-
             emojiPlugin,
             imagePlugin,
             linkPlugin,
@@ -519,13 +528,37 @@ export default function DraftEditor() {
       </Paper>
       {/* </NoSsr> */}
 
+      <Button fullWidth onClick={function () {
+
+        setTimeout(() => {
+          onSubmit(
+            toPreHtml(
+              {
+                editorState,
+                theme,
+                voteArr,
+                voteTopic,
+                pollDuration,
+                imageObj,
+                imageBlockNum
+              }
+            )
+          )
 
 
-      <div style={{ whiteSpace: "pre-wrap", display: "flex", fontSize: 15 }}>
+        }, 0);
+
+
+
+
+
+      }}>Submit</Button>
+
+      {/* <div style={{ whiteSpace: "pre-wrap", display: "flex", fontSize: 15 }}>
         <div>{JSON.stringify(editorState.getCurrentContent(), null, 2)}</div>
         <hr />
         <div>{JSON.stringify(convertToRaw(editorState.getCurrentContent()), null, 2)}</div>
-      </div>
+      </div> */}
 
     </>
   )
@@ -700,3 +733,143 @@ function deleteBlock2(store, blockKey) {
 }
 
 
+
+/////////
+////////
+///////
+//////
+/////
+////
+///
+//
+
+export function toPreHtml({ editorState, theme, voteArr, voteTopic, pollDuration, imageObj, imageBlockNum }) {
+
+
+
+  const preHtml = stateToHTML(
+    editorState.getCurrentContent(),
+    {
+      defaultBlockTag: "div",
+
+      inlineStyleFn: function (styleNameSet) {
+
+        const styleObj = {
+          element: "span",
+          style: {},
+          attributes: {}
+        }
+
+        if (styleNameSet.toArray().includes("linkTagOn")) {
+          //  styleObj.style = { color: blue[800] }
+          styleObj.attributes["data-type"] = "link"
+        }
+        if (styleNameSet.toArray().includes("linkTagOff")) {
+          //    styleObj.style = { color: blue[800] }
+          styleObj.attributes["data-type"] = "link"
+        }
+        return styleObj
+      },
+
+
+      entityStyleFn: function (entity) {
+        const { type, data, mutablity } = entity.toObject()
+
+        //  console.log(type, data, mutablity)
+
+        if (type.indexOf("mention") >= 0) {
+          return {
+            element: 'object',
+            attributes: {
+              "data-type": "mention-tag"
+            },
+
+          }
+        }
+        else if (type.indexOf("personTag") >= 0) {
+          return {
+            element: 'object',
+            attributes: {
+              "data-type": "person-tag"
+            },
+
+          }
+
+        }
+
+      },
+
+      blockStyleFn: function (block) {
+
+        const text = block.getText()
+        const data = block.getData().toObject()
+        const type = block.getType()
+        const key = block.getKey()
+
+        return {
+          style: {
+            ...(type === "centerBlock") && { textAlign: "center" },  // style will be a string not an object during toHtmll call
+            ...(type === "rightBlock") && { textAlign: "right" },
+
+
+            // ...(data.isSmallFont&&type==="rightBlock")&&{transform:"translateX(10%) scale(0.8) ",backgroundColor:"pink",lineHeight:1},
+            // ...(data.isSmallFont&&type==="unstyled")&&{transform:"translateX(-10%) scale(0.8) ",backgroundColor:"pink",lineHeight:1},
+            // ...(data.isSmallFont&&type==="centerBlock")&&{transform:"scale(0.8) ",backgroundColor:"pink",lineHeight:1},
+
+            // ...styleObj.centerBlock && { textAlign: "center" },
+            // ...styleObj.rightBlock && { textAlign: "right" }
+
+          },
+          attributes: {
+            ...data.isSmallFont && { "small-font": "small-font" },
+            ...(type === "centerBlock") && { "text-align": "center" },
+            ...(type === "rightBlock") && { "text-align": "right" },
+
+            // ...styleObj.centerBlock && { className: "text-center" },
+            // ...styleObj.rightBlock && { className: "text-right" }
+          }
+        }
+
+      },
+
+      blockRenderers: {
+
+        imageBlock: function (block) {
+
+          const text = block.getText()
+          const data = encodeURI(JSON.stringify(block.getData().toObject()))
+          const type = block.getType()
+          const key = block.getKey()
+
+          // object Tag caanot self close
+          const imageHtml = imageObj[key].reduce(function (imageHtml, currentValue, index, arr) {
+            return imageHtml = imageHtml + `<object data-imageIndex="${index}" data-imgUrl="${arr[index].imgUrl}" data-imgSnap="${arr[index].imgSnap}" data-blockKey="${key}" ></object>`
+          }, "")
+
+          return `<object data-type="image-block"  data-block_key="${key}" data-block_data="${data}">` + imageHtml + '</object>'
+        },
+
+        voteBlock: function (block) {
+
+
+          const voteTopicHtml = `<object data-topic>${voteTopic||""}</object>`
+          const pollDurationHtml = `<object data-duration>${JSON.stringify(pollDuration).trim()}</object>`
+          const voteArrHtml = voteArr.map((vote, index) => `<object data-item-${index}>${vote}</object>`)
+
+
+          const data = encodeURI(JSON.stringify({ ...block.getData().toObject() }))
+          const type = block.getType()
+          const key = block.getKey()
+          // return `< object data - vote_arr="${voteArr}" data - type="vote-block"  data - block_key="${key}" data - block_data="${data}" > ` + encodeURI(block.getText()) + '</object>'
+          return `<object data-vote_arr="${voteArr}" data-type="vote-block"  data-block_key="${key}" data-block_data="${data}">` + voteTopicHtml + pollDurationHtml + voteArrHtml.join("") + '</object>'
+
+        },
+
+      },
+
+
+
+    }
+  )
+  return preHtml
+}

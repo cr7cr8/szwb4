@@ -16,7 +16,11 @@ export default function VoteBlock(props) {
 
 
     const theme = useTheme()
-    const { editorState, setEditorState, voteArr, setVoteArr, voteTopic, setVoteTopic } = useContext(EditorContext)
+    const { editorState, setEditorState,
+        voteArr, setVoteArr,
+        voteTopic, setVoteTopic,
+        pollDuration, setPollDuration,
+    } = useContext(EditorContext)
 
 
     const { readOnly, setReadOnly, markingVoteBlock } = props.blockProps

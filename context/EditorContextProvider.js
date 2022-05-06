@@ -10,19 +10,14 @@ import DraftEditor from "./EditorContextFolder/DraftEditor"
 
 export const EditorContext = createContext()
 
-
-
-
-
 export function EditorContextProvider({
 
     savedEditorState, setSavedEditorState,
     savedImageObj, setSavedImageObj,
     savedVoteArr, setSavedVoteArr,
     savedVoteTopic, setSavedVoteTopic,
-    savedPollDuration, setSavedPollDuration
-
-
+    savedPollDuration, setSavedPollDuration,
+    onSubmit = function (preHtml) { }
 }) {
 
     // const key1 = useId().replace(":", "").replace(":", "")
@@ -82,7 +77,9 @@ export function EditorContextProvider({
 
             voteArr, setVoteArr,
             voteTopic, setVoteTopic,
-            pollDuration, setPollDuration
+            pollDuration, setPollDuration,
+
+            onSubmit,
 
         }}>
             <DraftEditor />

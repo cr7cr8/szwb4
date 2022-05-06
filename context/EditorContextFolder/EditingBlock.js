@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useContext, useCallback, createContext, useMemo } from 'react';
+import React, { useState, useRef, useEffect, useContext, useCallback, createContext, useMemo, useTransition } from 'react';
 import { EditorContext } from "../EditorContextProvider";
 import { Container, Grid, Paper, IconButton, ButtonGroup, Stack, Box } from '@mui/material';
 import { ImageOutlined, StackedBarChart } from '@mui/icons-material';
@@ -9,11 +9,14 @@ import { ThemeProvider, useTheme, createTheme } from '@mui/material/styles';
 
 export default function EditingBlock({ VoteBlock, readOnly, setReadOnly, markingImageBlock, markingVoteBlock, children, ...props }) {
 
-    const { 
+
+    const [isPending, startTransition] = useTransition()
+
+    const {
         currentBlockKey, editorState, imageBlockNum, setEditorState,
 
         imageObj, setImageObj,
-     
+
 
     } = useContext(EditorContext)
 
@@ -50,11 +53,11 @@ export default function EditingBlock({ VoteBlock, readOnly, setReadOnly, marking
                 const isCurrentRow = (blockKey === currentBlockKey) && (hasfocus) && (isCollapsed)
 
                 if (blockType === "imageBlock") {
-           
+
                     return <Box key={blockKey} sx={{ "& + &": { paddingTop: "2px" } }}>{block}</Box>
                 }
                 else if (blockType === "voteBlock") {
-               
+
                     return <Box key={blockKey} sx={{ "& + &": { paddingTop: "2px" } }}>{block}</Box>
                 }
 
@@ -64,19 +67,19 @@ export default function EditingBlock({ VoteBlock, readOnly, setReadOnly, marking
 
                         key={blockKey}
                         style={{
-                      
+
                         }}
 
                         sx={{
-                         
+
                             ...(blockData.isSmallFont) && { fontSize: theme.scaleSizeObj(0.8) },
                             ...(blockType === "unstyled") && { "& > div": { textAlign: "left", width: "100%" } },
                             ...(blockType === "centerBlock") && { "& > div": { textAlign: "center", width: "100%" } },
                             ...(blockType === "rightBlock") && { "& > div": { textAlign: "right", width: "100%" } },
 
-                        
 
-                        
+
+
                             paddingLeft: "2px",
                             paddingRight: "2px",
 
@@ -84,7 +87,7 @@ export default function EditingBlock({ VoteBlock, readOnly, setReadOnly, marking
                             // transform: isCurrentRow ? `scale(1.03)` : `scale(1)`,
                             // ...isCurrentRow && { backgroundColor: theme.palette.background.default },
                             // ...isCurrentRow && (currentBlockType !== "unstyled") && { transform: `scale(1)` },
-          
+
 
 
                             transition: "box-shadow, background-color, transform, 300ms",
@@ -94,9 +97,9 @@ export default function EditingBlock({ VoteBlock, readOnly, setReadOnly, marking
                             display: "flex",
                             alignItems: "center",
                             ...(theme.palette.mode === "dark") && isCurrentRow && {
-                            
+
                                 backgroundColor: "rgba(80, 80, 80, 1)"
-                             
+
                             }
 
 
@@ -108,15 +111,23 @@ export default function EditingBlock({ VoteBlock, readOnly, setReadOnly, marking
                             opacity: (isCurrentRow && !Boolean(currentBlockText) && (imageBlockNum < 3) && (blockType !== "imageBlock") && (blockType !== "voteBlock")) ? 1 : 0,
                             transform: (isCurrentRow && !Boolean(currentBlockText) && (imageBlockNum < 3) && (blockType !== "imageBlock") && (blockType !== "voteBlock")) ? "scale(1)" : "scale(0)",
                             transition: "opacity, 300ms"
-                         
+
 
                         }}
                             size="small"
 
                             contentEditable={false} suppressContentEditableWarning={true}
                             onClick={function () {
-                              
-                                markingImageBlock(blockKey)
+
+                                startTransition(function (){
+
+                                    markingImageBlock(blockKey)
+                                })
+                                // setTimeout(function () {
+
+                                //     markingImageBlock(blockKey)
+                                // }, [])
+
                             }}
                         >
                             <ImageOutlined fontSize="large" />
@@ -132,14 +143,14 @@ export default function EditingBlock({ VoteBlock, readOnly, setReadOnly, marking
                             transition: "opacity, 300ms",
                             ...hasVoteBlock && { transform: "scale(0)" }
 
-                  
+
 
                         }}
                             size="small"
 
                             contentEditable={false} suppressContentEditableWarning={true}
                             onClick={function () {
-                            
+
                                 markingVoteBlock(blockKey)
                             }}
                         >

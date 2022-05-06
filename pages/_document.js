@@ -5,7 +5,7 @@ export default class MyDocument extends Document {
     render() {
         return (
             <Html>
-                <Head><meta name="Hello" content="Hello _document"/></Head>
+                <Head><meta name="Hello" content="Hello _document" /></Head>
                 <body>
                     {/* {getInitColorSchemeScript()} //To use <CssVarsProvider> on SSR, enable this line  */}
                     <Main />
@@ -15,3 +15,4 @@ export default class MyDocument extends Document {
         );
     }
 }
+
