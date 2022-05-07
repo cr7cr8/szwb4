@@ -13,16 +13,17 @@ const hostname = '192.168.0.100'
 const port = 3000
 //when using middleware `hostname` and `port` must be provided below
 const app = next({ dev, hostname, port })
+
+
+
 const handle = app.getRequestHandler()
-
-
 const cookieParser = require('cookie-parser')
 
 
 const { authenticateToken, generateAndDispatchToken, checkingToken } = require("./middware/auth")
 
 const cookieApi = require("./router/cookieApi")
-
+const picture = require("./router/picture")
 
 console.log(">> Process.env.NODE_ENV = " + process.env.NODE_ENV, process.env.PORT || port)
 
@@ -37,20 +38,24 @@ app.prepare().then(
 
 
         express.use('/api/userCookie', cookieApi)
+        express.use('/api/picture', picture)
 
-        express.use('/api/404', function (req, res) {
 
-            res.status(403).send("404")
+       
 
-        })
+        // express.use('/api/404', function (req, res) {
 
-        express.get('/api/*', (req, res) => {
-            res.send("api-----dd--")
-        })
+        //     res.status(403).send("404")
 
-        express.get('/api', (req, res) => {
-            res.send("api")
-        })
+        // })
+
+        // express.get('/api/*', (req, res) => {
+        //     res.send("api-----dd--")
+        // })
+
+        // express.get('/api', (req, res) => {
+        //     res.send("api")
+        // })
 
 
         // express.get(/(^\/$)|(^\/home$)/i,

@@ -1,64 +1,47 @@
 const mongoose = require("mongoose")
 mongoose.connection.on('error', function (err) {
-  // console.log('Mongoose default connection error: ' + err);
+    // console.log('Mongoose default connection error: ' + err);
 
- // console.log("aaaaaaaaaaaaaaa")
+    // console.log("aaaaaaaaaaaaaaa")
 });
 
-const { connSzwb3DB, connEmojiDB, connPictureDB, connParam } = {
+const { connSzwb4DB, connParam } = {
 
-  //EmojiDB: "mongodb+srv://boss:ABCabc123@cluster0-lsf8g.azure.mongodb.net/EmojiDB?retryWrites=true&w=majority",
-  //szwb3DB: "mongodb+srv://boss:ABCabc123@cluster0-lsf8g.azure.mongodb.net/szwb3?retryWrites=true&w=majority",
-  //pictureDB: "mongodb+srv://boss:ABCabc123@cluster0-lsf8g.azure.mongodb.net/pictureDB?retryWrites=true&w=majority",
+    szwb4DB: "mongodb+srv://boss:ABCabc123@cluster0.7ijmi.mongodb.net/szwb4DB?retryWrites=true&w=majority",
+    connParam: { useNewUrlParser: true, useUnifiedTopology: true, /*poolSize:10*/ },
 
-  szwb3DB:"mongodb+srv://boss:ABCabc123@cluster0.l7owv.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
-
-  //szwb3DB:"mongodb+srv://boss:ABCabc123@cluster0.mnthh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
-
-  connParam: { useNewUrlParser: true, useUnifiedTopology: true, /*poolSize:10*/ },
-
-  get connSzwb3DB() {
-    return mongoose.createConnection(this.szwb3DB, this.connParam)
-  },
-
-  // get connEmojiDB() {
-  //   return mongoose.createConnection(this.EmojiDB, this.connParam)
-  // },
-
-  // get connPictureDB() {
-  //   return mongoose.createConnection(this.pictureDB, this.connParam)
-  // },
+    get connSzwb4DB() {
+        return mongoose.createConnection(this.szwb4DB, this.connParam)
+    },
 
 }
 
 
 
- 
+
 
 function wrapAndMerge(...args) {
 
-  return args.map(function (fn) {
-    return {
-      [fn.name]: function (req, res, next) {
-        try {
-          const obj = fn(req, res, next);
-          return (Promise.resolve(obj) === obj)
-            ? obj.catch(ex => res.send(`<h1>Async error from function <br> ${fn.name}<br> ${ex}</h1>`))
-            : obj
+    return args.map(function (fn) {
+        return {
+            [fn.name]: function (req, res, next) {
+                try {
+                    const obj = fn(req, res, next);
+                    return (Promise.resolve(obj) === obj)
+                        ? obj.catch(ex => res.send(`<h1>Async error from function <br> ${fn.name}<br> ${ex}</h1>`))
+                        : obj
+                }
+                catch (ex) { res.send(`<h1>something wrong when calling function  <br> ${fn.name}<br></h1> ${ex.stack}`) }
+            }
         }
-        catch (ex) { res.send(`<h1>something wrong when calling function  <br> ${fn.name}<br></h1> ${ex.stack}`) }
-      }
-    }
-  }).reduce(
-    function (accumulator, currentValue) {
-      return { ...accumulator, ...currentValue }
-    })
+    }).reduce(
+        function (accumulator, currentValue) {
+            return { ...accumulator, ...currentValue }
+        })
 }
 
 module.exports = {
- 
-  connSzwb3DB,
-  // connEmojiDB,
-  // connPictureDB,
-  wrapAndMerge,
+
+    connSzwb4DB,
+    wrapAndMerge,
 }
