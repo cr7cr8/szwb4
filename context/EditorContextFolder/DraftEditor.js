@@ -92,23 +92,11 @@ export default function DraftEditor() {
   useEffect(function () {
 
     onChange && setTimeout(function () {
-      onChange(toPreHtml(
-        {
-          editorState,
-          theme,
-          voteArr,
-          voteTopic,
-          pollDuration,
-          imageObj,
-          imageBlockNum
-        }
-      ))
+
+      const preHtml = toPreHtml({ editorState, theme, voteArr, voteTopic, pollDuration, imageObj, imageBlockNum })
+      onChange(preHtml)
+      
     }, 0)
-
-
-
-
-
 
   })
 
@@ -549,12 +537,14 @@ export default function DraftEditor() {
         setDisableSubmit(true)
         onLocalSubmit && setTimeout(() => {
 
-          onLocalSubmit(toPreHtml({ editorState, theme, voteArr, voteTopic, pollDuration, imageObj, imageBlockNum }), { setDisableSubmit })
+          const preHtml = toPreHtml({ editorState, theme, voteArr, voteTopic, pollDuration, imageObj, imageBlockNum })
+          onLocalSubmit(preHtml, { editorState, theme, voteArr, voteTopic, pollDuration, imageObj, imageBlockNum, setDisableSubmit, clearState })
 
         }, 0);
 
         onRemoteSubmit && setTimeout(() => {
-          onRemoteSubmit(toPreHtml, { editorState, theme, voteArr, voteTopic, pollDuration, imageObj, imageBlockNum, setDisableSubmit ,clearState})
+
+          onRemoteSubmit(toPreHtml, { editorState, theme, voteArr, voteTopic, pollDuration, imageObj, imageBlockNum, setDisableSubmit, clearState })
 
         }, 0);
 

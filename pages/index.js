@@ -72,10 +72,10 @@ export default function App() {
                         //     })
                         // }}
 
-                        // onLocalSubmit={function (preHtml, { setDisableSubmit }) {
-                        //     setPreHtml(preHtml)
-                        //     setDisableSubmit(false)
-                        // }}
+                        onLocalSubmit={function (preHtml, { setDisableSubmit }) {
+                            setPreHtml(preHtml)
+                         //   setDisableSubmit(false)
+                        }}
 
                         onRemoteSubmit={function (toPreHtml, { editorState, theme, voteArr, voteTopic, pollDuration, imageObj, imageBlockNum, setDisableSubmit,clearState }) {
 
@@ -148,6 +148,10 @@ export default function App() {
                                 console.log("all done")
                                 setDisableSubmit(false)
                                 clearState()
+
+
+                                //todo: making prehtml and submit to server
+
                             })
 
                         }}
