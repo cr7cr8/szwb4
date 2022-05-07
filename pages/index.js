@@ -80,16 +80,19 @@ export default function App() {
 
 
                             //console.log(imageObj)
-                            const dataSnap = new FormData();
-                            const dataImage = new FormData();
-                            const promiseImgSnapArr = [];
-                            const promiseImgUrlArr = [];
+
                             const promiseUploadArr = [];
 
 
                             const imageObjKeyArr = Object.keys(imageObj)
 
                             if (Array.isArray(imageObjKeyArr) && imageObjKeyArr.length > 0) {
+
+                                const dataSnap = new FormData();
+                                const dataImage = new FormData();
+                                const promiseImgSnapArr = [];
+                                const promiseImgUrlArr = [];
+
                                 Object.keys(imageObj).forEach((objKey, index) => {
                                     imageObj[objKey].forEach(img => {
 
@@ -138,7 +141,7 @@ export default function App() {
                                 }))
                             }
 
-                            
+
                             Promise.allSettled(promiseUploadArr).then((arr) => {
 
                                 console.log("all done")
