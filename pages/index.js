@@ -72,11 +72,12 @@ export default function App() {
                         //     })
                         // }}
 
-                        onLocalSubmit={function (preHtml) {
-                            setPreHtml(preHtml)
-                        }}
+                        // onLocalSubmit={function (preHtml, { setDisableSubmit }) {
+                        //     setPreHtml(preHtml)
+                        //     setDisableSubmit(false)
+                        // }}
 
-                        onRemoteSubmit={function (toPreHtml, { editorState, theme, voteArr, voteTopic, pollDuration, imageObj, imageBlockNum, }) {
+                        onRemoteSubmit={function (toPreHtml, { editorState, theme, voteArr, voteTopic, pollDuration, imageObj, imageBlockNum, setDisableSubmit,clearState }) {
 
 
                             //console.log(imageObj)
@@ -145,6 +146,8 @@ export default function App() {
                             Promise.allSettled(promiseUploadArr).then((arr) => {
 
                                 console.log("all done")
+                                setDisableSubmit(false)
+                                clearState()
                             })
 
                         }}

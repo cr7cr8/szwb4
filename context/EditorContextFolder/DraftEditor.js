@@ -8,7 +8,7 @@ import {
 
 import NoSsr from '@mui/material/NoSsr';
 
-import { Container, Grid, Paper, IconButton, ButtonGroup, Stack, Button, Switch, Box, Hidden } from '@mui/material';
+import { Container, Grid, Paper, IconButton, ButtonGroup, Stack, Button, Switch, Box, Hidden, } from '@mui/material';
 import Editor from "@draft-js-plugins/editor";
 
 import Immutable from 'immutable';
@@ -63,6 +63,8 @@ export default function DraftEditor() {
     onLocalSubmit,
     onRemoteSubmit,
 
+    clearState
+
   } = useContext(EditorContext)
 
   const theme = useTheme()
@@ -86,7 +88,7 @@ export default function DraftEditor() {
 
   const [shadowValue, setShadowValue] = useState(3)
 
-
+  const [disableSubmit, setDisableSubmit] = useState(false)
   useEffect(function () {
 
     onChange && setTimeout(function () {
@@ -543,40 +545,16 @@ export default function DraftEditor() {
       </Paper>
       {/* </NoSsr> */}
 
-      <Button fullWidth onClick={function () {
-
+      <Button fullWidth disabled={disableSubmit} onClick={function () {
+        setDisableSubmit(true)
         onLocalSubmit && setTimeout(() => {
-          onLocalSubmit(
-            toPreHtml(
-              {
-                editorState,
-                theme,
-                voteArr,
-                voteTopic,
-                pollDuration,
-                imageObj,
-                imageBlockNum
-              }
-            )
-          )
 
+          onLocalSubmit(toPreHtml({ editorState, theme, voteArr, voteTopic, pollDuration, imageObj, imageBlockNum }), { setDisableSubmit })
 
         }, 0);
 
         onRemoteSubmit && setTimeout(() => {
-          onRemoteSubmit(toPreHtml,
-            {
-              editorState,
-              theme,
-              voteArr,
-              voteTopic,
-              pollDuration,
-              imageObj,
-              imageBlockNum,
-            }
-          )
-
-
+          onRemoteSubmit(toPreHtml, { editorState, theme, voteArr, voteTopic, pollDuration, imageObj, imageBlockNum, setDisableSubmit ,clearState})
 
         }, 0);
 

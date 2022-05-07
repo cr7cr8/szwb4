@@ -1,4 +1,4 @@
-import React, { useState, createContext, useMemo, useId, useDeferredValue } from "react"
+import React, { useState, createContext, useMemo, useId, useDeferredValue, useCallback } from "react"
 
 import {
     EditorState, ContentState, ContentBlock, CharacterMetadata, SelectionState, convertToRaw, convertFromRaw,
@@ -64,6 +64,16 @@ export function EditorContextProvider({
     const [voteTopic, setVoteTopic] = useState("")
     const [pollDuration, setPollDuration] = useState({ d: 3, h: 0, m: 0 })
 
+    const clearState = useCallback(function () {
+
+        setEditorState(EditorState.createEmpty())
+        setImageObj({})
+        setVoteArr([])
+        setVoteTopic("")
+
+    }, [])
+
+
 
     return (
 
@@ -84,6 +94,8 @@ export function EditorContextProvider({
             onChange,
             onLocalSubmit,
             onRemoteSubmit,
+
+            clearState
 
         }}>
             <DraftEditor />
