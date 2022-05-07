@@ -24,7 +24,7 @@ export default function ImageViewerBlock({ imgSnapArr, imgUrlArr }) {
 
         const resizeObserver = new ResizeObserver(([element]) => {
 
-            console.log(element.contentRect.width)
+         //   console.log(element.contentRect.width)
             setWidth(element.contentRect.width)
         })
 

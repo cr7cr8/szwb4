@@ -83,16 +83,36 @@ export default function App() {
 
 
                             //console.log(imageObj)
+                            const data = new FormData();
+                            const promiseArr = []
 
-                            Object.keys(imageObj).forEach(objKey => {
+                            Object.keys(imageObj).forEach((objKey, index) => {
                                 imageObj[objKey].forEach(img => {
-                                 //   console.log(img.imgSnap, img.imgUrl)
 
-                                    console.log(img.imgSnap.substr(img.imgSnap.lastIndexOf("/")+1),
-                                        img.imgSnap.substr(img.imgUrl.lastIndexOf("/")+1))
+                                    promiseArr.push(fetch(img.imgSnap).then(res => {
 
+                                        data.append("file", new File([res.blob()], img.imgSnap.substr(img.imgSnap.lastIndexOf("/") + 1), { type: "image/jpeg" }))
+
+                                    }))
+
+                                    img.imgSnap !== img.imgUrl && promiseArr.push(fetch(img.imgUrl).then(res => {
+
+                                        data.append("file", new File([res.blob()], img.imgUrl.substr(img.imgUrl.lastIndexOf("/") + 1), { type: "image/jpeg" }))
+
+                                    }))
+
+                                    // console.log(img.imgSnap.substr(img.imgSnap.lastIndexOf("/") + 1), img.imgSnap.substr(img.imgUrl.lastIndexOf("/") + 1))
                                 })
 
+                            })
+                            Promise.allSettled(promiseArr).then(arr => {
+                                //console.log(data.getAll("file"))
+                                return axios.post(`${url}/api/picture/uploadPicture`, data, {
+                                    headers: { 'content-type': 'multipart/form-data' },
+                                })
+
+                            }).then(response => {
+                                console.log(response.data)
                             })
 
                         }}
@@ -106,4 +126,12 @@ export default function App() {
         </Container>
     )
 
+}
+
+
+
+async function asyncForEach(array, callback) {
+    for (let index = 0; index < array.length; index++) {
+        await callback(array[index], index, array);
+    }
 }
