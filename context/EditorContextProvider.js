@@ -10,7 +10,7 @@ import parse, { domToReact, attributesToProps } from 'html-react-parser';
 
 
 import ImageViewerBlock from "./EditorViewerFolder/ImageViewerBlock";
-
+import VoteViewerBlock from "./EditorViewerFolder/VoteViewerBlock";
 
 export const EditorContext = createContext()
 
@@ -124,9 +124,7 @@ export function EditorViewer({ preHtml }) {
 
                 return <ImageViewerBlock {...{ imgSnapArr, imgUrlArr }} />
 
-                return <div>{children.map((item, index) => {
-                    return <img key={index} src={item.attribs["data-imgsnap"]} style={{ width: 100, height: 100 }} />
-                })}</div>
+
             }
             else if (name === "object" && attribs["data-type"] === "vote-block") {
 
@@ -137,11 +135,11 @@ export function EditorViewer({ preHtml }) {
                     return item?.children?.[0]?.data ?? ""
                 })
 
-                console.log(topic)
-                console.log(duration)
-                console.log(voteArr)
+              
 
-                return <span>{topic}</span>
+                return <VoteViewerBlock {...{ topic, duration, voteArr }} />
+
+             
 
             }
 
