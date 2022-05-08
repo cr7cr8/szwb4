@@ -42,7 +42,10 @@ export default function App() {
 
 
 
-    const [preHtml, setPreHtml] = useState("")
+    // const [preHtml, setPreHtml] = useState("")
+
+    const [postArr, setPostArr] = useState([])
+
 
     return (
         <Container disableGutters={true} fixed={false} maxWidth={windowObj?.innerWidth >= 3000 ? false : "lg"} sx={{}} >
@@ -73,105 +76,111 @@ export default function App() {
                         // }}
 
                         onLocalSubmit={function (preHtml, { setDisableSubmit, clearState }) {
-                            setPreHtml(preHtml)
+
+                            setPostArr(pre => ([preHtml, ...pre]))
                             setDisableSubmit(false)
                             clearState()
-                      
+
                         }}
 
-                        // onRemoteSubmit={function (toPreHtml, { editorState, theme, voteArr, voteTopic, pollDuration, imageObj, imageBlockNum, setDisableSubmit, clearState }) {
+                    // onRemoteSubmit={function (toPreHtml, { editorState, theme, voteArr, voteTopic, pollDuration, imageObj, imageBlockNum, setDisableSubmit, clearState }) {
 
 
-                        //     //console.log(imageObj)
+                    //     //console.log(imageObj)
 
-                        //     const promiseUploadArr = [];
-
-
-                        //     const imageObjKeyArr = Object.keys(imageObj)
-
-                        //     if (Array.isArray(imageObjKeyArr) && imageObjKeyArr.length > 0) {
-
-                        //         const dataSnap = new FormData();
-                        //         const dataImage = new FormData();
-                        //         const promiseImgSnapArr = [];
-                        //         const promiseImgUrlArr = [];
-
-                        //         Object.keys(imageObj).forEach((objKey, index) => {
-                        //             imageObj[objKey].forEach(img => {
-
-                        //                 promiseImgSnapArr.push(fetch(img.imgSnap)
-                        //                     .then(res => {
-                        //                         return res.blob()
-                        //                     })
-                        //                     .then(fileBlob => {
-                        //                         dataSnap.append("file", new File([fileBlob], img.imgSnap.substr(img.imgSnap.lastIndexOf("/") + 1) + "-snap", { type: "image/jpeg" }))
-                        //                     })
-                        //                 )
-
-                        //                 promiseImgUrlArr.push(fetch(img.imgUrl)
-                        //                     .then(res => {
-                        //                         return res.blob()
-                        //                     })
-                        //                     .then(fileBlob => {
-                        //                         dataImage.append("file", new File([fileBlob], img.imgUrl.substr(img.imgUrl.lastIndexOf("/") + 1) + "-img", { type: "image/jpeg" }))
-                        //                     })
-                        //                 )
+                    //     const promiseUploadArr = [];
 
 
-                        //                 // console.log(img.imgSnap.substr(img.imgSnap.lastIndexOf("/") + 1), img.imgSnap.substr(img.imgUrl.lastIndexOf("/") + 1))
-                        //             })
+                    //     const imageObjKeyArr = Object.keys(imageObj)
 
-                        //         })
+                    //     if (Array.isArray(imageObjKeyArr) && imageObjKeyArr.length > 0) {
 
-                        //         promiseUploadArr.push(Promise.allSettled(promiseImgSnapArr).then(arr => {
+                    //         const dataSnap = new FormData();
+                    //         const dataImage = new FormData();
+                    //         const promiseImgSnapArr = [];
+                    //         const promiseImgUrlArr = [];
 
-                        //             return axios.post(`/api/picture/uploadPicture`, dataSnap, {
-                        //                 headers: { 'content-type': 'multipart/form-data' },
-                        //             })
+                    //         Object.keys(imageObj).forEach((objKey, index) => {
+                    //             imageObj[objKey].forEach(img => {
 
-                        //         }))
+                    //                 promiseImgSnapArr.push(fetch(img.imgSnap)
+                    //                     .then(res => {
+                    //                         return res.blob()
+                    //                     })
+                    //                     .then(fileBlob => {
+                    //                         dataSnap.append("file", new File([fileBlob], img.imgSnap.substr(img.imgSnap.lastIndexOf("/") + 1) + "-snap", { type: "image/jpeg" }))
+                    //                     })
+                    //                 )
 
-                        //         promiseUploadArr.push(Promise.allSettled(promiseImgUrlArr).then(arr => {
-                        //             //console.log(data.getAll("file"))
-                        //             return axios.post(`/api/picture/uploadPicture2`, dataImage, {
-                        //                 headers: { 'content-type': 'multipart/form-data' },
-                        //             })
+                    //                 promiseImgUrlArr.push(fetch(img.imgUrl)
+                    //                     .then(res => {
+                    //                         return res.blob()
+                    //                     })
+                    //                     .then(fileBlob => {
+                    //                         dataImage.append("file", new File([fileBlob], img.imgUrl.substr(img.imgUrl.lastIndexOf("/") + 1) + "-img", { type: "image/jpeg" }))
+                    //                     })
+                    //                 )
 
-                        //         }))
-                        //     }
+
+                    //                 // console.log(img.imgSnap.substr(img.imgSnap.lastIndexOf("/") + 1), img.imgSnap.substr(img.imgUrl.lastIndexOf("/") + 1))
+                    //             })
+
+                    //         })
+
+                    //         promiseUploadArr.push(Promise.allSettled(promiseImgSnapArr).then(arr => {
+
+                    //             return axios.post(`/api/picture/uploadPicture`, dataSnap, {
+                    //                 headers: { 'content-type': 'multipart/form-data' },
+                    //             })
+
+                    //         }))
+
+                    //         promiseUploadArr.push(Promise.allSettled(promiseImgUrlArr).then(arr => {
+                    //             //console.log(data.getAll("file"))
+                    //             return axios.post(`/api/picture/uploadPicture2`, dataImage, {
+                    //                 headers: { 'content-type': 'multipart/form-data' },
+                    //             })
+
+                    //         }))
+                    //     }
 
 
-                        //     Promise.allSettled(promiseUploadArr).then((arr) => {
+                    //     Promise.allSettled(promiseUploadArr).then((arr) => {
 
-                               
-                            
 
-                        //         if (Array.isArray(imageObjKeyArr) && imageObjKeyArr.length > 0) {
-                        //             Object.keys(imageObj).forEach((objKey, index) => {
-                        //                 imageObj[objKey].forEach(img => {
-                        //                     img.imgSnap = "/api/picture/downloadPicture/" + img.imgSnap.substr(img.imgSnap.lastIndexOf("/") + 1)+"-snap"
 
-                        //                     img.imgUrl = "/api/picture/downloadPicture/" + img.imgUrl.substr(img.imgUrl.lastIndexOf("/") + 1)+"-img"
-                        //                 })
-                        //             })
-                        //         }
-                               
 
-                        //         const preHtml = toPreHtml({ editorState, theme, voteArr, voteTopic, pollDuration, imageObj, imageBlockNum })
-                        //         setPreHtml(preHtml)
-                        //         setDisableSubmit(false)
-                        //         clearState()
+                    //         if (Array.isArray(imageObjKeyArr) && imageObjKeyArr.length > 0) {
+                    //             Object.keys(imageObj).forEach((objKey, index) => {
+                    //                 imageObj[objKey].forEach(img => {
+                    //                     img.imgSnap = "/api/picture/downloadPicture/" + img.imgSnap.substr(img.imgSnap.lastIndexOf("/") + 1)+"-snap"
 
-                        //     })
+                    //                     img.imgUrl = "/api/picture/downloadPicture/" + img.imgUrl.substr(img.imgUrl.lastIndexOf("/") + 1)+"-img"
+                    //                 })
+                    //             })
+                    //         }
 
-                        // }}
+
+                    //         const preHtml = toPreHtml({ editorState, theme, voteArr, voteTopic, pollDuration, imageObj, imageBlockNum })
+                    //         setPreHtml(preHtml)
+                    //         setDisableSubmit(false)
+                    //         clearState()
+
+                    //     })
+
+                    // }}
 
 
 
                     />
                 </Grid>
             </Grid>
-            <EditorViewer preHtml={preHtml} />
+
+            {postArr.map((preHtml, index) => {
+                return <EditorViewer preHtml={preHtml} key={index} />
+            })}
+
+
         </Container>
     )
 

@@ -109,10 +109,7 @@ export function EditorViewer({ preHtml }) {
         replace: (domNode) => {
             const { name, type, attribs, children } = domNode
 
-
-
             if (name === "object" && attribs["data-type"] === "image-block") {
-
 
                 const imgSnapArr = []
                 const imgUrlArr = []
@@ -123,11 +120,10 @@ export function EditorViewer({ preHtml }) {
                 })
 
                 return <ImageViewerBlock {...{ imgSnapArr, imgUrlArr }} />
-
-
             }
             else if (name === "object" && attribs["data-type"] === "vote-block") {
 
+                const expireDate = attribs["date-expire_date"]
 
                 const topic = children?.[0]?.children?.[0]?.data ?? ""
                 const duration = children?.[1]?.children?.[0]?.data
@@ -135,11 +131,11 @@ export function EditorViewer({ preHtml }) {
                     return item?.children?.[0]?.data ?? ""
                 })
 
-              
 
-                return <VoteViewerBlock {...{ topic, duration, voteArr }} />
 
-             
+                return <VoteViewerBlock {...{ topic, duration, voteArr, expireDate }} />
+
+
 
             }
 
