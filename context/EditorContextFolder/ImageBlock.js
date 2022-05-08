@@ -161,7 +161,7 @@ export default function ImageBlock({ ...props }) {
         if (e.currentTarget.files[0].name.trim().match(/\.(gif|jpe?g|tiff|png|webp|bmp)$/i)) {
 
             const files = e.currentTarget.files
-            console.log(URL.createObjectURL(files[0]))
+        //    console.log(URL.createObjectURL(files[0]))
             const newFileArr = [
                 files[0] && URL.createObjectURL(files[0]),
                 files[1] && URL.createObjectURL(files[1]),

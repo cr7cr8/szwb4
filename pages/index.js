@@ -72,12 +72,14 @@ export default function App() {
                         //     })
                         // }}
 
-                        onLocalSubmit={function (preHtml, { setDisableSubmit }) {
-                            setPreHtml(preHtml)
-                         //   setDisableSubmit(false)
-                        }}
+                        // onLocalSubmit={function (preHtml, { setDisableSubmit, clearState }) {
+                        //     setPreHtml(preHtml)
+                        //     setDisableSubmit(false)
+                        //     clearState()
+                      
+                        // }}
 
-                        onRemoteSubmit={function (toPreHtml, { editorState, theme, voteArr, voteTopic, pollDuration, imageObj, imageBlockNum, setDisableSubmit,clearState }) {
+                        onRemoteSubmit={function (toPreHtml, { editorState, theme, voteArr, voteTopic, pollDuration, imageObj, imageBlockNum, setDisableSubmit, clearState }) {
 
 
                             //console.log(imageObj)
@@ -122,13 +124,11 @@ export default function App() {
                                 })
 
                                 promiseUploadArr.push(Promise.allSettled(promiseImgSnapArr).then(arr => {
-                                    //console.log(data.getAll("file"))
+
                                     return axios.post(`/api/picture/uploadPicture`, dataSnap, {
                                         headers: { 'content-type': 'multipart/form-data' },
                                     })
-                                    //console.log(arr.length)
-                                }).then(response => {
-                                    // console.log(response.data)
+
                                 }))
 
                                 promiseUploadArr.push(Promise.allSettled(promiseImgUrlArr).then(arr => {
@@ -136,21 +136,31 @@ export default function App() {
                                     return axios.post(`/api/picture/uploadPicture2`, dataImage, {
                                         headers: { 'content-type': 'multipart/form-data' },
                                     })
-                                    //console.log(arr.length)
-                                }).then(response => {
-                                    //console.log(response.data)
+
                                 }))
                             }
 
 
                             Promise.allSettled(promiseUploadArr).then((arr) => {
 
-                                console.log("all done")
+                               
+                            
+
+                                if (Array.isArray(imageObjKeyArr) && imageObjKeyArr.length > 0) {
+                                    Object.keys(imageObj).forEach((objKey, index) => {
+                                        imageObj[objKey].forEach(img => {
+                                            img.imgSnap = "/api/picture/downloadPicture/" + img.imgSnap.substr(img.imgSnap.lastIndexOf("/") + 1)+"-snap"
+
+                                            img.imgUrl = "/api/picture/downloadPicture/" + img.imgUrl.substr(img.imgUrl.lastIndexOf("/") + 1)+"-img"
+                                        })
+                                    })
+                                }
+                               
+
+                                const preHtml = toPreHtml({ editorState, theme, voteArr, voteTopic, pollDuration, imageObj, imageBlockNum })
+                                setPreHtml(preHtml)
                                 setDisableSubmit(false)
                                 clearState()
-
-
-                                //todo: making prehtml and submit to server
 
                             })
 

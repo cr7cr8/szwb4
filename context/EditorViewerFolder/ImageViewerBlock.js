@@ -14,27 +14,17 @@ export default function ImageViewerBlock({ imgSnapArr, imgUrlArr }) {
 
     const [width, setWidth] = useState(0)
     const height = [width / 16 * 9, width / 16 * 9, width / 2, width / 3, width / 16 * 9][numOfImage]
-
     const target = useRef()
 
-
-
-
     useEffect(function () {
-
         const resizeObserver = new ResizeObserver(([element]) => {
-
-         //   console.log(element.contentRect.width)
+            //   console.log(element.contentRect.width)
             setWidth(element.contentRect.width)
         })
-
         resizeObserver.observe(target.current);
-
         return function () {
             resizeObserver.disconnect()
         }
-
-
     }, [])
 
 
@@ -99,7 +89,7 @@ export default function ImageViewerBlock({ imgSnapArr, imgUrlArr }) {
         //  marginBottom: "2px",
         justifyContent: 'space-around',
         overflow: 'hidden',
-       
+
         width: "100%",
         height,
         // bgcolor: "pink",
@@ -139,13 +129,33 @@ export default function ImageViewerBlock({ imgSnapArr, imgUrlArr }) {
 
     }
 
+    const [isOpen, setIsOpen] = useState(false)
+    const [photoIndex, setPhotoIndex] = useState(0)
 
+    const images = imgUrlArr
     return (
 
         <Box sx={cssObj} ref={target}>
+            {isOpen && <Lightbox
+                mainSrc={images[photoIndex]}
+                nextSrc={images[(photoIndex + 1) % images.length]}
+                prevSrc={images[(photoIndex + images.length - 1) % images.length]}
+                onCloseRequest={() => {
+                    setIsOpen(false);
+                }}
+                onMovePrevRequest={() =>
+                    setPhotoIndex(pre => (pre + images.length - 1) % images.length)
+                }
+                onMoveNextRequest={() =>
+                    setPhotoIndex(pre => (pre + images.length + 1) % images.length)
+                }
+                onAfterOpen={() => {
+
+                }}
+            />}
 
             {imgSnapArr.map((item, index) => {
-                return <Box  key={index} sx={{
+                return <Box key={index} sx={{
                     bgcolor: "pink",
 
                     width: "100%",
@@ -154,7 +164,9 @@ export default function ImageViewerBlock({ imgSnapArr, imgUrlArr }) {
                     position: "relative",
 
 
-                }}>
+                }}
+                    onClick={function () { setPhotoIndex(index); setIsOpen(true) }}
+                >
                     <img src={item} style={{ width: "100%", height: "100%", verticalAlign: "bottom", objectFit: "cover", }} />
                 </Box>
             })}
