@@ -77,10 +77,10 @@ export default function App() {
 
                         onLocalSubmit={function (preHtml, { setDisableSubmit, clearState }) {
 
-                            setPostArr(pre => ([preHtml, ...pre]))
+
                             setDisableSubmit(false)
                             clearState()
-
+                            setPostArr(pre => [{ keyId: Math.random(), preHtml }, ...pre])
                         }}
 
                     // onRemoteSubmit={function (toPreHtml, { editorState, theme, voteArr, voteTopic, pollDuration, imageObj, imageBlockNum, setDisableSubmit, clearState }) {
@@ -162,10 +162,10 @@ export default function App() {
 
 
                     //         const preHtml = toPreHtml({ editorState, theme, voteArr, voteTopic, pollDuration, imageObj, imageBlockNum })
-                    //         setPreHtml(preHtml)
                     //         setDisableSubmit(false)
                     //         clearState()
 
+                    //         setPreHtml(preHtml)
                     //     })
 
                     // }}
@@ -175,11 +175,14 @@ export default function App() {
                     />
                 </Grid>
             </Grid>
+            <Box sx={{ display: "flex", flexDirection: "column" }}>
 
-            {postArr.map((preHtml, index) => {
-                return <EditorViewer preHtml={preHtml} key={index} />
-            })}
+                {postArr.map((preHtml, index) => {
 
+                    return <EditorViewer preHtml={preHtml.preHtml} key={preHtml.keyId} />
+                })}
+
+            </Box>
 
         </Container>
     )

@@ -2,7 +2,8 @@ import React, { useState, useRef, useEffect, memo } from "react";
 import { Button, CssBaseline, Switch, Paper, IconButton, Popover, Typography, Slide, Tabs, Tab, AppBar, Stack, Box, Divider, LinearProgress } from '@mui/material';
 import { ThemeProvider, useTheme, createTheme, styled, } from '@mui/material/styles';
 import Countdown from "react-countdown";
-
+import { blue, red, grey } from '@mui/material/colors';
+import { IndeterminateCheckBox } from "@mui/icons-material";
 
 export default function VoteViewerBlock({ topic, duration, voteArr, expireDate }) {
 
@@ -12,11 +13,40 @@ export default function VoteViewerBlock({ topic, duration, voteArr, expireDate }
 
 
 
-    const [percentageArr, setPercentageArr] = useState([])
     const [expireTime, setExpireTime] = useState("")
 
     const [isVotting, setIsVotting] = useState((Date.parse(new Date(expireDate)) - Date.now()) > 0)
-    const [totalVotes, setTotalVotes] = useState(0)
+
+
+
+    const [voteCountArr, setVoteCountArr] = useState(voteArr.map(item => {
+
+
+        return Number(Number(Math.random() * 100).toFixed(0))
+    }))
+    const totalVotes = voteCountArr.reduce((totalVotes_, itemVote) => {
+
+        //console.log(voteCountArr, itemVote)
+        return totalVotes_ + itemVote
+    }, 0)
+
+    const percentageArr = voteCountArr.map(count => {
+
+        if (count === 0) { return 0 }
+        else {
+            return Number(Number(count / totalVotes * 100).toFixed(0))
+        }
+
+    })
+
+    //const [totalVotes, setTotalVotes] = useState(0)
+
+
+    // useEffect(function () {
+    //     console.log(voteCountArr, percentageArr, totalVotes)
+
+    // }, [])
+
 
 
     // useEffect(function () {
@@ -80,7 +110,8 @@ export default function VoteViewerBlock({ topic, duration, voteArr, expireDate }
                         </Typography>
 
                         <LinearProgress variant="determinate"// value={percentageArr.length === 0 ? 0 : percentageArr[index]}  
-                            value={Math.min(100, index * 15 + 20)}             //value={Number(Math.random() * 100).toFixed(0)}
+                            //value={Math.min(100, index * 15 + 20)}             //value={Number(Math.random() * 100).toFixed(0)}
+                            value={percentageArr[index]}
                             sx={{
                                 height: theme.scaleSizeObj(1.5), marginBottom: "2px",
                             }}
@@ -91,7 +122,8 @@ export default function VoteViewerBlock({ topic, duration, voteArr, expireDate }
 
 
                         <Typography variant='body2' sx={{ position: "absolute", top: "50%", right: 4, zIndex: 100, transform: "translateY(-50%)" }}>
-                            {percentageArr.length === 0 ? "47%" : percentageArr[index] + "%"}
+                            {voteCountArr[index]}/{totalVotes}={percentageArr[index]}%
+                            {/* {percentageArr.length === 0 ? "47%" : percentageArr[index] + "%"} */}
                         </Typography>
 
                     </Box>
