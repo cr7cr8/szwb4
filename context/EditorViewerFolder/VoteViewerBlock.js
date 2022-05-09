@@ -137,7 +137,7 @@ export default function VoteViewerBlock({ topic, duration, voteArr, voteId, expi
 
                             else if (isVotting && !downloadVoteUrl) {
                                 setVoteCountArr((pre) => {
-                                   
+                                    
                                     const newCountArr = [...pre]
                                     newCountArr[index] = newCountArr[index] + 1
                                     console.log(newCountArr)
