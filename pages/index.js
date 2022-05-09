@@ -85,7 +85,7 @@ export default function App() {
                              //      ...uploadVote({ voteArr, voteTopic, pollDuration, voteId })
                             ]
 
-                      
+                       
 
                             Promise.allSettled(promiseArr).then((arr) => {
                                 setDisableSubmit(false)
@@ -94,7 +94,7 @@ export default function App() {
 
                             })
                         }}
-
+ 
                     />
                 </Grid>
             </Grid>
