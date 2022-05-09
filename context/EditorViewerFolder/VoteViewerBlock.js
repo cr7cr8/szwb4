@@ -137,7 +137,7 @@ export default function VoteViewerBlock({ topic, duration, voteArr, voteId, expi
 
                             else if (isVotting && !downloadVoteUrl) {
                                 setVoteCountArr((pre) => {
-                                    
+
                                     const newCountArr = [...pre]
                                     newCountArr[index] = newCountArr[index] + 1
                                     console.log(newCountArr)
@@ -146,7 +146,7 @@ export default function VoteViewerBlock({ topic, duration, voteArr, voteId, expi
 
                             }
                         }}
-                    > 
+                    >
                         <Typography variant='body2'
                             alt="sdfsddf"
                             sx={{
@@ -162,7 +162,7 @@ export default function VoteViewerBlock({ topic, duration, voteArr, voteId, expi
                                 overflow: "hidden",
                                 textOverflow: "ellipsis",
                                 top: 0,
-                                //top: "50%",
+
                                 // transform: "translateY(-50%)",
                             }}>
                             {(choice.length >= 25 ? choice.substring(0, 25) : choice)}
@@ -180,8 +180,9 @@ export default function VoteViewerBlock({ topic, duration, voteArr, voteId, expi
                             display: "block",
                             position: "absolute",
                             right: 4, zIndex: 20,
-                            //    transform: "translateY(-50%)",
                             top: 0,
+                            //    transform: "translateY(-50%)",
+
                         }}>
                             {/* {voteCountArr[index]}/{totalVotes}={percentageArr[index]}% */}
                             {percentageArr[index]}%
