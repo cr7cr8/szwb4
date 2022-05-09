@@ -55,6 +55,7 @@ export default function DraftEditor() {
     voteArr,
     voteTopic,
     pollDuration,
+    voteId,
 
     imageObj,
     imageBlockNum,
@@ -93,7 +94,7 @@ export default function DraftEditor() {
 
     onChange && setTimeout(function () {
 
-      const preHtml = toPreHtml({ editorState, theme, voteArr, voteTopic, pollDuration, imageObj, imageBlockNum })
+      const preHtml = toPreHtml({ editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum })
       onChange(preHtml)
 
     }, 0)
@@ -537,14 +538,14 @@ export default function DraftEditor() {
         setDisableSubmit(true)
         onLocalSubmit && setTimeout(() => {
 
-          const preHtml = toPreHtml({ editorState, theme, voteArr, voteTopic, pollDuration, imageObj, imageBlockNum })
-          onLocalSubmit(preHtml, { editorState, theme, voteArr, voteTopic, pollDuration, imageObj, imageBlockNum, setDisableSubmit, clearState })
+          const preHtml = toPreHtml({ editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum })
+          onLocalSubmit(preHtml, { editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum, setDisableSubmit, clearState })
 
         }, 0);
 
         onRemoteSubmit && setTimeout(() => {
 
-          onRemoteSubmit(toPreHtml, { editorState, theme, voteArr, voteTopic, pollDuration, imageObj, imageBlockNum, setDisableSubmit, clearState })
+          onRemoteSubmit(toPreHtml, { editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum, setDisableSubmit, clearState })
 
         }, 0);
 
@@ -732,7 +733,7 @@ function deleteBlock2(store, blockKey) {
 }
 
 
-export function toPreHtml({ editorState, theme, voteArr, voteTopic, pollDuration, imageObj, imageBlockNum }) {
+export function toPreHtml({ editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum }) {
 
 
 
@@ -840,16 +841,12 @@ export function toPreHtml({ editorState, theme, voteArr, voteTopic, pollDuration
         },
 
         voteBlock: function (block) {
-
           const { d, h, m } = pollDuration
           const expireDate = new Date(Date.now() + (3600 * 24 * d + 3600 * h + 60 * m) * 1000)
-
-        
 
           const voteTopicHtml = `<object data-topic>${voteTopic || ""}</object>`
           const pollDurationHtml = `<object data-duration>${JSON.stringify(pollDuration).trim()}</object>`
           const voteArrHtml = voteArr.map((vote, index) => `<object data-item-${index}>${vote}</object>`)
-
 
           const data = encodeURI(JSON.stringify({ ...block.getData().toObject() }))
           const type = block.getType()
@@ -857,7 +854,7 @@ export function toPreHtml({ editorState, theme, voteArr, voteTopic, pollDuration
 
 
           // return `< object data - vote_arr="${voteArr}" data - type="vote-block"  data - block_key="${key}" data - block_data="${data}" > ` + encodeURI(block.getText()) + '</object>'
-          return `<object data-vote_arr="${voteArr}" date-expire_date="${expireDate}" data-type="vote-block"  data-block_key="${key}" data-block_data="${data}">` + voteTopicHtml + pollDurationHtml + voteArrHtml.join("") + '</object>'
+          return `<object data-vote_arr="${voteArr}" date-vote_id="${voteId}" date-expire_date="${expireDate}" data-type="vote-block"  data-block_key="${key}" data-block_data="${data}">` + voteTopicHtml + pollDurationHtml + voteArrHtml.join("") + '</object>'
 
         },
 

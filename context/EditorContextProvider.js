@@ -61,6 +61,7 @@ export function EditorContextProvider({
     const [peopleList, setPeopleList] = useState(["UweF23", "UweF22", "TonyCerl", "JimWil", "大发发", "Jimberg", "m大Gsd哈"])
 
     const [voteArr, setVoteArr] = useState([])
+    const [voteId, setVoteId] = useState("")
     const [voteTopic, setVoteTopic] = useState("")
     const [pollDuration, setPollDuration] = useState({ d: 3, h: 0, m: 0 })
 
@@ -69,6 +70,7 @@ export function EditorContextProvider({
         setEditorState(EditorState.createEmpty())
         setImageObj({})
         setVoteArr([])
+        setVoteId("")
         setVoteTopic("")
 
     }, [])
@@ -90,6 +92,7 @@ export function EditorContextProvider({
             voteArr, setVoteArr,
             voteTopic, setVoteTopic,
             pollDuration, setPollDuration,
+            voteId, setVoteId,
 
             onChange,
             onLocalSubmit,
@@ -123,6 +126,8 @@ export function EditorViewer({ preHtml }) {
             }
             else if (name === "object" && attribs["data-type"] === "vote-block") {
 
+                const voteId = attribs["date-vote_id"]
+
                 const expireDate = attribs["date-expire_date"]
 
                 const topic = children?.[0]?.children?.[0]?.data ?? ""
@@ -133,7 +138,7 @@ export function EditorViewer({ preHtml }) {
 
 
 
-                return <VoteViewerBlock {...{ topic, duration, voteArr, expireDate }} />
+                return <VoteViewerBlock {...{ topic, duration, voteArr, expireDate, voteId }} />
 
 
 

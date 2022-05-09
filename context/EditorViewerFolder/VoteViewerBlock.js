@@ -4,26 +4,27 @@ import { ThemeProvider, useTheme, createTheme, styled, } from '@mui/material/sty
 import Countdown from "react-countdown";
 import { blue, red, grey } from '@mui/material/colors';
 import { IndeterminateCheckBox } from "@mui/icons-material";
+import axios from "axios";
 
-export default function VoteViewerBlock({ topic, duration, voteArr, expireDate }) {
 
-    //console.log(topic, duration, voteArr)
+export default function VoteViewerBlock({ topic, duration, voteArr, voteId, expireDate }) {
+
+
 
     const theme = useTheme()
-
-
 
     const [expireTime, setExpireTime] = useState("")
 
     const [isVotting, setIsVotting] = useState((Date.parse(new Date(expireDate)) - Date.now()) > 0)
 
+    const [shouldSync, setShouldSync] = useState(false)
 
-
-    const [voteCountArr, setVoteCountArr] = useState(voteArr.map(item => {
-
-
-        return Number(Number(Math.random() * 100).toFixed(0))
-    }))
+    const [voteCountArr, setVoteCountArr] = useState(
+        voteArr.map(item => {
+            return 0
+            //return Number(Number(Math.random() * 100).toFixed(0))
+        })
+    )
     const totalVotes = voteCountArr.reduce((totalVotes_, itemVote) => {
 
         //console.log(voteCountArr, itemVote)
@@ -42,19 +43,22 @@ export default function VoteViewerBlock({ topic, duration, voteArr, expireDate }
     //const [totalVotes, setTotalVotes] = useState(0)
 
 
-    // useEffect(function () {
-    //     console.log(voteCountArr, percentageArr, totalVotes)
+    useEffect(function () {
 
-    // }, [])
-
+        axios.get(`/api/voteBlock/getVoteCount/${voteId}`).then(response => {
 
 
-    // useEffect(function () {
+            if (response.data?.voteCountArr) {
+                setShouldSync(true)
+                setVoteCountArr(response.data?.voteCountArr)
+            }
 
-    //     setIsVotting((Date.parse(new Date(expireDate)) - Date.now()) > 0)
+        })
+
+    }, [])
 
 
-    // })
+
 
     return (
         <Box>
@@ -63,44 +67,90 @@ export default function VoteViewerBlock({ topic, duration, voteArr, expireDate }
             {voteArr.map((choice, index) => {
 
                 return (
-                    <Box key={index} sx={{
-                        position: "relative",
+                    <Box key={index}
+                        sx={{
+                            position: "relative",
 
 
-                        ...isVotting && {
-                            "& > span": { bgcolor: theme.palette.action.disabledBackground },
-                            "& > span > span": {
+                            ...isVotting && {
+                                "& > span": {
 
-                                //bgcolor: hexToRGB(avatarColor, 0.5),
-                                //  transition: "all, 300ms",
-                                //  opacity:0.6,
-                            },
-                            "&:hover": {
-                                cursor: "pointer", transition: "all, 300ms",
-                                "& > span": { bgcolor: theme.palette.action.disabled },
+                                    // bgcolor: theme.palette.action.disabledBackground,
+                                    bgcolor: "transparent",
+                                    borderWidth: "2px",
+                                    borderStyle: "solid",
+                                    borderColor: theme.isLight ? blue[300] : blue[600]
+
+                                },
+
                                 "& > span > span": {
+                                    bgcolor: theme.isLight ? blue[300] : blue[600]
+                                    //bgcolor: hexToRGB(avatarColor, 0.5),
+                                    //  transition: "all, 300ms",
+                                    //  opacity:0.6,
+                                },
+                                "&:hover": {
+                                    cursor: "pointer", transition: "all, 300ms",
+                                    "& > span": { bgcolor: theme.palette.action.disabledBackground },
+                                    "& > span > span": {
 
-                                    //  bgcolor: hexToRGB(avatarColor, 1),
-                                    //    transition: "all, 300ms",
-                                    //    opacity:1,
+                                        //  bgcolor: hexToRGB(avatarColor, 1),
+                                        //    transition: "all, 300ms",
+                                        //    opacity:1,
+                                    },
+                                }
+                            },
+
+                            ...!isVotting && {
+                                "& > span": {
+                                    bgcolor: theme.palette.action.disabledBackground
+                                    //bgcolor:"transparent"
+                                },
+                                "& > span > span": {
+                                    bgcolor: theme.isLight ? blue[300] : blue[600]
+                                    // hexToRGB(avatarColor, 0.5), transition: "all, 300ms"
+
                                 },
                             }
-                        },
-
-                        ...!isVotting && {
-                            "& > span": { bgcolor: theme.palette.action.disabledBackground },
-                            "& > span > span": {
-
-                                // hexToRGB(avatarColor, 0.5), transition: "all, 300ms"
-                            },
-                        }
 
 
-                    }}>
+                        }}
+                        onClick={function () {
+
+
+
+                            if (isVotting && shouldSync) {
+                                setVoteCountArr((pre) => {
+                                    const newCountArr = [...pre]
+                                    newCountArr[index] = newCountArr[index] + 1
+                                    console.log(newCountArr)
+                                    return newCountArr
+                                })
+
+                                axios.put(`/api/voteBlock/updateVoteCount/${voteId}/${index}`).then(resposne => {
+                                    setIsVotting(false)
+                                })
+                            }
+
+                            if (isVotting && !shouldSync) {
+                                setVoteCountArr((pre) => {
+                                    const newCountArr = [...pre]
+                                    newCountArr[index] = newCountArr[index] + 1
+                                    console.log(newCountArr)
+                                    return newCountArr
+                                })
+
+                            }
+
+
+
+                        }}
+                    >
                         <Typography variant='body2'
                             alt="sdfsddf"
                             sx={{
-                                position: "absolute", top: "50%", left: 4, zIndex: 100, transform: "translateY(-50%)", display: "block", width: "calc(100% - 64px )",
+                                position: "absolute", top: "50%", left: 4, zIndex: 100, transform: "translateY(-50%)", display: "block",
+                                width: "calc(100% - 64px )",
                                 //bgcolor: "yellow", 
                                 whiteSpace: "nowrap",
                                 overflow: "hidden",
@@ -118,12 +168,20 @@ export default function VoteViewerBlock({ topic, duration, voteArr, expireDate }
                         />
 
 
+                        {/* <Typography variant='body2' sx={{
+                            position: "absolute", top: "50%",
+                            left:`${percentageArr[index]}%`,
 
+                            zIndex: 100, transform: `translateX(-100%) translateY(-50%)`
+                        }}>
+                         
+                            {percentageArr[index]}% 
+                        </Typography> */}
 
 
                         <Typography variant='body2' sx={{ position: "absolute", top: "50%", right: 4, zIndex: 100, transform: "translateY(-50%)" }}>
-                            {voteCountArr[index]}/{totalVotes}={percentageArr[index]}%
-                            {/* {percentageArr.length === 0 ? "47%" : percentageArr[index] + "%"} */}
+                            {/* {voteCountArr[index]}/{totalVotes}={percentageArr[index]}% */}
+                            {percentageArr[index]}%
                         </Typography>
 
                     </Box>

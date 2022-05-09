@@ -24,6 +24,7 @@ const { authenticateToken, generateAndDispatchToken, checkingToken } = require("
 
 const cookieApi = require("./router/cookieApi")
 const picture = require("./router/picture")
+const voteBlock = require("./router/voteBlock")
 
 console.log(">> Process.env.NODE_ENV = " + process.env.NODE_ENV, process.env.PORT || port)
 
@@ -31,6 +32,9 @@ app.prepare().then(
 
     () => {
         express.disable('x-powered-by');
+        express.use(express_.json())
+        express.use(express_.urlencoded({ extended: true }))
+        
         express.use(cors({}))
         express.use(cookieParser('cookieSecretKey'))
 
@@ -39,9 +43,9 @@ app.prepare().then(
 
         express.use('/api/userCookie', cookieApi)
         express.use('/api/picture', picture)
+        express.use('/api/voteBlock', voteBlock)
 
 
-       
 
         // express.use('/api/404', function (req, res) {
 

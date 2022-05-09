@@ -20,6 +20,7 @@ export default function VoteBlock(props) {
         voteArr, setVoteArr,
         voteTopic, setVoteTopic,
         pollDuration, setPollDuration,
+        voteId, setVoteId,
     } = useContext(EditorContext)
 
 
@@ -29,7 +30,9 @@ export default function VoteBlock(props) {
         if (voteArr.length === 0) {
             setVoteArr([""])
         }
+        setVoteId("VoteId" + Number(Math.random() * 100000000).toFixed(0))
 
+        return function () { setVoteId(pre => {  return "" }) }
 
     }, [])
 
