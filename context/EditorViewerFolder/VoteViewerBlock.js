@@ -7,7 +7,7 @@ import { IndeterminateCheckBox } from "@mui/icons-material";
 import axios from "axios";
 
 
-export default function VoteViewerBlock({ topic, duration, voteArr, voteId, expireDate }) {
+export default function VoteViewerBlock({ topic, duration, voteArr, voteId, expireDate, downloadVoteUrl }) {
 
 
 
@@ -17,7 +17,7 @@ export default function VoteViewerBlock({ topic, duration, voteArr, voteId, expi
 
     const [isVotting, setIsVotting] = useState((Date.parse(new Date(expireDate)) - Date.now()) > 0)
 
-    const [shouldSync, setShouldSync] = useState(false)
+    const [isLoaded, setIsLoaded] = useState(false)
 
     const [voteCountArr, setVoteCountArr] = useState(
         voteArr.map(item => {
@@ -45,12 +45,13 @@ export default function VoteViewerBlock({ topic, duration, voteArr, voteId, expi
 
     useEffect(function () {
 
-        axios.get(`/api/voteBlock/getVoteCount/${voteId}`).then(response => {
+        downloadVoteUrl && axios.get(`/api/voteBlock/getVoteCount/${voteId}`).then(response => {
 
 
             if (response.data?.voteCountArr) {
-                setShouldSync(true)
+
                 setVoteCountArr(response.data?.voteCountArr)
+                 setIsLoaded(true)
             }
 
         })
@@ -89,14 +90,16 @@ export default function VoteViewerBlock({ topic, duration, voteArr, voteId, expi
                                     //  transition: "all, 300ms",
                                     //  opacity:0.6,
                                 },
-                                "&:hover": {
-                                    cursor: "pointer", transition: "all, 300ms",
-                                    "& > span": { bgcolor: theme.palette.action.disabledBackground },
-                                    "& > span > span": {
+                                ...(isLoaded || (!downloadVoteUrl)) && {
+                                    "&:hover": {
+                                        cursor: "pointer", transition: "all, 300ms",
+                                        "& > span": { bgcolor: theme.palette.action.disabledBackground },
+                                        "& > span > span": {
 
-                                        //  bgcolor: hexToRGB(avatarColor, 1),
-                                        //    transition: "all, 300ms",
-                                        //    opacity:1,
+                                            //  bgcolor: hexToRGB(avatarColor, 1),
+                                            //    transition: "all, 300ms",
+                                            //    opacity:1,
+                                        }
                                     },
                                 }
                             },
@@ -119,20 +122,20 @@ export default function VoteViewerBlock({ topic, duration, voteArr, voteId, expi
 
 
 
-                            if (isVotting && shouldSync) {
+                            if (isVotting && downloadVoteUrl && isLoaded) {
                                 setVoteCountArr((pre) => {
                                     const newCountArr = [...pre]
                                     newCountArr[index] = newCountArr[index] + 1
                                     console.log(newCountArr)
                                     return newCountArr
                                 })
-
+                                setIsVotting(false)
                                 axios.put(`/api/voteBlock/updateVoteCount/${voteId}/${index}`).then(resposne => {
-                                    setIsVotting(false)
+
                                 })
                             }
 
-                            if (isVotting && !shouldSync) {
+                            else if (isVotting && !downloadVoteUrl) {
                                 setVoteCountArr((pre) => {
                                     const newCountArr = [...pre]
                                     newCountArr[index] = newCountArr[index] + 1

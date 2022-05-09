@@ -61,8 +61,8 @@ export default function DraftEditor() {
     imageBlockNum,
 
     onChange,
-    onLocalSubmit,
-    onRemoteSubmit,
+    onSubmit,
+   
 
     clearState
 
@@ -536,18 +536,27 @@ export default function DraftEditor() {
 
       <Button fullWidth disabled={disableSubmit} onClick={function () {
         setDisableSubmit(true)
-        onLocalSubmit && setTimeout(() => {
+        onSubmit && setTimeout(() => {
 
           const preHtml = toPreHtml({ editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum })
-          onLocalSubmit(preHtml, { editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum, setDisableSubmit, clearState })
+          onSubmit(preHtml, { editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum, setDisableSubmit, clearState })
 
         }, 0);
 
-        onRemoteSubmit && setTimeout(() => {
+        // onRemoteSubmit && setTimeout(() => {
 
-          onRemoteSubmit(toPreHtml, { editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum, setDisableSubmit, clearState })
+        //   const preHtml = toPreHtml({ editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum })
+        //   onRemoteSubmit(preHtml, { editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum, setDisableSubmit, clearState })
 
-        }, 0);
+
+        // }, 0);
+
+
+        // onRemoteSubmit && setTimeout(() => {
+
+        //   onRemoteSubmit(toPreHtml, { editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum, setDisableSubmit, clearState })
+
+        // }, 0);
 
 
 

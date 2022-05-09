@@ -75,108 +75,23 @@ export default function App() {
                         //     })
                         // }}
 
-                        // onLocalSubmit={function (preHtml, { setDisableSubmit, clearState }) {
+                     
 
+                        onSubmit={function (preHtml, { editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum, setDisableSubmit, clearState }) {
 
-                        //     setDisableSubmit(false)
-                        //     clearState()
-                        //     setPostArr(pre => [{ keyId: Math.random(), preHtml }, ...pre])
-                        // }}
+                         
+                            const promiseArr = [
+                                   ...uploadImage(imageObj),
+                                   ...uploadVote({ voteArr, voteTopic, pollDuration, voteId })
+                            ]
 
-                        onRemoteSubmit={function (toPreHtml, { editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum, setDisableSubmit, clearState }) {
+                      
 
-
-                            const promiseUploadArr = [];
-
-
-                            const imageObjKeyArr = Object.keys(imageObj)
-
-                            if (Array.isArray(imageObjKeyArr) && imageObjKeyArr.length > 0) {
-
-                                const dataSnap = new FormData();
-                                const dataImage = new FormData();
-                                const promiseImgSnapArr = [];
-                                const promiseImgUrlArr = [];
-
-                                Object.keys(imageObj).forEach((objKey, index) => {
-                                    imageObj[objKey].forEach(img => {
-
-                                        promiseImgSnapArr.push(fetch(img.imgSnap)
-                                            .then(res => {
-                                                return res.blob()
-                                            })
-                                            .then(fileBlob => {
-                                                dataSnap.append("file", new File([fileBlob], img.imgSnap.substr(img.imgSnap.lastIndexOf("/") + 1) + "-snap", { type: "image/jpeg" }))
-                                            })
-                                        )
-
-                                        promiseImgUrlArr.push(fetch(img.imgUrl)
-                                            .then(res => {
-                                                return res.blob()
-                                            })
-                                            .then(fileBlob => {
-                                                dataImage.append("file", new File([fileBlob], img.imgUrl.substr(img.imgUrl.lastIndexOf("/") + 1) + "-img", { type: "image/jpeg" }))
-                                            })
-                                        )
-
-
-                                        // console.log(img.imgSnap.substr(img.imgSnap.lastIndexOf("/") + 1), img.imgSnap.substr(img.imgUrl.lastIndexOf("/") + 1))
-                                    })
-
-                                })
-
-                                promiseUploadArr.push(Promise.allSettled(promiseImgSnapArr).then(arr => {
-
-                                    return axios.post(`/api/picture/uploadPicture`, dataSnap, {
-                                        headers: { 'content-type': 'multipart/form-data' },
-                                    })
-
-                                }))
-
-                                promiseUploadArr.push(Promise.allSettled(promiseImgUrlArr).then(arr => {
-                                    //console.log(data.getAll("file"))
-                                    return axios.post(`/api/picture/uploadPicture2`, dataImage, {
-                                        headers: { 'content-type': 'multipart/form-data' },
-                                    })
-
-                                }))
-                            }
-
-
-
-
-
-                            if (voteId) {
-                                const { d, h, m } = pollDuration
-                                const expireDate = new Date(Date.now() + (3600 * 24 * d + 3600 * h + 60 * m) * 1000)
-
-                                promiseUploadArr.push(
-                                    axios.post(`/api/voteBlock/createVote`, { voteId, voteTopic, voteArr, expireDate }, {
-                                        //  headers: { 'content-type': 'multipart/form-data' },
-                                    }).then(response => {
-                                        console.log(response.data)
-                                    })
-                                )
-                            }
-
-
-
-                            Promise.allSettled(promiseUploadArr).then((arr) => {
-
-                                if (Array.isArray(imageObjKeyArr) && imageObjKeyArr.length > 0) {
-                                    Object.keys(imageObj).forEach((objKey, index) => {
-                                        imageObj[objKey].forEach(img => {
-                                            img.imgSnap = "/api/picture/downloadPicture/" + img.imgSnap.substr(img.imgSnap.lastIndexOf("/") + 1) + "-snap"
-                                            img.imgUrl = "/api/picture/downloadPicture/" + img.imgUrl.substr(img.imgUrl.lastIndexOf("/") + 1) + "-img"
-                                        })
-                                    })
-                                }
-                                const preHtml = toPreHtml({ editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum })
-
+                            Promise.allSettled(promiseArr).then((arr) => {
                                 setDisableSubmit(false)
                                 clearState()
                                 setPostArr(pre => [{ keyId: Math.random(), preHtml }, ...pre])
-                                // setPreHtml(preHtml)
+
                             })
                         }}
 
@@ -196,8 +111,9 @@ export default function App() {
 
                             return (
                                 <EditorViewer key={preHtml.keyId} preHtml={preHtml.preHtml}
-                                    downloadImageUrl="/api/picture/downloadPicture/"
-                                    downloadVoteUrl="/api/voteBlock/" />
+                                  downloadImageUrl="/api/picture/downloadPicture/"
+                                  downloadVoteUrl="/api/voteBlock/"
+                                />
                             )
                         })}
                     </Grid>
@@ -212,8 +128,86 @@ export default function App() {
 
 
 
-async function asyncForEach(array, callback) {
-    for (let index = 0; index < array.length; index++) {
-        await callback(array[index], index, array);
+function uploadImage(imageObj) {
+
+    const promiseUploadArr = [];
+
+    const imageObjKeyArr = Object.keys(imageObj)
+
+    if (Array.isArray(imageObjKeyArr) && imageObjKeyArr.length > 0) {
+
+        const dataSnap = new FormData();
+        const dataImage = new FormData();
+        const promiseImgSnapArr = [];
+        const promiseImgUrlArr = [];
+
+        Object.keys(imageObj).forEach((objKey, index) => {
+            imageObj[objKey].forEach(img => {
+
+                promiseImgSnapArr.push(fetch(img.imgSnap)
+                    .then(res => {
+                        return res.blob()
+                    })
+                    .then(fileBlob => {
+                        dataSnap.append("file", new File([fileBlob], img.imgSnap.substr(img.imgSnap.lastIndexOf("/") + 1) + "-snap", { type: "image/jpeg" }))
+                    })
+                )
+
+                promiseImgUrlArr.push(fetch(img.imgUrl)
+                    .then(res => {
+                        return res.blob()
+                    })
+                    .then(fileBlob => {
+                        dataImage.append("file", new File([fileBlob], img.imgUrl.substr(img.imgUrl.lastIndexOf("/") + 1) + "-img", { type: "image/jpeg" }))
+                    })
+                )
+
+
+                // console.log(img.imgSnap.substr(img.imgSnap.lastIndexOf("/") + 1), img.imgSnap.substr(img.imgUrl.lastIndexOf("/") + 1))
+            })
+
+        })
+
+        promiseUploadArr.push(Promise.allSettled(promiseImgSnapArr).then(arr => {
+
+            return axios.post(`/api/picture/uploadPicture`, dataSnap, {
+                headers: { 'content-type': 'multipart/form-data' },
+            })
+
+        }))
+
+        promiseUploadArr.push(Promise.allSettled(promiseImgUrlArr).then(arr => {
+            //console.log(data.getAll("file"))
+            return axios.post(`/api/picture/uploadPicture2`, dataImage, {
+                headers: { 'content-type': 'multipart/form-data' },
+            })
+
+        }))
     }
+
+
+    return promiseUploadArr
+
+}
+
+function uploadVote({ voteArr, voteTopic, pollDuration, voteId }) {
+    const promiseUploadArr = []
+
+    if (voteId) {
+        const { d, h, m } = pollDuration
+        const expireDate = new Date(Date.now() + (3600 * 24 * d + 3600 * h + 60 * m) * 1000)
+
+        promiseUploadArr.push(
+            axios.post(`/api/voteBlock/createVote`, { voteId, voteTopic, voteArr, expireDate }, {
+                //  headers: { 'content-type': 'multipart/form-data' },
+            }).then(response => {
+                console.log(response.data)
+            })
+        )
+    }
+
+
+    return promiseUploadArr
+
+
 }

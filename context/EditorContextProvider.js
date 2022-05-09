@@ -17,8 +17,8 @@ export const EditorContext = createContext()
 export function EditorContextProvider({
 
     onChange,
-    onLocalSubmit,
-    onRemoteSubmit,
+    onSubmit,
+    
 
 }) {
 
@@ -95,8 +95,8 @@ export function EditorContextProvider({
             voteId, setVoteId,
 
             onChange,
-            onLocalSubmit,
-            onRemoteSubmit,
+            onSubmit,
+          
 
             clearState
 
@@ -106,7 +106,7 @@ export function EditorContextProvider({
     )
 }
 
-export function EditorViewer({ preHtml }) {
+export function EditorViewer({ preHtml, downloadImageUrl = "", downloadVoteUrl = "" }) {
 
     const options = useMemo(() => ({
         replace: (domNode) => {
@@ -114,13 +114,32 @@ export function EditorViewer({ preHtml }) {
 
             if (name === "object" && attribs["data-type"] === "image-block") {
 
-                const imgSnapArr = []
-                const imgUrlArr = []
+                let imgSnapArr = []
+                let imgUrlArr = []
 
                 children.forEach((item, index) => {
-                    imgSnapArr.push(item.attribs["data-imgsnap"])
-                    imgUrlArr.push(item.attribs["data-imgurl"])
+                    if (downloadImageUrl) {
+                        imgSnapArr.push(downloadImageUrl + item.attribs["data-imgsnap"].substr(item.attribs["data-imgsnap"].lastIndexOf("/") + 1) + "-snap")
+                        imgUrlArr.push(downloadImageUrl + item.attribs["data-imgurl"].substr(item.attribs["data-imgurl"].lastIndexOf("/") + 1) + "-img")
+                    }
+                    else {
+                        imgSnapArr.push(item.attribs["data-imgsnap"])
+                        imgUrlArr.push(item.attribs["data-imgurl"])
+                    }
                 })
+
+
+
+                //     Object.keys(imageObj).forEach((objKey, index) => {
+                //         imageObj[objKey].forEach(img => {
+                //             img.imgSnap = "/api/picture/downloadPicture/" + img.imgSnap.substr(img.imgSnap.lastIndexOf("/") + 1) + "-snap"
+                //             img.imgUrl = "/api/picture/downloadPicture/" + img.imgUrl.substr(img.imgUrl.lastIndexOf("/") + 1) + "-img"
+                //         })
+                //     })
+
+
+
+
 
                 return <ImageViewerBlock {...{ imgSnapArr, imgUrlArr }} />
             }
@@ -138,7 +157,7 @@ export function EditorViewer({ preHtml }) {
 
 
 
-                return <VoteViewerBlock {...{ topic, duration, voteArr, expireDate, voteId }} />
+                return <VoteViewerBlock {...{ topic, duration, voteArr, expireDate, voteId, downloadVoteUrl }} />
 
 
 

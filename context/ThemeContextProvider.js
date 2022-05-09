@@ -40,7 +40,7 @@ export default function ThemeContextProvider({ cssBaseLine = true, ...props }) {
         return obj
     }, [sizeObj])
 
-   
+
 
     const [mode, setMode] = React.useState(props.mode || 'light');
     const myTheme = React.useMemo(
@@ -94,6 +94,23 @@ export default function ThemeContextProvider({ cssBaseLine = true, ...props }) {
                             }
                         }
                     },
+                    MuiTypography: {
+                        styleOverrides: {
+                            root: ({ ownerState, theme, ...props }) => {
+
+                                return [
+                                    ownerState.variant === 'body2' &&
+                                    sx({
+                                        fontSize: theme.sizeObj,
+
+                                    }),
+
+                                ]
+                            }
+                        }
+
+                    },
+
                     MuiSvgIcon: {
                         styleOverrides: {
                             root: ({ ownerState, theme, ...props }) => {
