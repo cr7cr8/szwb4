@@ -103,7 +103,7 @@ export default function createMentionPlugin() {
                     tagStartPos = start
                     tagEndPos = end
 
-                    tagCurrentStartPos= start
+                    tagCurrentStartPos = start
                     tagCurrentEndPos = end
 
                     newSelection = newSelection.merge({
@@ -191,7 +191,7 @@ export default function createMentionPlugin() {
             isBackward: false,
             hasFocus: true,
         }), entityKeyObj[`personTag`])
-       
+
 
         newSelection = editorState.getSelection().merge({
 
@@ -284,6 +284,7 @@ export default function createMentionPlugin() {
                     {/* <Typography sx={cssObj} variant="body2"> */}
                     {children}
                     {/* </Typography> */}
+                    {/* <MentionMenu tabIndex={tabIndex} setShowing={setShowing} setTabName={setTabName} nameList={nameList} insertMention={insertMention} blockType={blockType} /> */}
 
                 </Box>
             )

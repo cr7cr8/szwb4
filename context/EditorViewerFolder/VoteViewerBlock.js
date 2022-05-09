@@ -51,7 +51,7 @@ export default function VoteViewerBlock({ topic, duration, voteArr, voteId, expi
             if (response.data?.voteCountArr) {
 
                 setVoteCountArr(response.data?.voteCountArr)
-                 setIsLoaded(true)
+                setIsLoaded(true)
             }
 
         })
@@ -152,12 +152,20 @@ export default function VoteViewerBlock({ topic, duration, voteArr, voteId, expi
                         <Typography variant='body2'
                             alt="sdfsddf"
                             sx={{
-                                position: "absolute", top: "50%", left: 4, zIndex: 100, transform: "translateY(-50%)", display: "block",
+                                position: "absolute",
+
+                                left: 4,
+                                zIndex: 20,
+
+                                display: "block",
                                 width: "calc(100% - 64px )",
                                 //bgcolor: "yellow", 
                                 whiteSpace: "nowrap",
                                 overflow: "hidden",
-                                textOverflow: "ellipsis"
+                                textOverflow: "ellipsis",
+                                top:0,
+                                //top: "50%",
+                                // transform: "translateY(-50%)",
                             }}>
                             {(choice.length >= 25 ? choice.substring(0, 25) : choice)}
                         </Typography>
@@ -170,19 +178,13 @@ export default function VoteViewerBlock({ topic, duration, voteArr, voteId, expi
                             }}
                         />
 
-
-                        {/* <Typography variant='body2' sx={{
-                            position: "absolute", top: "50%",
-                            left:`${percentageArr[index]}%`,
-
-                            zIndex: 100, transform: `translateX(-100%) translateY(-50%)`
+                        <Typography variant='body2' sx={{
+                            display: "block",
+                            position: "absolute",
+                            right: 4, zIndex: 20,
+                            //    transform: "translateY(-50%)",
+                            top: 0,
                         }}>
-                         
-                            {percentageArr[index]}% 
-                        </Typography> */}
-
-
-                        <Typography variant='body2' sx={{ position: "absolute", top: "50%", right: 4, zIndex: 100, transform: "translateY(-50%)" }}>
                             {/* {voteCountArr[index]}/{totalVotes}={percentageArr[index]}% */}
                             {percentageArr[index]}%
                         </Typography>

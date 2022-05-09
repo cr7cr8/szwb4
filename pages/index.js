@@ -81,8 +81,8 @@ export default function App() {
 
                          
                             const promiseArr = [
-                                   ...uploadImage(imageObj),
-                                   ...uploadVote({ voteArr, voteTopic, pollDuration, voteId })
+                             //      ...uploadImage(imageObj),
+                             //      ...uploadVote({ voteArr, voteTopic, pollDuration, voteId })
                             ]
 
                       
@@ -111,8 +111,8 @@ export default function App() {
 
                             return (
                                 <EditorViewer key={preHtml.keyId} preHtml={preHtml.preHtml}
-                                  downloadImageUrl="/api/picture/downloadPicture/"
-                                  downloadVoteUrl="/api/voteBlock/"
+                              //    downloadImageUrl="/api/picture/downloadPicture/"
+                              //    downloadVoteUrl="/api/voteBlock/"
                                 />
                             )
                         })}

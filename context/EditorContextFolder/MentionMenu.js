@@ -93,12 +93,14 @@ export function MenuItem({ name, index, inTab, insertMention }) {
             variant="filled"
             sx={{
                 justifyContent: "flex-start",
+                zIndex:1000,
                 "&:hover": {
                     bgcolor: "background.default", 
                     borderWidth: "1px",
                     borderStyle: "solid",
                     borderColor: blue[500],
-                    color: blue[500]
+                    color: blue[500],
+                
                 },
 
                 // ...inTab === index && { bgcolor: "pink" }
