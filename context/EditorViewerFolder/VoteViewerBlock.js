@@ -137,6 +137,7 @@ export default function VoteViewerBlock({ topic, duration, voteArr, voteId, expi
 
                             else if (isVotting && !downloadVoteUrl) {
                                 setVoteCountArr((pre) => {
+                                   
                                     const newCountArr = [...pre]
                                     newCountArr[index] = newCountArr[index] + 1
                                     console.log(newCountArr)
@@ -144,11 +145,8 @@ export default function VoteViewerBlock({ topic, duration, voteArr, voteId, expi
                                 })
 
                             }
-
-
-
                         }}
-                    >
+                    > 
                         <Typography variant='body2'
                             alt="sdfsddf"
                             sx={{
@@ -163,7 +161,7 @@ export default function VoteViewerBlock({ topic, duration, voteArr, voteId, expi
                                 whiteSpace: "nowrap",
                                 overflow: "hidden",
                                 textOverflow: "ellipsis",
-                                top:0,
+                                top: 0,
                                 //top: "50%",
                                 // transform: "translateY(-50%)",
                             }}>
