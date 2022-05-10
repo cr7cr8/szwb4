@@ -331,7 +331,7 @@ export default function DraftEditor() {
           plugins={[
             emojiPlugin,
             imagePlugin,
-            linkPlugin,
+            linkPlugin, 
             votePlugin,
             mentionPlugin,
             personPlugin,
