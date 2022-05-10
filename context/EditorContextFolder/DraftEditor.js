@@ -290,7 +290,7 @@ export default function DraftEditor() {
 
         </Box>
         <Box>
-          <Collapse in={colorIn} unmountOnExit={false}  >
+          <Collapse in={colorIn} unmountOnExit={true}  >
 
             {
               colorArr.map((colorItem, index) => {

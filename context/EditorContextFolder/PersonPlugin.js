@@ -37,9 +37,10 @@ export default function createPersonPlugin() {
 
             display: "inline-block",
             "& span": {
-                fontSize: theme.scaleSizeObj(blockData.isSmallFont ? 0.8 : 1),
+                fontSize:     theme.scaleSizeObj(blockData.isSmallFont ? 0.6 : 1),
                 wordWrap: "normal",
-                transition: "font-size, 300ms"
+                transition: "font-size, 300ms",
+             //   fontSize:     blockData.isSmallFont ? "1rem" : "1.5rem",
             },
 
         }
@@ -78,7 +79,7 @@ export default function createPersonPlugin() {
                 }}
             >
 
-                <Typography sx={cssObj} variant="body2">
+                <Typography sx={cssObj}>
                     {children}
                 </Typography>
             </Box>
