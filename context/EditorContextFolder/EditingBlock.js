@@ -119,14 +119,14 @@ export default function EditingBlock({ VoteBlock, readOnly, setReadOnly, marking
                             contentEditable={false} suppressContentEditableWarning={true}
                             onClick={function () {
 
-                                startTransition(function (){
+                                //  startTransition(function (){
 
+                                //      markingImageBlock(blockKey)
+                                //   })
+                                setTimeout(function () {
+            
                                     markingImageBlock(blockKey)
-                                })
-                                // setTimeout(function () {
-
-                                //     markingImageBlock(blockKey)
-                                // }, [])
+                                }, 0)
 
                             }}
                         >

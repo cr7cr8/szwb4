@@ -36,6 +36,11 @@ export default function createImagePlugin() {
 
         }
         else {
+            //alert("cccaaa")
+            // setTimeout(() => {
+            //   //  alert("cccaaabbb")
+            //     setEditorState(EditorState.forceSelection(editorState, editorState.getSelection()))
+            // }, 0);
             return setEditorState(editorState)
         }
 
