@@ -26,9 +26,9 @@ export default function ThemeContextProvider({ cssBaseLine = true, ...props }) {
 
 
     const [sizeObj, setSizeObj] = useState(props.sizeObj || { xs: "1.5rem", sm: "1.5rem", md: "1.5rem", lg: "1.5rem", xl: "1.5rem" })
-    const [colorObj, setColorObj] = useColorObj(2)
+    const [colorObj, setColorObj] = useColorObj(5)
 
- 
+
 
     const scaleSizeObj = useCallback((factor = 1) => {
         const obj = {}
@@ -98,6 +98,27 @@ export default function ThemeContextProvider({ cssBaseLine = true, ...props }) {
                             variant: "contained",
                             disableRipple: false,
                         },
+                        styleOverrides: {
+                            root: ({ ownerState, theme, ...props }) => {
+
+                                return [
+                                    //  ownerState.variant === 'body2' &&
+                                    sx({
+
+                                        bgcolor: theme.isLight
+                                            ? `rgba( ${hexToRgb(colorObj[100]).r}, ${hexToRgb(colorObj[100]).g}, ${hexToRgb(colorObj[100]).b},   0.5)`
+                                            : `rgba( ${hexToRgb(colorObj[900]).r}, ${hexToRgb(colorObj[900]).g}, ${hexToRgb(colorObj[900]).b},   0.5)`,
+                                        color: theme.palette.text.secondary,
+                                        fontSize: theme.addingSizeObj(-5),
+                                        "&:hover": {
+                                            bgcolor: theme.isLight ? colorObj[500] : colorObj[500],
+                                        },
+                                        backdropFilter: "blur(20px)",
+                                    }),
+
+                                ]
+                            }
+                        }
 
                     },
                     MuiPaper: {
@@ -150,7 +171,7 @@ export default function ThemeContextProvider({ cssBaseLine = true, ...props }) {
                     }
                 }
             }),
-        [mode, sizeObj,colorObj],
+        [mode, sizeObj, colorObj],
     );
 
     return (
@@ -162,6 +183,18 @@ export default function ThemeContextProvider({ cssBaseLine = true, ...props }) {
 
 
     )
+}
 
 
+
+
+
+
+function hexToRgb(hex) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
 }

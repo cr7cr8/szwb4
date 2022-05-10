@@ -8,7 +8,7 @@ import {
 
 import NoSsr from '@mui/material/NoSsr';
 
-import { Container, Grid, Paper, IconButton, ButtonGroup, Stack, Button, Switch, Box, Hidden, } from '@mui/material';
+import { Container, Grid, Paper, IconButton, ButtonGroup, Stack, Button, Switch, Box, Hidden, Collapse } from '@mui/material';
 import Editor from "@draft-js-plugins/editor";
 
 import Immutable from 'immutable';
@@ -77,7 +77,10 @@ export default function DraftEditor() {
   const theme = useTheme()
   const colorObj = theme.colorObj
 
+
   const colorArr = theme.colorArr
+
+
 
   const editorRef = useRef()
   const specialBackSpace = useRef(false)
@@ -133,7 +136,7 @@ export default function DraftEditor() {
 
 
 
-
+  const [colorIn, setColorIn] = useState(true)
 
 
 
@@ -141,139 +144,6 @@ export default function DraftEditor() {
   return (
     <>
       {/* <NoSsr fallback={<></>}> */}
-
-
-      <Stack direction="row"
-        sx={{
-          position: "sticky", top: 0, justifyContent: "space-between",
-          zIndex: 600,
-          // bgcolor:"background.default",
-
-        }}
-      >
-        <Stack direction="row" sx={{
-          width: "10px", flexGrow: 1,
-          bgcolor: theme.isLight ? "rgba(255, 255, 255, 0.5)" : "rgba(0, 0, 0, 0.5)",
-          backdropFilter: "blur(20px)"
-        }}>
-          <EmojiComp editorRef={editorRef} />
-
-          <IconButton size="small" onClick={function (e) {
-            e.preventDefault()
-            e.stopPropagation()
-
-
-            const blockType = editorState.getCurrentContent().getBlockForKey(currentBlockKey).getType()
-            if (blockType === "imageBlock") { return }
-
-
-            const data = editorState.getCurrentContent().getBlockForKey(currentBlockKey).getData().toObject()
-
-
-
-            const newContent = Modifier.setBlockData(
-              editorState.getCurrentContent(),
-              SelectionState.createEmpty(currentBlockKey),//  editorState.getSelection(), // SelectionState.createEmpty(currentBlockKey),
-              Immutable.Map({ isSmallFont: !Boolean(data.isSmallFont) })
-            )
-
-
-            const es = EditorState.push(editorState, newContent, 'change-block-data');
-            setEditorState(es)
-
-          }} >
-            <FormatSize fontSize="large" />
-          </IconButton>
-
-          <IconButton size="small" onClick={function () {
-            const es = RichUtils.toggleBlockType(
-              editorState, // write type to editorState
-              "unstyled"
-            )
-            setTimeout(() => {
-              setEditorState(EditorState.forceSelection(es, es.getSelection()))
-            }, 0);
-
-          }}>
-            <FormatAlignLeft fontSize="large" />
-          </IconButton>
-
-          <IconButton size="small" onClick={function () {
-            const es = RichUtils.toggleBlockType(
-              editorState, // write type to editorState
-              "centerBlock"
-            )
-            setTimeout(() => {
-              setEditorState(EditorState.forceSelection(es, es.getSelection()))
-            }, 0);
-          }}>
-            <FormatAlignCenter fontSize="large" />
-          </IconButton>
-
-          <IconButton size="small" onClick={function () {
-            const es = RichUtils.toggleBlockType(
-              editorState, // write type to editorState
-              "rightBlock"
-            )
-            setTimeout(() => {
-              setEditorState(EditorState.forceSelection(es, es.getSelection()))
-            }, 0);
-          }}>
-            <FormatAlignRight fontSize="large" />
-          </IconButton>
-
-          <IconButton size="small" onClick={function () {
-            setEditorState(addEmptyBlock(editorState))
-            // const es = RichUtils.toggleBlockType(
-            //   editorState, // write type to editorState
-            //   "rightBlock"
-            // )
-            // setTimeout(() => {
-            //   setEditorState(EditorState.forceSelection(es, es.getSelection()))
-            // }, 0);
-          }}>
-            <HorizontalSplitOutlined fontSize="large" />
-          </IconButton>
-
-
-          <IconButton size="small" onClick={function () {
-
-          }}>
-            <ColorLensOutlined fontSize="large" />
-          </IconButton>
-
-          <Box>
-
-            {
-              colorArr.map((colorItem, index) => {
-
-                return (
-                  <IconButton key={index} size="small" onClick={function () {
-
-                    theme.setColorObj(index)
-                  }}>
-                    <Circle fontSize="large" sx={{ color: theme.isLight ? colorItem[500] : colorItem[300] }} />
-                  </IconButton>
-                )
-
-              })
-
-            }
-
-
-          </Box>
-
-          <Switch
-            sx={{ position: "absolute", right: -10 }}
-            checked={!theme.isLight}
-            onChange={function (event) {
-              event.target.checked
-                ? theme.setMode("dark")
-                : theme.setMode("light")
-            }}
-          />
-        </Stack>
-      </Stack>
       <Paper
         id="frame-editor"
         //  ref={frameRef}
@@ -295,6 +165,154 @@ export default function DraftEditor() {
         }}
       >
 
+      <Box
+        sx={{
+          position: "sticky", top: 0, justifyContent: "space-between",
+          zIndex: 600, display: "flex",
+
+          backdropFilter: "blur(20px)",
+          flexDirection: "column",
+          width: "100%",
+       
+          // bgcolor: theme.isLight ? "rgba(255, 255, 255, 0.5)" : "rgba(0, 0, 0, 0.5)",
+          bgcolor: theme.isLight
+            ? `rgba( ${hexToRgb(colorObj[100]).r}, ${hexToRgb(colorObj[100]).g}, ${hexToRgb(colorObj[100]).b},   0.5)`
+            : `rgba( ${hexToRgb(colorObj[900]).r}, ${hexToRgb(colorObj[900]).g}, ${hexToRgb(colorObj[900]).b},   0.5)`
+          // bgcolor:"background.default",
+
+        }}
+      >
+
+        <Box sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          width: "100%",
+        }}>
+          <Box>
+            <EmojiComp editorRef={editorRef} />
+
+            <IconButton size="small" onClick={function (e) {
+              e.preventDefault()
+              e.stopPropagation()
+
+
+              const blockType = editorState.getCurrentContent().getBlockForKey(currentBlockKey).getType()
+              if (blockType === "imageBlock") { return }
+
+
+              const data = editorState.getCurrentContent().getBlockForKey(currentBlockKey).getData().toObject()
+
+
+
+              const newContent = Modifier.setBlockData(
+                editorState.getCurrentContent(),
+                SelectionState.createEmpty(currentBlockKey),//  editorState.getSelection(), // SelectionState.createEmpty(currentBlockKey),
+                Immutable.Map({ isSmallFont: !Boolean(data.isSmallFont) })
+              )
+
+
+              const es = EditorState.push(editorState, newContent, 'change-block-data');
+              setEditorState(es)
+
+            }} >
+              <FormatSize fontSize="large" />
+            </IconButton>
+
+            <IconButton size="small" onClick={function () {
+              const es = RichUtils.toggleBlockType(
+                editorState, // write type to editorState
+                "unstyled"
+              )
+              setTimeout(() => {
+                setEditorState(EditorState.forceSelection(es, es.getSelection()))
+              }, 0);
+
+            }}>
+              <FormatAlignLeft fontSize="large" />
+            </IconButton>
+
+            <IconButton size="small" onClick={function () {
+              const es = RichUtils.toggleBlockType(
+                editorState, // write type to editorState
+                "centerBlock"
+              )
+              setTimeout(() => {
+                setEditorState(EditorState.forceSelection(es, es.getSelection()))
+              }, 0);
+            }}>
+              <FormatAlignCenter fontSize="large" />
+            </IconButton>
+
+            <IconButton size="small" onClick={function () {
+              const es = RichUtils.toggleBlockType(
+                editorState, // write type to editorState
+                "rightBlock"
+              )
+              setTimeout(() => {
+                setEditorState(EditorState.forceSelection(es, es.getSelection()))
+              }, 0);
+            }}>
+              <FormatAlignRight fontSize="large" />
+            </IconButton>
+
+            <IconButton size="small" onClick={function () {
+              setEditorState(addEmptyBlock(editorState))
+              // const es = RichUtils.toggleBlockType(
+              //   editorState, // write type to editorState
+              //   "rightBlock"
+              // )
+              // setTimeout(() => {
+              //   setEditorState(EditorState.forceSelection(es, es.getSelection()))
+              // }, 0);
+            }}>
+              <HorizontalSplitOutlined fontSize="large" />
+            </IconButton>
+
+
+            <IconButton size="small" onClick={function () {
+              setColorIn(pre => !pre)
+            }}>
+              <ColorLensOutlined fontSize="large" />
+            </IconButton>
+          </Box>
+
+          <Box>
+            <Switch
+              sx={{ position: "absolute", right: -10 }}
+              checked={!theme.isLight}
+              onChange={function (event) {
+                event.target.checked
+                  ? theme.setMode("dark")
+                  : theme.setMode("light")
+              }}
+            />
+          </Box>
+
+        </Box>
+        <Box>
+          <Collapse in={colorIn} unmountOnExit={false}  >
+
+            {
+              colorArr.map((colorItem, index) => {
+
+                return (
+                  <IconButton key={index} size="small" onClick={function () {
+
+                    theme.setColorObj(index)
+                  }}>
+                    <Circle fontSize="large" sx={{ color: theme.isLight ? colorItem[500] : colorItem[300] }} />
+                  </IconButton>
+                )
+
+              })
+            }
+
+          </Collapse>
+        </Box>
+      </Box>
+
+    
+
 
         <Editor
           editorKey={useId()}
@@ -302,7 +320,7 @@ export default function DraftEditor() {
           editorState={editorState}
           ref={function (element) { editorRef.current = element; }}
 
-          onFocus={function () { setShadowValue(5) }}
+          onFocus={function () { setShadowValue(10) }}
           onBlur={function () { setShadowValue(3) }}
 
 
@@ -331,7 +349,7 @@ export default function DraftEditor() {
           plugins={[
             emojiPlugin,
             imagePlugin,
-            linkPlugin, 
+            linkPlugin,
             votePlugin,
             mentionPlugin,
             personPlugin,
@@ -603,18 +621,19 @@ export default function DraftEditor() {
           }}
 
         />
+        <Button fullWidth disabled={disableSubmit} sx={{boxShadow:0,borderRadius:0}}  onClick={function () {
+          setDisableSubmit(true)
+          onSubmit && setTimeout(() => {
+            const preHtml = toPreHtml({ editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum })
+            onSubmit(preHtml, { editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum, setDisableSubmit, clearState })
+          }, 0);
+        }}>
+          Submit
+        </Button>
       </Paper>
       {/* </NoSsr> */}
 
-      <Button fullWidth disabled={disableSubmit} onClick={function () {
-        setDisableSubmit(true)
-        onSubmit && setTimeout(() => {
-          const preHtml = toPreHtml({ editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum })
-          onSubmit(preHtml, { editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum, setDisableSubmit, clearState })
-        }, 0);
-      }}>
-        Submit
-      </Button>
+
 
       {/* <div style={{ whiteSpace: "pre-wrap", display: "flex", fontSize: 15 }}>
         <div>{JSON.stringify(editorState.getCurrentContent(), null, 2)}</div>
@@ -927,4 +946,15 @@ export function toPreHtml({ editorState, theme, voteArr, voteTopic, pollDuration
     }
   )
   return preHtml
+}
+
+
+
+function hexToRgb(hex) {
+  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? {
+    r: parseInt(result[1], 16),
+    g: parseInt(result[2], 16),
+    b: parseInt(result[3], 16)
+  } : null;
 }
