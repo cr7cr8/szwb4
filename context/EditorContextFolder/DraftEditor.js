@@ -18,7 +18,13 @@ import { EditorContext } from "../EditorContextProvider"
 
 import { isChrome, useDeviceData } from 'react-device-detect';
 
-import { EmojiEmotions, FormatSize, FormatAlignLeft, FormatAlignCenter, FormatAlignRight, StackedBarChart, HorizontalSplitOutlined } from '@mui/icons-material';
+import {
+  EmojiEmotions, FormatSize, FormatAlignLeft, FormatAlignCenter, FormatAlignRight, StackedBarChart, HorizontalSplitOutlined,
+
+  ColorLensOutlined,
+  Circle
+
+} from '@mui/icons-material';
 
 import { ThemeProvider, useTheme, createTheme } from '@mui/material/styles';
 
@@ -35,7 +41,7 @@ import createVotePlugin from './VotePlugin';
 
 const { emojiPlugin, EmojiComp } = createEmojiPlugin()
 const { imagePlugin, markingImageBlock, ImageBlock } = createImagePlugin()
-const { linkPlugin } = createLinkPlugin()
+const { linkPlugin, taggingLink } = createLinkPlugin()
 const { votePlugin, markingVoteBlock, VoteBlock } = createVotePlugin()
 
 const { mentionPlugin, taggingMention, checkShowing } = createMentionPlugin()
@@ -62,13 +68,17 @@ export default function DraftEditor() {
 
     onChange,
     onSubmit,
-   
+
 
     clearState
 
   } = useContext(EditorContext)
 
   const theme = useTheme()
+  const colorObj = theme.colorObj
+
+  const colorArr = theme.colorArr
+
   const editorRef = useRef()
   const specialBackSpace = useRef(false)
 
@@ -87,6 +97,23 @@ export default function DraftEditor() {
   }, [editorState, autoFocused])
 
 
+  useEffect(function () {
+
+
+    //setEditorState(EditorState.forceSelection(editorState, editorState.getSelection()))
+
+    document.querySelectorAll("[style*='--mylinkcolor']").forEach(element => {
+
+
+
+      element.style.setProperty("--mylinkcolor", theme.isLight ? colorObj[500] : colorObj[300])
+
+    })
+
+
+  }, [colorObj])
+
+
   const [shadowValue, setShadowValue] = useState(3)
 
   const [disableSubmit, setDisableSubmit] = useState(false)
@@ -100,6 +127,15 @@ export default function DraftEditor() {
     }, 0)
 
   })
+
+
+
+
+
+
+
+
+
 
 
   return (
@@ -199,6 +235,34 @@ export default function DraftEditor() {
             <HorizontalSplitOutlined fontSize="large" />
           </IconButton>
 
+
+          <IconButton size="small" onClick={function () {
+
+          }}>
+            <ColorLensOutlined fontSize="large" />
+          </IconButton>
+
+          <Box>
+
+            {
+              colorArr.map((colorItem, index) => {
+
+                return (
+                  <IconButton key={index} size="small" onClick={function () {
+
+                    theme.setColorObj(index)
+                  }}>
+                    <Circle fontSize="large" sx={{ color: theme.isLight ? colorItem[500] : colorItem[300] }} />
+                  </IconButton>
+                )
+
+              })
+
+            }
+
+
+          </Box>
+
           <Switch
             sx={{ position: "absolute", right: -10 }}
             checked={!theme.isLight}
@@ -277,13 +341,21 @@ export default function DraftEditor() {
             const styleNameArr = style.toArray();
             const styleObj = {}
 
+
+
             styleNameArr.forEach(item => {
               if (item === "linkTagOn") {
-                styleObj.color = blue[500]
+                // styleObj.color = theme.isLight ? colorObj[500] : colorObj[300]
                 styleObj.textDecoration = "underline"
+                styleObj["--mylinkcolor"] = theme.isLight ? colorObj[500] : colorObj[300]
+                styleObj["color"] = "var(--mylinkcolor)"
+                styleObj["transition"] = "all 1000ms"
               }
               if (item === "linkTagOff") {
-                styleObj.color = blue[500]
+                //   styleObj.color = theme.isLight ? colorObj[500] : colorObj[300]
+                styleObj["--mylinkcolor"] = theme.isLight ? colorObj[500] : colorObj[300]
+                styleObj["color"] = "var(--mylinkcolor)"
+                styleObj["transition"] = "all 1000ms"
               }
             })
             if (styleNameArr.length > 0) {
@@ -537,31 +609,12 @@ export default function DraftEditor() {
       <Button fullWidth disabled={disableSubmit} onClick={function () {
         setDisableSubmit(true)
         onSubmit && setTimeout(() => {
-
           const preHtml = toPreHtml({ editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum })
           onSubmit(preHtml, { editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum, setDisableSubmit, clearState })
-
         }, 0);
-
-        // onRemoteSubmit && setTimeout(() => {
-
-        //   const preHtml = toPreHtml({ editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum })
-        //   onRemoteSubmit(preHtml, { editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum, setDisableSubmit, clearState })
-
-
-        // }, 0);
-
-
-        // onRemoteSubmit && setTimeout(() => {
-
-        //   onRemoteSubmit(toPreHtml, { editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum, setDisableSubmit, clearState })
-
-        // }, 0);
-
-
-
-
-      }}>Submit</Button>
+      }}>
+        Submit
+      </Button>
 
       {/* <div style={{ whiteSpace: "pre-wrap", display: "flex", fontSize: 15 }}>
         <div>{JSON.stringify(editorState.getCurrentContent(), null, 2)}</div>

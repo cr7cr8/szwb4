@@ -25,6 +25,9 @@ export default function createPersonPlugin() {
 
     function Person({ ...props }) {
         const theme = useTheme()
+        const colorObj = theme.colorObj
+
+
         const { contentState, entityKey, blockKey, offsetKey, start, end, decoratedText, children, } = props;
         const blockData = contentState.getBlockForKey(blockKey).getData().toObject()
 
@@ -49,8 +52,8 @@ export default function createPersonPlugin() {
                    
                     borderWidth: "1px",
                     borderStyle: "solid",
-                    borderColor: blue[500],
-                    color: blue[500],
+                    borderColor: theme.isLight?colorObj[500]:colorObj[300],
+                    color: theme.isLight?colorObj[500]:colorObj[300],
                     //bgcolor: theme.isLight ? "lightgray" : "darkgray",
 
                     verticalAlign: "sub",

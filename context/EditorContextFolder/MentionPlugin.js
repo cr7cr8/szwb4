@@ -231,7 +231,7 @@ export default function createMentionPlugin() {
 
         const theme = useTheme()
 
-
+   
 
 
 

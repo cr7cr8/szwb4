@@ -4,14 +4,31 @@ import { ThemeProvider, useTheme, createTheme, experimental_sx as sx } from '@mu
 import { Button, CssBaseline, Switch, Typography } from '@mui/material';
 
 
+import { red, pink, purple, deepPurple, indigo, blue, lightBlue, cyan, teal, green, lightGreen, lime, yellow, amber, orange, deepOrange, brown, grey, blueGrey } from '@mui/material/colors';
+
+const colorArr = [red, pink, purple, deepPurple, indigo, blue, lightBlue, cyan, teal, green, lightGreen, lime, yellow, amber, orange, deepOrange, brown, grey, blueGrey]
+
+
+function useColorObj(colorIndex = 5) {
+
+    const [colorObj, setColorIndex] = useState(colorArr[colorIndex])
+
+    function setColorObj(index) {
+        setColorIndex(colorArr[index])
+    }
+
+    return [colorObj, setColorObj]
+
+}
+
 
 export default function ThemeContextProvider({ cssBaseLine = true, ...props }) {
 
 
     const [sizeObj, setSizeObj] = useState(props.sizeObj || { xs: "1.5rem", sm: "1.5rem", md: "1.5rem", lg: "1.5rem", xl: "1.5rem" })
+    const [colorObj, setColorObj] = useColorObj(2)
 
-
-
+ 
 
     const scaleSizeObj = useCallback((factor = 1) => {
         const obj = {}
@@ -41,8 +58,10 @@ export default function ThemeContextProvider({ cssBaseLine = true, ...props }) {
     }, [sizeObj])
 
 
-
     const [mode, setMode] = React.useState(props.mode || 'light');
+
+
+
     const myTheme = React.useMemo(
         () =>
             createTheme({
@@ -60,12 +79,18 @@ export default function ThemeContextProvider({ cssBaseLine = true, ...props }) {
                 },
                 sizeObj,
                 setSizeObj,
+
+                colorArr,
+                colorObj, setColorObj,
+
+
                 setMode,
                 scaleSizeObj,
                 addingSizeObj,
                 mode,
                 isLight: mode === "light",
                 isDark: mode === "dark",
+
                 components: {
 
                     MuiButton: {
@@ -79,7 +104,6 @@ export default function ThemeContextProvider({ cssBaseLine = true, ...props }) {
                         defaultProps: {
 
                         },
-
                         styleOverrides: {
                             root: ({ ownerState, theme, ...props }) => {
 
@@ -87,7 +111,6 @@ export default function ThemeContextProvider({ cssBaseLine = true, ...props }) {
                                     //  ownerState.variant === 'body2' &&
                                     sx({
                                         fontSize: theme.sizeObj,
-
                                     }),
 
                                 ]
@@ -127,7 +150,7 @@ export default function ThemeContextProvider({ cssBaseLine = true, ...props }) {
                     }
                 }
             }),
-        [mode, sizeObj],
+        [mode, sizeObj,colorObj],
     );
 
     return (
