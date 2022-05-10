@@ -23,7 +23,7 @@ export default function VoteBlock(props) {
         voteId, setVoteId,
     } = useContext(EditorContext)
 
-
+    const colorObj = theme.colorObj
     const { readOnly, setReadOnly, markingVoteBlock } = props.blockProps
 
     useEffect(function () {
@@ -32,7 +32,7 @@ export default function VoteBlock(props) {
         }
         setVoteId("VoteId" + Number(Math.random() * 100000000).toFixed(0))
 
-        return function () { setVoteId(pre => {  return "" }) }
+        return function () { setVoteId(pre => { return "" }) }
 
     }, [])
 
@@ -44,7 +44,10 @@ export default function VoteBlock(props) {
             gap: "8px",
 
 
-            backgroundColor: theme.palette.action.disabledBackground,
+            // backgroundColor: theme.palette.action.disabledBackground,
+            backgroundColor: theme.isLight
+                ? `rgba( ${hexToRgb(colorObj[100]).r}, ${hexToRgb(colorObj[100]).g}, ${hexToRgb(colorObj[100]).b},   0.5)`
+                : `rgba( ${hexToRgb(colorObj[900]).r}, ${hexToRgb(colorObj[900]).g}, ${hexToRgb(colorObj[900]).b},   0.5)`,
 
             position: "relative",
 
@@ -76,13 +79,50 @@ export default function VoteBlock(props) {
                 onChange={function (e) {
                     setVoteTopic(e.target.value)
                 }}
-                placeholder="Enter Topic"
+                //placeholder="Enter Topic"
                 sx={{
                     width: "100%",
-                    bgcolor: theme.palette.background.default,
+                    // bgcolor:"transparent",
+                    // bgcolor: theme.palette.background.default,
+
                     alignItems: "center",
-                    "& > div": { width: "100%" },
+                    "& > div": {
+                        width: "100%",
+                    },
+
+                    '& label.Mui-focused': {
+                        color: theme.isLight ? colorObj[300] : colorObj[500],
+                    },
+                    '& .MuiFilledInput-root.MuiFilledInput-underline::after': {
+                        borderBottomColor: theme.isLight ? colorObj[300] : colorObj[500],
+                    },
+
+                    '& .MuiFilledInput-root.MuiFilledInput-underline::before': {
+                        borderBottomColor: theme.isLight ? colorObj[300] : colorObj[500],
+                        //content: `"hihihi"`,
+                    },
+
+                    '& .MuiFilledInput-root.MuiFilledInput-underline': {
+                        bgcolor: "transparent",
+                    }
+                    // '& .MuiInputLabel-root.MuiInputLabel-formControl.MuiInputLabel-animated.MuiInputLabel-filled.MuiFormLabel-root.MuiFormLabel-colorPrimary': {
+
+                    //     color: theme.palette.text.secondary,
+                    // },
+
+                    // '& .MuiFilledInput-root.MuiFilledInput-underline.MuiInputBase-root.MuiInputBase-colorPrimary.MuiInputBase-formControl.MuiInputBase-multiline': {
+
+                    //     bgcolor: "transparent",
+                    // },
+
+                    // '& .MuiFilledInput-root.MuiFilledInput-underline.MuiInputBase-root.MuiInputBase-colorPrimary.MuiInputBase-formControl.MuiInputBase-multiline::after': {
+
+                    //     borderBottomColor: theme.isLight ? colorObj[300] : colorObj[500],
+                    // },
+
+
                 }}
+
                 variant="filled"
                 onFocus={function (e) {
                     setReadOnly(true)
@@ -149,6 +189,20 @@ export default function VoteBlock(props) {
                                 bgcolor: theme.palette.background.default,
                                 alignItems: "center",
                                 "& > div": { width: "100%" },
+                                '& label.Mui-focused': {
+                                    color: theme.isLight ? colorObj[300] : colorObj[500],
+                                },
+                                '& .MuiOutlinedInput-root': {
+                                    '& fieldset': {
+                                        borderColor: theme.isLight ? colorObj[300] : colorObj[500],
+                                    },
+                                    '&:hover fieldset': {
+                                        borderColor: theme.isLight ? colorObj[300] : colorObj[500],
+                                    },
+                                    '&.Mui-focused fieldset': {
+                                        borderColor: theme.isLight ? colorObj[300] : colorObj[500],
+                                    },
+                                },
 
 
                             }}
@@ -257,10 +311,10 @@ export default function VoteBlock(props) {
 
 function TimeBar() {
 
-    // const theme = useTheme()
+    const theme = useTheme()
     const { pollDuration, setPollDuration } = useContext(EditorContext)
 
-
+    const colorObj = theme.colorObj
 
 
     return (
@@ -303,7 +357,7 @@ function TimeBar() {
 
                     m: "auto, auto",
                     width: "20%",
-                    color: "skyblue",
+                    color: theme.isLight ? colorObj[300] : colorObj[500],
                     transform: "translateY(10px)"
 
                 }}
@@ -331,7 +385,7 @@ function TimeBar() {
 
                     m: "auto, auto",
                     width: "30%",
-                    color: "skyblue",
+                    color: theme.isLight ? colorObj[300] : colorObj[500],
                     transform: "translateY(10px)"
 
                 }}
@@ -358,7 +412,7 @@ function TimeBar() {
 
                     m: "auto, auto",
                     width: "40%",
-                    color: "skyblue",
+                    color: theme.isLight ? colorObj[300] : colorObj[500],
                     transform: "translateY(10px)"
 
                 }}
@@ -373,3 +427,13 @@ function TimeBar() {
 
 }
 
+
+
+function hexToRgb(hex) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
+}

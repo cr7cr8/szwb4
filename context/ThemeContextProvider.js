@@ -111,7 +111,7 @@ export default function ThemeContextProvider({ cssBaseLine = true, ...props }) {
                                         color: theme.palette.text.secondary,
                                         fontSize: theme.addingSizeObj(-5),
                                         "&:hover": {
-                                            bgcolor: theme.isLight ? colorObj[500] : colorObj[500],
+                                            bgcolor: theme.isLight ? colorObj[300] : colorObj[500],
                                         },
                                         backdropFilter: "blur(20px)",
                                     }),
@@ -168,7 +168,44 @@ export default function ThemeContextProvider({ cssBaseLine = true, ...props }) {
                                 ]
                             }
                         }
+                    },
+                    MuiSwitch: {
+                        styleOverrides: {
+                            root: ({ ownerState, theme, ...props }) => {
+                                return [
+                                    //  ownerState.variant === 'body2' &&
+                                    theme.isDark && sx({
+                                        "& .MuiSwitch-thumb": {
+                                            color: colorObj[300]
+                                        },
+                                    }),
+
+                                ]
+                            }
+                        }
+                    },
+                    MuiSlider:{
+                        styleOverrides: {
+                            root: ({ ownerState, theme, ...props }) => {
+                                return [
+                                    //  ownerState.variant === 'body2' &&
+                                    // theme.isDark && sx({
+                                    //     "& .MuiSwitch-thumb": {
+                                    //         color: colorObj[300]
+                                    //     },
+                                    // }),
+
+                                ]
+                            }
+                        }
+
+
+
+
                     }
+
+
+
                 }
             }),
         [mode, sizeObj, colorObj],
