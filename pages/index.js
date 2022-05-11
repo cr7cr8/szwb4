@@ -75,17 +75,17 @@ export default function App() {
                         //     })
                         // }}
 
-                     
+
 
                         onSubmit={function (preHtml, { editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum, setDisableSubmit, clearState }) {
 
-                         
+                            console.log(preHtml)
                             const promiseArr = [
-                             //      ...uploadImage(imageObj),
-                             //      ...uploadVote({ voteArr, voteTopic, pollDuration, voteId })
+                                //      ...uploadImage(imageObj),
+                                //      ...uploadVote({ voteArr, voteTopic, pollDuration, voteId })
                             ]
 
-                       
+
 
                             Promise.allSettled(promiseArr).then((arr) => {
                                 setDisableSubmit(false)
@@ -94,7 +94,7 @@ export default function App() {
 
                             })
                         }}
- 
+
                     />
                 </Grid>
             </Grid>
@@ -111,8 +111,8 @@ export default function App() {
 
                             return (
                                 <EditorViewer key={preHtml.keyId} preHtml={preHtml.preHtml}
-                              //    downloadImageUrl="/api/picture/downloadPicture/"
-                              //    downloadVoteUrl="/api/voteBlock/"
+                                //    downloadImageUrl="/api/picture/downloadPicture/"
+                                //    downloadVoteUrl="/api/voteBlock/"
                                 />
                             )
                         })}

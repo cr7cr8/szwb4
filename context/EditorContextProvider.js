@@ -6,11 +6,15 @@ import {
 } from 'draft-js';
 
 import DraftEditor from "./EditorContextFolder/DraftEditor"
-import parse, { domToReact, attributesToProps } from 'html-react-parser';
-
+import parse, { domToReact, attributesToProps, Element } from 'html-react-parser';
+import reactElementToJSXString from 'react-element-to-jsx-string';
 
 import ImageViewerBlock from "./EditorViewerFolder/ImageViewerBlock";
 import VoteViewerBlock from "./EditorViewerFolder/VoteViewerBlock";
+import AvatarChip from "./EditorViewerFolder/AvatarChip";
+import { ThemeProvider, useTheme, createTheme } from '@mui/material/styles';
+import { Container, Grid, Paper, IconButton, ButtonGroup, Stack, Button, Switch, Box, Hidden, Collapse } from '@mui/material';
+
 
 export const EditorContext = createContext()
 
@@ -18,7 +22,7 @@ export function EditorContextProvider({
 
     onChange,
     onSubmit,
-    
+
 
 }) {
 
@@ -96,7 +100,7 @@ export function EditorContextProvider({
 
             onChange,
             onSubmit,
-          
+
 
             clearState
 
@@ -107,6 +111,8 @@ export function EditorContextProvider({
 }
 
 export function EditorViewer({ preHtml, downloadImageUrl = "", downloadVoteUrl = "" }) {
+
+    const theme = useTheme()
 
     const options = useMemo(() => ({
         replace: (domNode) => {
@@ -155,15 +161,36 @@ export function EditorViewer({ preHtml, downloadImageUrl = "", downloadVoteUrl =
                     return item?.children?.[0]?.data ?? ""
                 })
 
-
-
                 return <VoteViewerBlock {...{ topic, duration, voteArr, expireDate, voteId, downloadVoteUrl }} />
+            }
+            else if (name === "object" && attribs["data-type"] === "person-tag") {
+                //only children and domNode are dom
+                // children[0] children[1] ... are NOT 
 
 
+                return <AvatarChip personName={extractText(children)} labelDom={domToReact(children)} />
 
             }
 
+            else if (name === "div" && !attribs["small-font"]) {
 
+                return (
+                    <Box sx={{
+                        fontSize: theme.sizeObj,
+                        //  "& .MuiChip-root.MuiChip-filled": { fontSize: theme.sizeObj }
+                    }}>
+                        {domToReact(children, options)}
+                    </Box>
+                )
+            }
+            else if (name === "div" && attribs["small-font"]) {
+                return <Box sx={{
+                    fontSize: theme.scaleSizeObj(0.8),
+                    "& .MuiChip-root.MuiChip-filled": { fontSize: theme.scaleSizeObj(0.8), }
+
+                }}>{domToReact(children, options)}</Box>
+
+            }
 
         }
     }), [preHtml])
@@ -173,4 +200,23 @@ export function EditorViewer({ preHtml, downloadImageUrl = "", downloadVoteUrl =
     return parse(preHtml, options)
 
 
+}
+
+function extractText(dom) {
+    let text = ""
+    const option = {
+        replace: (domNode) => {
+            const { name, type, attribs, children } = domNode
+            if (type === "text") {
+
+                text = text + domNode.data
+            }
+
+
+        }
+    }
+    domToReact(dom, option)
+
+
+    return text
 }

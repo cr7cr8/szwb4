@@ -628,11 +628,11 @@ export default function DraftEditor() {
       {/* </NoSsr> */}
 
 
-      <div style={{ whiteSpace: "pre-wrap", display: "flex", fontSize: 15 }}>
+      {/* <div style={{ whiteSpace: "pre-wrap", display: "flex", fontSize: 15 }}>
         <div>{JSON.stringify(editorState.getCurrentContent(), null, 2)}</div>
         <hr />
         <div>{JSON.stringify(convertToRaw(editorState.getCurrentContent()), null, 2)}</div>
-      </div>
+      </div> */}
 
     </>
   )
