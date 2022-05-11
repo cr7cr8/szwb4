@@ -128,7 +128,7 @@ export default function EditingBlock({ VoteBlock, readOnly, setReadOnly, marking
                                     markingImageBlock(blockKey)
                                 }, 0)
 
-                            }}
+                            }} 
                         >
                             <ImageOutlined fontSize="large" />
                         </IconButton>
@@ -143,7 +143,7 @@ export default function EditingBlock({ VoteBlock, readOnly, setReadOnly, marking
                             transition: "opacity, 300ms",
                             ...hasVoteBlock && { transform: "scale(0)" }
 
-
+ 
 
                         }}
                             size="small"

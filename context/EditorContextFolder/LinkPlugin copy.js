@@ -2,11 +2,7 @@ import { EditorState, ContentState, ContentBlock, CharacterMetadata, SelectionSt
 
 function genRandom() {
 
-  let random = (Math.random() * 10000).toFixed(0)
-  while (random.length < 4) {
-    random = "0" + random
-  }
-  return "-" + random
+  return "-" + (Math.random() * 10000).toFixed(0)
 }
 
 export default function createLinkPlugin() {
@@ -28,7 +24,6 @@ export default function createLinkPlugin() {
   }
 
   function taggingLink() {
-    const random = genRandom()
     const [anchorKey, anchorOffset, focusKey, focusOffset, isBackward, hasfocus] = editorState.getSelection().toArray()
     const [anchorStartKey, anchorStartOffset, anchorFocusKey, anchorFocusOffset, isAnchorBackward, isAnchorFocused]
       = [!isBackward ? anchorKey : focusKey, !isBackward ? anchorOffset : focusOffset, isBackward ? anchorKey : focusKey, isBackward ? anchorOffset : focusOffset,]
@@ -49,8 +44,7 @@ export default function createLinkPlugin() {
 
 
         if (styleArr && styleArr.length > 0) {
-          styleArr.filter(item => { return item.indexOf("linkTag") >= 0 }).forEach((item) => {
-
+          if (styleArr.includes("linkTagOn") || styleArr.includes("linkTagOff")) {
             newSelection = newSelection.merge({
               anchorKey: blockKey,
               anchorOffset: index,
@@ -59,28 +53,13 @@ export default function createLinkPlugin() {
               isBackward: false,
               hasFocus: false,
             })
-            newContent = Modifier.removeInlineStyle(newContent, newSelection, item)
-            newContent = Modifier.removeInlineStyle(newContent, newSelection, item)
-
-          })
-
-          //   if (styleArr.includes("linkTagOn") || styleArr.includes("linkTagOff")) {
-          //     newSelection = newSelection.merge({
-          //       anchorKey: blockKey,
-          //       anchorOffset: index,
-          //       focusKey: blockKey,
-          //       focusOffset: index + 1,
-          //       isBackward: false,
-          //       hasFocus: false,
-          //     })
-          //     newContent = Modifier.removeInlineStyle(newContent, newSelection, "linkTagOn")
-          //     newContent = Modifier.removeInlineStyle(newContent, newSelection, "linkTagOff")
-          //   }
+            newContent = Modifier.removeInlineStyle(newContent, newSelection, "linkTagOn")
+            newContent = Modifier.removeInlineStyle(newContent, newSelection, "linkTagOff")
+          }
         }
       })
 
       let matchArr;
-    
       while ((matchArr = regx.exec(blockText)) !== null) {
 
         const start = matchArr.index;
@@ -104,7 +83,7 @@ export default function createLinkPlugin() {
             isBackward: false,
             hasFocus: false,
           })
-          newContent = Modifier.applyInlineStyle(newContent, newSelection, "linkTagOn" + random)
+          newContent = Modifier.applyInlineStyle(newContent, newSelection, "linkTagOn")
         }
         else if (mentionOff) {
           tagStartPos = start
@@ -118,7 +97,7 @@ export default function createLinkPlugin() {
             isBackward: false,
             hasFocus: false,
           })
-          newContent = Modifier.applyInlineStyle(newContent, newSelection, "linkTagOff" + random)
+          newContent = Modifier.applyInlineStyle(newContent, newSelection, "linkTagOff")
         }
       }
     })
