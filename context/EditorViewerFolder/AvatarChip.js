@@ -24,7 +24,7 @@ export default function AvatarChip({ personName, labelDom, isSmall = false }) {
                 justifyContent: "flex-start",
                 //   zIndex: 1000,
 
-                fontSize:theme.sizeObj,
+                //fontSize:theme.sizeObj,
                 // ...inTab === index && { bgcolor: "pink" }
 
                 bgcolor: "background.default",

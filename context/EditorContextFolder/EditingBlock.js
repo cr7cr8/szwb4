@@ -38,7 +38,7 @@ export default function EditingBlock({ VoteBlock, readOnly, setReadOnly, marking
     const currentBlockType = block && block.getType()
 
     const theme = useTheme()
-
+    const colorObj = theme.colorObj
 
 
     return (
@@ -54,11 +54,24 @@ export default function EditingBlock({ VoteBlock, readOnly, setReadOnly, marking
 
                 if (blockType === "imageBlock") {
 
-                    return <Box key={blockKey} sx={{ "& + &": { paddingTop: "2px" } }}>{block}</Box>
+                    return <Box key={blockKey}
+                        sx={{
+
+                            bgcolor: theme.isLight
+                                ? `rgba( ${hexToRgb(colorObj[100]).r}, ${hexToRgb(colorObj[100]).g}, ${hexToRgb(colorObj[100]).b},   0.5)`
+                                : `rgba( ${hexToRgb(colorObj[900]).r}, ${hexToRgb(colorObj[900]).g}, ${hexToRgb(colorObj[900]).b},   0.5)`,
+
+                            "& + &": { paddingTop: "2px" }
+                        }}>{block}</Box>
                 }
                 else if (blockType === "voteBlock") {
 
-                    return <Box key={blockKey} sx={{ "& + &": { paddingTop: "2px" } }}>{block}</Box>
+                    return <Box key={blockKey} sx={{
+                        bgcolor: theme.isLight
+                            ? `rgba( ${hexToRgb(colorObj[100]).r}, ${hexToRgb(colorObj[100]).g}, ${hexToRgb(colorObj[100]).b},   0.5)`
+                            : `rgba( ${hexToRgb(colorObj[900]).r}, ${hexToRgb(colorObj[900]).g}, ${hexToRgb(colorObj[900]).b},   0.5)`,
+                        "& + &": { paddingTop: "2px" }
+                    }}>{block}</Box>
                 }
 
 
@@ -124,11 +137,11 @@ export default function EditingBlock({ VoteBlock, readOnly, setReadOnly, marking
                                 //      markingImageBlock(blockKey)
                                 //   })
                                 setTimeout(function () {
-            
+
                                     markingImageBlock(blockKey)
                                 }, 0)
 
-                            }} 
+                            }}
                         >
                             <ImageOutlined fontSize="large" />
                         </IconButton>
@@ -143,7 +156,7 @@ export default function EditingBlock({ VoteBlock, readOnly, setReadOnly, marking
                             transition: "opacity, 300ms",
                             ...hasVoteBlock && { transform: "scale(0)" }
 
- 
+
 
                         }}
                             size="small"
@@ -170,4 +183,16 @@ export default function EditingBlock({ VoteBlock, readOnly, setReadOnly, marking
 
     )
 
+}
+
+
+
+
+function hexToRgb(hex) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
 }

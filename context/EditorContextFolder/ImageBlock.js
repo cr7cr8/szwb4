@@ -39,6 +39,7 @@ const arr = [
 export default function ImageBlock({ ...props }) {
 
     const theme = useTheme()
+    const colorObj = theme.colorObj
 
     const { imageObj, setImageObj, editorState, setEditorState } = useContext(EditorContext)
     const { blockKey, markingImageBlock } = props.blockProps
@@ -161,7 +162,7 @@ export default function ImageBlock({ ...props }) {
         if (e.currentTarget.files[0].name.trim().match(/\.(gif|jpe?g|tiff|png|webp|bmp)$/i)) {
 
             const files = e.currentTarget.files
-        //    console.log(URL.createObjectURL(files[0]))
+            //    console.log(URL.createObjectURL(files[0]))
             const newFileArr = [
                 files[0] && URL.createObjectURL(files[0]),
                 files[1] && URL.createObjectURL(files[1]),
@@ -187,8 +188,7 @@ export default function ImageBlock({ ...props }) {
         }
     }
 
-
-
+  
 
 
     return (
@@ -202,9 +202,13 @@ export default function ImageBlock({ ...props }) {
 
             <Box sx={{ //backgroundColor: "wheat", 
                 width: "100%", position: "relative",
-                ...numOfImage === 0 && {
-                    backgroundColor: theme.palette.mode === "light" ? "lightgray" : "darkgray",
-                }
+                // bgcolor: theme.isLight
+                //     ? `rgba( ${hexToRgb(colorObj[100]).r}, ${hexToRgb(colorObj[100]).g}, ${hexToRgb(colorObj[100]).b},   0.5)`
+                //     : `rgba( ${hexToRgb(colorObj[900]).r}, ${hexToRgb(colorObj[900]).g}, ${hexToRgb(colorObj[900]).b},   0.5)`,
+
+                // ...numOfImage === 0 && {
+                //     backgroundColor: theme.palette.mode === "light" ? "lightgray" : "darkgray",
+                // }
             }}>
                 <Box contentEditable={false} sx={cssObj} ref={target} >
 
@@ -552,4 +556,16 @@ function ImageAdjuster({ imageUrl, imageId, imageSnap, blockKey, numOfImage, ...
         </>
     )
 
+}
+
+
+
+
+function hexToRgb(hex) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
 }

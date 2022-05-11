@@ -177,19 +177,22 @@ export function EditorViewer({ preHtml, downloadImageUrl = "", downloadVoteUrl =
                 return (
                     <Box sx={{
                         fontSize: theme.sizeObj,
-                        //  "& .MuiChip-root.MuiChip-filled": { fontSize: theme.sizeObj }
+
+                        // "& .MuiChip-root.MuiChip-filled": { fontSize: theme.scaleSizeObj(0.8), }
+                        "& .MuiChip-root.MuiChip-filled": { fontSize: theme.sizeObj }
                     }}>
                         {domToReact(children, options)}
                     </Box>
                 )
             }
             else if (name === "div" && attribs["small-font"]) {
-                return <Box sx={{
-                    fontSize: theme.scaleSizeObj(0.8),
-                    "& .MuiChip-root.MuiChip-filled": { fontSize: theme.scaleSizeObj(0.8), }
+                return (
+                    <Box sx={{
+                        fontSize: theme.scaleSizeObj(0.8),
+                        "& .MuiChip-root.MuiChip-filled": { fontSize: theme.scaleSizeObj(0.8), }
 
-                }}>{domToReact(children, options)}</Box>
-
+                    }}>{domToReact(children, options)}</Box>
+                )
             }
 
         }

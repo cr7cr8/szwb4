@@ -12,6 +12,7 @@ export default function VoteViewerBlock({ topic, duration, voteArr, voteId, expi
 
 
     const theme = useTheme()
+    const colorObj = theme.colorObj
 
     const [expireTime, setExpireTime] = useState("")
 
@@ -80,12 +81,12 @@ export default function VoteViewerBlock({ topic, duration, voteArr, voteId, expi
                                     bgcolor: "transparent",
                                     borderWidth: "2px",
                                     borderStyle: "solid",
-                                    borderColor: theme.isLight ? blue[300] : blue[600]
+                                    borderColor: theme.isLight ? colorObj[300] : colorObj[600]
 
                                 },
 
                                 "& > span > span": {
-                                    bgcolor: theme.isLight ? blue[300] : blue[600]
+                                    bgcolor: theme.isLight ? colorObj[300] : colorObj[600]
                                     //bgcolor: hexToRGB(avatarColor, 0.5),
                                     //  transition: "all, 300ms",
                                     //  opacity:0.6,
@@ -110,7 +111,7 @@ export default function VoteViewerBlock({ topic, duration, voteArr, voteId, expi
                                     //bgcolor:"transparent"
                                 },
                                 "& > span > span": {
-                                    bgcolor: theme.isLight ? blue[300] : blue[600]
+                                    bgcolor: theme.isLight ? colorObj[300] : colorObj[600]
                                     // hexToRGB(avatarColor, 0.5), transition: "all, 300ms"
 
                                 },
