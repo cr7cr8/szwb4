@@ -16,6 +16,8 @@ export default function MentionMenu({ tabIndex, setShowing, setTabName, nameList
 
     const theme = useTheme()
 
+
+
     useEffect(function () {
 
 
@@ -89,35 +91,42 @@ export function MenuItem({ name, index, inTab, insertMention }) {
     avatarString = "data:image/svg+xml;base64," + btoa(avatarString)
     const theme = useTheme()
     const colorObj = theme.colorObj
-
+    const colorBgObj = theme.colorBgObj
     return (
         <Chip
             variant="filled"
             sx={{
                 justifyContent: "flex-start",
-                zIndex:1000,
+                zIndex: 1000,
+                backdropFilter: "blur(20px)",
+
+                color: theme.palette.text.secondary,
                 "&:hover": {
-                    bgcolor: "background.default", 
-                    borderWidth: "1px",
-                    borderStyle: "solid",
-                    borderColor: theme.isLight?colorObj[500]:colorObj[300],
-                    color: theme.isLight?colorObj[500]:colorObj[300],
-                
+                    // bgcolor: "background.default", 
+
+                    // borderWidth: "1px",
+                    // borderStyle: "solid",
+                    // borderColor: theme.isLight ? colorObj[500] : colorObj[300],
+                    //color: theme.isLight ? colorObj[500] : colorObj[100],
+                    // color: theme.palette.text.primary,
+
+                    color: theme.isLight ? colorObj[500] : colorObj[300],
+                    bgcolor: colorBgObj,
                 },
 
-                // ...inTab === index && { bgcolor: "pink" }
-                ...theme.isLight && {
-                    bgcolor: inTab === index ? "background.default" : "lightgray",
-                },
-                ...!theme.isLight && {
-                    bgcolor: inTab === index ? "background.default" : "darkgray",
-                },
+
+                // ...theme.isLight && {
+                //     //    bgcolor: inTab === index ? "background.default" : "lightgray",
+                //     //   bgcolor: inTab === index ? colorBgObj : "lightgray",
+                // },
+                // ...!theme.isLight && {
+                //     //  bgcolor: inTab === index ? colorBgObj : "darkgray",
+                // },
                 ...inTab === index && {
-
-                    borderWidth: "1px",
-                    borderStyle: "solid",
-                    borderColor: theme.isLight?colorObj[500]:colorObj[300],
-                    color: theme.isLight?colorObj[500]:colorObj[300],
+                    // color: theme.isLight ? colorObj[500] : colorObj[100],
+                    //color: theme.palette.text.primary,
+                    color: theme.isLight ? colorObj[500] :colorObj[300],
+                    bgcolor: colorBgObj,
                 }
 
 
@@ -133,7 +142,7 @@ export function MenuItem({ name, index, inTab, insertMention }) {
                         "&.MuiAvatar-root.MuiChip-avatar": {
                             width: theme.scaleSizeObj(1),
                             height: theme.scaleSizeObj(1),
-                            transform:"scale(1.1)",
+                            transform: "scale(1.1)",
                             //marginLeft: "1px",
                             // marginRight: "-8px",
                         }

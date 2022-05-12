@@ -14,7 +14,7 @@ export default function AvatarChip({ personName, labelDom, isSmall = false }) {
     avatarString = "data:image/svg+xml;base64," + btoa(avatarString)
     const theme = useTheme()
     const colorObj = theme.colorObj
-
+    const colorBgObj = theme.colorBgObj
 
 
     return (
@@ -27,12 +27,12 @@ export default function AvatarChip({ personName, labelDom, isSmall = false }) {
                 //fontSize:theme.sizeObj,
                 // ...inTab === index && { bgcolor: "pink" }
 
-                bgcolor: "background.default",
-                borderWidth: "1px",
-                borderStyle: "solid",
-                borderColor: theme.isLight ? colorObj[500] : colorObj[300],
+                // bgcolor: "background.default",
+                // borderWidth: "1px",
+                // borderStyle: "solid",
+                // borderColor: theme.isLight ? colorObj[500] : colorObj[300],
                 color: theme.isLight ? colorObj[500] : colorObj[300],
-
+                bgcolor:colorBgObj,
 
 
             }}

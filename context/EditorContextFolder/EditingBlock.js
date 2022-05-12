@@ -39,7 +39,7 @@ export default function EditingBlock({ VoteBlock, readOnly, setReadOnly, marking
 
     const theme = useTheme()
     const colorObj = theme.colorObj
-
+    const colorBgObj = theme.colorBgObj
 
     return (
 
@@ -57,9 +57,7 @@ export default function EditingBlock({ VoteBlock, readOnly, setReadOnly, marking
                     return <Box key={blockKey}
                         sx={{
 
-                            bgcolor: theme.isLight
-                                ? `rgba( ${hexToRgb(colorObj[100]).r}, ${hexToRgb(colorObj[100]).g}, ${hexToRgb(colorObj[100]).b},   0.5)`
-                                : `rgba( ${hexToRgb(colorObj[900]).r}, ${hexToRgb(colorObj[900]).g}, ${hexToRgb(colorObj[900]).b},   0.5)`,
+                            bgcolor: colorBgObj,
 
                             "& + &": { paddingTop: "2px" }
                         }}>{block}</Box>
@@ -67,9 +65,7 @@ export default function EditingBlock({ VoteBlock, readOnly, setReadOnly, marking
                 else if (blockType === "voteBlock") {
 
                     return <Box key={blockKey} sx={{
-                        bgcolor: theme.isLight
-                            ? `rgba( ${hexToRgb(colorObj[100]).r}, ${hexToRgb(colorObj[100]).g}, ${hexToRgb(colorObj[100]).b},   0.5)`
-                            : `rgba( ${hexToRgb(colorObj[900]).r}, ${hexToRgb(colorObj[900]).g}, ${hexToRgb(colorObj[900]).b},   0.5)`,
+                        bgcolor: colorBgObj,
                         "& + &": { paddingTop: "2px" }
                     }}>{block}</Box>
                 }
@@ -109,11 +105,11 @@ export default function EditingBlock({ VoteBlock, readOnly, setReadOnly, marking
                             zIndex: isCurrentRow ? 100 : 0,
                             display: "flex",
                             alignItems: "center",
-                            ...(theme.palette.mode === "dark") && isCurrentRow && {
+                            // ...(theme.palette.mode === "dark") && isCurrentRow && {
 
-                                backgroundColor: "rgba(80, 80, 80, 1)"
+                            //     backgroundColor: "rgba(10, 10, 10, 1)"
 
-                            }
+                            // }
 
 
                         }}
@@ -187,12 +183,3 @@ export default function EditingBlock({ VoteBlock, readOnly, setReadOnly, marking
 
 
 
-
-function hexToRgb(hex) {
-    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result ? {
-        r: parseInt(result[1], 16),
-        g: parseInt(result[2], 16),
-        b: parseInt(result[3], 16)
-    } : null;
-}

@@ -62,6 +62,11 @@ export default function ThemeContextProvider({ cssBaseLine = true, ...props }) {
 
 
 
+    const colorBgObj = mode === "light"
+        ? `rgba( ${hexToRgb(colorObj[100]).r}, ${hexToRgb(colorObj[100]).g}, ${hexToRgb(colorObj[100]).b},   0.5)`
+        : `rgba( ${hexToRgb(colorObj[900]).r}, ${hexToRgb(colorObj[900]).g}, ${hexToRgb(colorObj[900]).b},   0.5)`
+
+
     const myTheme = React.useMemo(
         () =>
             createTheme({
@@ -82,7 +87,7 @@ export default function ThemeContextProvider({ cssBaseLine = true, ...props }) {
 
                 colorArr,
                 colorObj, setColorObj,
-
+                colorBgObj,
 
                 setMode,
                 scaleSizeObj,
@@ -184,7 +189,7 @@ export default function ThemeContextProvider({ cssBaseLine = true, ...props }) {
                             }
                         }
                     },
-                    MuiSlider:{
+                    MuiSlider: {
                         styleOverrides: {
                             root: ({ ownerState, theme, ...props }) => {
                                 return [
@@ -221,7 +226,6 @@ export default function ThemeContextProvider({ cssBaseLine = true, ...props }) {
 
     )
 }
-
 
 
 

@@ -26,7 +26,7 @@ export default function createPersonPlugin() {
     function Person({ ...props }) {
         const theme = useTheme()
         const colorObj = theme.colorObj
-
+        const colorBgObj = theme.colorBgObj
 
         const { contentState, entityKey, blockKey, offsetKey, start, end, decoratedText, children, } = props;
         const blockData = contentState.getBlockForKey(blockKey).getData().toObject()
@@ -37,10 +37,10 @@ export default function createPersonPlugin() {
 
             display: "inline-block",
             "& span": {
-                fontSize:     theme.scaleSizeObj(blockData.isSmallFont ? 0.6 : 1),
+                fontSize: theme.scaleSizeObj(blockData.isSmallFont ? 0.8 : 1),
                 wordWrap: "normal",
                 transition: "font-size, 300ms",
-             //   fontSize:     blockData.isSmallFont ? "1rem" : "1.5rem",
+                //   fontSize:     blockData.isSmallFont ? "1rem" : "1.5rem",
             },
 
         }
@@ -48,40 +48,67 @@ export default function createPersonPlugin() {
 
 
         return (
-            <Box //contentEditable={false} suppressContentEditableWarning={true}
-                sx={{
-                   
-                    borderWidth: "1px",
-                    borderStyle: "solid",
-                    borderColor: theme.isLight?colorObj[500]:colorObj[300],
-                    color: theme.isLight?colorObj[500]:colorObj[300],
-                    //bgcolor: theme.isLight ? "lightgray" : "darkgray",
+            <Box sx={{
+                padding: "4px",
 
-                    verticalAlign: "sub",
-                    backgroundImage,
-                    // backgroundImage: `url(${"data:image/svg+xml;base64," + btoa(multiavatar(decoratedText))})`,
-                    backgroundSize: "contain",
-                    paddingLeft: theme.scaleSizeObj(blockData.isSmallFont ? 1 : 1.2),
-                    paddingRight: theme.scaleSizeObj(blockData.isSmallFont ? 0.4 : 0.5),
-                    borderRadius: "1000px",
-                    backgroundRepeat: "no-repeat",
-                    display: "inline-block",
-                    //   backgroundSize: theme.sizeObj,
-                    backgroundPositionX: "left",
-                    backgroundPositionY: "center",
-                    height: theme.scaleSizeObj(blockData.isSmallFont ? 0.8 : 1),
-                    "& p": {
-                        verticalAlign: "top",
-                        lineHeight: 1,
-                    },
+                // ...theme.isDark && {
+                //     borderWidth: "1px",
+                //     borderStyle: "solid",
+                //     borderColor: theme.isLight ? colorObj[500] : colorObj[300],
+                // },
+
+              //  ...theme.isLight && {
+                    bgcolor: colorBgObj,
+             //   },
+               
+                color: theme.isLight ? colorObj[500] : colorObj[300],
+
+                borderRadius: "1000px",
+
+                verticalAlign: "sub",
+
+                display: "inline-block",
 
 
-                }}
-            >
+            }}>
+                <Box //contentEditable={false} suppressContentEditableWarning={true}
+                    sx={{
 
-                <Typography sx={cssObj}>
-                    {children}
-                </Typography>
+                        // borderWidth: "1px",
+                        // borderStyle: "solid",
+                        // borderColor: theme.isLight?colorObj[500]:colorObj[300],
+
+
+
+
+                        // verticalAlign: "sub",
+                        backgroundImage,
+                        // backgroundImage: `url(${"data:image/svg+xml;base64," + btoa(multiavatar(decoratedText))})`,
+                        backgroundSize: "contain",
+                        paddingLeft: theme.scaleSizeObj(blockData.isSmallFont ? 1.2 : 1.2),
+                        paddingRight: theme.scaleSizeObj(blockData.isSmallFont ? 0.4 : 0.5),
+                        borderRadius: "1000px",
+                        backgroundRepeat: "no-repeat",
+
+                        //   backgroundSize: theme.sizeObj,
+                        backgroundPositionX: "left",
+                        backgroundPositionY: "center",
+
+                        // height: theme.scaleSizeObj(blockData.isSmallFont ? 0.8 : 1), // for smallFont
+                        height: theme.sizeObj,
+                        "& p": {
+                            verticalAlign: blockData.isSmallFont ? "text-top" : "top",
+                            lineHeight: 1,
+                        },
+
+
+                    }}
+                >
+
+                    <Typography sx={cssObj}>
+                        {children}
+                    </Typography>
+                </Box>
             </Box>
         )
 

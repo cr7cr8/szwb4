@@ -246,9 +246,10 @@ export default function createMentionPlugin() {
         const text = decoratedText.replace("@", "")
 
         const cssObj = {
-            ...text && { backgroundColor: theme.palette.mentionBg },
+            ...text && { backgroundColor: theme.colorBgObj },
             display: "inline-block",
-            "& span": { fontSize: blockData.isSmallFont ? theme.scaleSizeObj(0.8) : theme.sizeObj }
+            "& span": { fontSize: blockData.isSmallFont ? theme.scaleSizeObj(0.8) : theme.sizeObj },
+
         }
 
 

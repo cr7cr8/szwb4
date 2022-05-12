@@ -76,7 +76,7 @@ export default function DraftEditor() {
 
   const theme = useTheme()
   const colorObj = theme.colorObj
-
+  const colorBgObj = theme.colorBgObj
 
   const colorArr = theme.colorArr
 
@@ -171,9 +171,7 @@ export default function DraftEditor() {
             width: "100%",
 
             // bgcolor: theme.isLight ? "rgba(255, 255, 255, 0.5)" : "rgba(0, 0, 0, 0.5)",
-            bgcolor: theme.isLight
-              ? `rgba( ${hexToRgb(colorObj[100]).r}, ${hexToRgb(colorObj[100]).g}, ${hexToRgb(colorObj[100]).b},   0.5)`
-              : `rgba( ${hexToRgb(colorObj[900]).r}, ${hexToRgb(colorObj[900]).g}, ${hexToRgb(colorObj[900]).b},   0.5)`
+            bgcolor: colorBgObj
             // bgcolor:"background.default",
 
           }}
@@ -824,14 +822,17 @@ export function toPreHtml({ editorState, theme, voteArr, voteTopic, pollDuration
           attributes: {}
         }
 
-        if (styleNameSet.toArray().includes("linkTagOn")) {
-          //  styleObj.style = { color: blue[800] }
+
+        const isLink = styleNameSet.toArray().some(item => {
+          return (item.indexOf("linkTagOn") >= 0) || (item.indexOf("linkTagOff") >= 0)
+        })
+
+
+        if (isLink) {
+
           styleObj.attributes["data-type"] = "link"
         }
-        if (styleNameSet.toArray().includes("linkTagOff")) {
-          //    styleObj.style = { color: blue[800] }
-          styleObj.attributes["data-type"] = "link"
-        }
+
         return styleObj
       },
 
@@ -847,7 +848,6 @@ export function toPreHtml({ editorState, theme, voteArr, voteTopic, pollDuration
             attributes: {
               "data-type": "mention-tag"
             },
-
           }
         }
         else if (type.indexOf("personTag") >= 0) {
@@ -943,11 +943,3 @@ export function toPreHtml({ editorState, theme, voteArr, voteTopic, pollDuration
 
 
 
-function hexToRgb(hex) {
-  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result ? {
-    r: parseInt(result[1], 16),
-    g: parseInt(result[2], 16),
-    b: parseInt(result[3], 16)
-  } : null;
-}

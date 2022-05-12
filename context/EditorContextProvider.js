@@ -12,6 +12,9 @@ import reactElementToJSXString from 'react-element-to-jsx-string';
 import ImageViewerBlock from "./EditorViewerFolder/ImageViewerBlock";
 import VoteViewerBlock from "./EditorViewerFolder/VoteViewerBlock";
 import AvatarChip from "./EditorViewerFolder/AvatarChip";
+import LinkTag from "./EditorViewerFolder/LinkTag";
+
+
 import { ThemeProvider, useTheme, createTheme } from '@mui/material/styles';
 import { Container, Grid, Paper, IconButton, ButtonGroup, Stack, Button, Switch, Box, Hidden, Collapse } from '@mui/material';
 
@@ -194,6 +197,15 @@ export function EditorViewer({ preHtml, downloadImageUrl = "", downloadVoteUrl =
                     }}>{domToReact(children, options)}</Box>
                 )
             }
+            else if (name === "span" && attribs["data-type"] === "link") {
+                const linkAdd = extractText(children)
+                return (
+
+
+                    <LinkTag {...{ linkAdd }} />
+                )
+            }
+
 
         }
     }), [preHtml])
