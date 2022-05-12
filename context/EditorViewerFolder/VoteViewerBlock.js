@@ -14,6 +14,9 @@ export default function VoteViewerBlock({ topic, duration, voteArr, voteId, expi
     const theme = useTheme()
     const colorObj = theme.colorObj
 
+
+ 
+
     const [expireTime, setExpireTime] = useState("")
 
     const [isVotting, setIsVotting] = useState((Date.parse(new Date(expireDate)) - Date.now()) > 0)
@@ -81,12 +84,12 @@ export default function VoteViewerBlock({ topic, duration, voteArr, voteId, expi
                                     bgcolor: "transparent",
                                     borderWidth: "2px",
                                     borderStyle: "solid",
-                                    borderColor: theme.isLight ? colorObj[300] : colorObj[600]
-
+                                    borderColor: theme.isLight ? colorObj[300]==="#e0e0e0"?"darkgray":colorObj[300] : colorObj[600]
+                                  
                                 },
 
                                 "& > span > span": {
-                                    bgcolor: theme.isLight ? colorObj[300] : colorObj[600]
+                                    bgcolor: theme.isLight ? colorObj[300]==="#e0e0e0"?"darkgray":colorObj[300] : colorObj[600]
                                     //bgcolor: hexToRGB(avatarColor, 0.5),
                                     //  transition: "all, 300ms",
                                     //  opacity:0.6,
@@ -111,7 +114,7 @@ export default function VoteViewerBlock({ topic, duration, voteArr, voteId, expi
                                     //bgcolor:"transparent"
                                 },
                                 "& > span > span": {
-                                    bgcolor: theme.isLight ? colorObj[300] : colorObj[600]
+                                    bgcolor: theme.isLight ? colorObj[300]==="#e0e0e0"?"darkgray":colorObj[300] : colorObj[600]
                                     // hexToRGB(avatarColor, 0.5), transition: "all, 300ms"
 
                                 },
@@ -246,8 +249,8 @@ function TimeRender({ days, hours, minutes, seconds, completed, expireTime, tota
                     : `${seconds} sec Left`
 
     return <Box sx={{ display: "flex", justifyContent: "space-between", paddingLeft: "4px", paddingRight: "4px" }}>
-        <Typography variant='body2' className="count-down" sx={{ color: theme.palette.text.secondary }}>{message} </Typography>
-        <Typography variant='body2' className="count-down" sx={{ color: theme.palette.text.secondary }}>Total {totalVotes} </Typography>
+        <Typography  className="count-down" sx={{ color: theme.palette.text.secondary }}>{message} </Typography>
+        <Typography  className="count-down" sx={{ color: theme.palette.text.secondary }}>Total {totalVotes} </Typography>
         {/* <Typography variant='body2' className="count-down" sx={{ color: theme.palette.text.secondary }}>{days} {hours} {minutes} {seconds}</Typography>
       <Typography variant='body2' className="count-down">{intervalDelay}</Typography> */}
     </Box>

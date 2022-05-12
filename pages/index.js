@@ -91,7 +91,7 @@ export default function App() {
                                 setDisableSubmit(false)
                                 clearState()
                                 setPostArr(pre => [{ keyId: Math.random(), preHtml }, ...pre])
-
+                               // setPostArr(pre => [{ keyId: Math.random(), preHtml }])
                             })
                         }}
 

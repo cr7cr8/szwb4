@@ -294,7 +294,7 @@ export default function DraftEditor() {
 
                       theme.setColorObj(index)
                     }}>
-                      <Circle fontSize="large" sx={{ color: theme.isLight ? colorItem[500] : colorItem[300] }} />
+                      <Circle fontSize="large" sx={{ color: theme.isLight ? colorItem[500] : colorItem[300] ,boxShadow:1,borderRadius:"1000px",}} />
                     </IconButton>
                   )
 

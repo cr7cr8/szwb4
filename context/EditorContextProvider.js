@@ -168,19 +168,19 @@ export function EditorViewer({ preHtml, downloadImageUrl = "", downloadVoteUrl =
             }
             else if (name === "object" && attribs["data-type"] === "person-tag") {
                 //only children and domNode are dom
-                // children[0] children[1] ... are NOT 
+                //children[0] children[1] ... are NOT 
 
 
                 return <AvatarChip personName={extractText(children)} labelDom={domToReact(children)} />
 
             }
 
-            else if (name === "div" && !attribs["small-font"]) {
+            if (name === "div" && !attribs["small-font"]) {
 
                 return (
                     <Box sx={{
                         fontSize: theme.sizeObj,
-
+                        ...attribs["text-align"] && { textAlign: attribs["text-align"] },
                         // "& .MuiChip-root.MuiChip-filled": { fontSize: theme.scaleSizeObj(0.8), }
                         "& .MuiChip-root.MuiChip-filled": { fontSize: theme.sizeObj }
                     }}>
@@ -192,12 +192,13 @@ export function EditorViewer({ preHtml, downloadImageUrl = "", downloadVoteUrl =
                 return (
                     <Box sx={{
                         fontSize: theme.scaleSizeObj(0.8),
+                        ...attribs["text-align"] && { textAlign: attribs["text-align"] },
                         "& .MuiChip-root.MuiChip-filled": { fontSize: theme.scaleSizeObj(0.8), }
 
                     }}>{domToReact(children, options)}</Box>
                 )
             }
-            else if (name === "span" && attribs["data-type"] === "link") {
+            if (name === "span" && attribs["data-type"] === "link") {
                 const linkAdd = extractText(children)
                 return (
 
