@@ -69,32 +69,32 @@ export default function App() {
                     <EditorCtx
 
 
-                        onChange={function (preHtml) {
-                            startTransition(function () {
-                               // setPreHtml(preHtml)
-                               setPostArr(pre => [{ keyId: "test___test", preHtml }])
-                            })
-                        }}
-
-
-
-                        // onSubmit={function (preHtml, { editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum, setDisableSubmit, clearState }) {
-
-                        //     console.log(preHtml)
-                        //     const promiseArr = [
-                        //         //      ...uploadImage(imageObj),
-                        //         //      ...uploadVote({ voteArr, voteTopic, pollDuration, voteId })
-                        //     ]
-
-
-
-                        //     Promise.allSettled(promiseArr).then((arr) => {
-                        //         setDisableSubmit(false)
-                        //         clearState()
-                        //         setPostArr(pre => [{ keyId: Math.random(), preHtml }, ...pre])
-                        //        // setPostArr(pre => [{ keyId: Math.random(), preHtml }])
+                        // onChange={function (preHtml) {
+                        //     startTransition(function () {
+                        //        // setPreHtml(preHtml)
+                        //        setPostArr(pre => [{ keyId: "test___test", preHtml }])
                         //     })
                         // }}
+
+
+
+                        onSubmit={function (preHtml, { editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum, setDisableSubmit, clearState }) {
+
+                            console.log(preHtml)
+                            const promiseArr = [
+                                //      ...uploadImage(imageObj),
+                                //      ...uploadVote({ voteArr, voteTopic, pollDuration, voteId })
+                            ]
+
+
+
+                            Promise.allSettled(promiseArr).then((arr) => {
+                                setDisableSubmit(false)
+                                clearState()
+                                setPostArr(pre => [{ keyId: Math.random(), preHtml }, ...pre])
+                               // setPostArr(pre => [{ keyId: Math.random(), preHtml }])
+                            })
+                        }}
 
                     />
                 </Grid>
