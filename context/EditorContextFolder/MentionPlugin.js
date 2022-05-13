@@ -227,11 +227,11 @@ export default function createMentionPlugin() {
     function Mention({ ...props }) {
 
 
-        const { peopleList } = useContext(EditorContext)
+        const { peopleList  } = useContext(EditorContext)
 
         const theme = useTheme()
 
-   
+
 
 
 

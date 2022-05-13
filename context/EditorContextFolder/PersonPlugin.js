@@ -8,6 +8,7 @@ import { useTheme } from '@mui/private-theming';
 
 import { EditorContext } from "../EditorContextProvider";
 import { blue, red, grey } from '@mui/material/colors';
+import AvatarChip from '../EditorViewerFolder/AvatarChip';
 
 export default function createPersonPlugin() {
 
@@ -31,7 +32,10 @@ export default function createPersonPlugin() {
         const { contentState, entityKey, blockKey, offsetKey, start, end, decoratedText, children, } = props;
         const blockData = contentState.getBlockForKey(blockKey).getData().toObject()
 
-        const backgroundImage = `url(${"data:image/svg+xml;base64," + btoa(multiavatar(decoratedText))})`
+        const { peopleList, avatarPeopleList, downloadAvatarUrl, genAvatarLink } = useContext(EditorContext)
+        const backgroundImage = avatarPeopleList.includes(decoratedText)
+            ? `url(${genAvatarLink(downloadAvatarUrl, decoratedText)})` //genAvatarLink(downloadAvatarUrl, decoratedText)
+            : `url(${"data:image/svg+xml;base64," + btoa(multiavatar(decoratedText))})`
 
         const cssObj = {
 
@@ -45,7 +49,61 @@ export default function createPersonPlugin() {
 
         }
 
+        return (
 
+            <AvatarChip personName={decoratedText} avatarPeopleList={avatarPeopleList}
+                downloadAvatarUrl={downloadAvatarUrl} genAvatarLink={genAvatarLink}
+            >
+                {children}
+            </AvatarChip>
+        )
+
+        return (
+
+            <Box //contentEditable={false} suppressContentEditableWarning={true}
+                sx={{
+
+
+                    display: "inline-flex",
+                    //  verticalAlign: blockData.isSmallFont ? "text-top" : "top",
+                    lineHeight: 1,
+                    bgcolor: colorBgObj,
+                    alignItems: "center",
+                    padding: "4px",
+                    color: theme.isLight ? colorObj[500] : colorObj[300],
+                    padding: "5px",
+                    paddingRight: "12px",
+                    // paddingRight: theme.scaleSizeObj(blockData.isSmallFont ? 0.4 : 0.5),
+                    borderRadius: "1000px",
+                    "&::before": {
+                        content: `" "`,
+                        backgroundImage,
+                        backgroundSize: "contain",
+                        // paddingLeft: theme.scaleSizeObj(blockData.isSmallFont ? 1.2 : 1.2),
+                        // paddingRight: theme.scaleSizeObj(blockData.isSmallFont ? 0.4 : 0.5),
+                        width: theme.scaleSizeObj(1),
+                        height: theme.scaleSizeObj(1),
+                        transform: "scale(1.2)",
+                        borderRadius: "1000px",
+                        backgroundRepeat: "no-repeat",
+                        overflow: "hidden",
+                        //   backgroundSize: theme.sizeObj,
+                        backgroundPositionX: "left",
+                        backgroundPositionY: "center",
+                        bgcolor: "pink",
+                        display: "inline-block",
+                        marginRight: "7px"
+                    }
+
+                }}
+            >
+
+                <span>{children}</span>
+
+
+            </Box>
+
+        )
 
         return (
             <Box sx={{
@@ -57,10 +115,10 @@ export default function createPersonPlugin() {
                 //     borderColor: theme.isLight ? colorObj[500] : colorObj[300],
                 // },
 
-              //  ...theme.isLight && {
-                    bgcolor: colorBgObj,
-             //   },
-               
+                //  ...theme.isLight && {
+                bgcolor: colorBgObj,
+                //   },
+
                 color: theme.isLight ? colorObj[500] : colorObj[300],
 
                 borderRadius: "1000px",
@@ -82,25 +140,40 @@ export default function createPersonPlugin() {
 
 
                         // verticalAlign: "sub",
-                        backgroundImage,
                         // backgroundImage: `url(${"data:image/svg+xml;base64," + btoa(multiavatar(decoratedText))})`,
+                        // backgroundSize: theme.sizeObj,
+                        // height: theme.scaleSizeObj(blockData.isSmallFont ? 0.8 : 1), // for smallFont
+                        ////
+                        backgroundImage,
                         backgroundSize: "contain",
                         paddingLeft: theme.scaleSizeObj(blockData.isSmallFont ? 1.2 : 1.2),
                         paddingRight: theme.scaleSizeObj(blockData.isSmallFont ? 0.4 : 0.5),
                         borderRadius: "1000px",
                         backgroundRepeat: "no-repeat",
+                        overflow: "hidden",
 
-                        //   backgroundSize: theme.sizeObj,
                         backgroundPositionX: "left",
                         backgroundPositionY: "center",
 
-                        // height: theme.scaleSizeObj(blockData.isSmallFont ? 0.8 : 1), // for smallFont
+
                         height: theme.sizeObj,
                         "& p": {
                             verticalAlign: blockData.isSmallFont ? "text-top" : "top",
                             lineHeight: 1,
                         },
-
+                        // "&::before": {
+                        //     content: `""`,
+                        //     backgroundImage,
+                        //     backgroundSize: "contain",
+                        //     paddingLeft: theme.scaleSizeObj(blockData.isSmallFont ? 1.2 : 1.2),
+                        //     paddingRight: theme.scaleSizeObj(blockData.isSmallFont ? 0.4 : 0.5),
+                        //     borderRadius: "1000px",
+                        //     backgroundRepeat: "no-repeat",
+                        //     overflow:"hidden",
+                        //     //   backgroundSize: theme.sizeObj,
+                        //     backgroundPositionX: "left",
+                        //     backgroundPositionY: "center",
+                        // }
 
                     }}
                 >

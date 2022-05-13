@@ -23,10 +23,13 @@ export const EditorContext = createContext()
 
 export function EditorContextProvider({
 
+    downloadAvatarUrl = "",
+    genAvatarLink = () => { },
+
     onChange,
     onSubmit,
 
-
+    ...props
 }) {
 
     const key1 = useId().replace(":", "").replace(":", "")
@@ -65,7 +68,9 @@ export function EditorContextProvider({
     const [imageObj, setImageObj] = useState({})
     const imageBlockNum = editorState.getCurrentContent().getBlocksAsArray().filter(block => block.getType() === "imageBlock").length
 
-    const [peopleList, setPeopleList] = useState(["UweF23", "UweF22", "TonyCerl", "JimWil", "大发发", "Jimberg", "m大Gsd哈"])
+    // const [peopleList, setPeopleList] = useState(["UweF23", "UweF22", "TonyCerl", "JimWil", "大发发", "Jimberg", "m大Gsd哈"])
+    const [peopleList, setPeopleList] = useState(props.peopleList || [])
+    const [avatarPeopleList, setAvatarPeopleList] = useState(props.avatarPeopleList || [])
 
     const [voteArr, setVoteArr] = useState([])
     const [voteId, setVoteId] = useState("")
@@ -94,7 +99,11 @@ export function EditorContextProvider({
             // savedImageObj, setSavedImageObj,
             imageObj, setImageObj,
             imageBlockNum,
+
             peopleList, setPeopleList,
+            avatarPeopleList, setAvatarPeopleList,
+            downloadAvatarUrl,
+            genAvatarLink,
 
             voteArr, setVoteArr,
             voteTopic, setVoteTopic,
@@ -113,7 +122,7 @@ export function EditorContextProvider({
     )
 }
 
-export function EditorViewer({ preHtml, downloadImageUrl = "", downloadVoteUrl = "" }) {
+export function EditorViewer({ preHtml, peopleList = [], avatarPeopleList = [], genAvatarLink = () => { }, downloadImageUrl = "", downloadVoteUrl = "", downloadAvatarUrl = "" }) {
 
     const theme = useTheme()
 
@@ -171,8 +180,16 @@ export function EditorViewer({ preHtml, downloadImageUrl = "", downloadVoteUrl =
                 //children[0] children[1] ... are NOT 
 
 
-                return <AvatarChip personName={extractText(children)} labelDom={domToReact(children)} />
-
+                return (
+                    <AvatarChip
+                        personName={extractText(children)}
+                        downloadAvatarUrl={downloadAvatarUrl}
+                        avatarPeopleList={avatarPeopleList}
+                        genAvatarLink={genAvatarLink}
+                    >
+                        {domToReact(children)}
+                    </AvatarChip>
+                )
             }
 
             if (name === "div" && !attribs["small-font"]) {

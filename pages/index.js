@@ -76,7 +76,13 @@ export default function App() {
                         //     })
                         // }}
 
-
+                        peopleList={["UweF23", "UweF22", "TonyCerl", "JimWil", "大发发", "Jimberg", "m大Gsd哈"]}
+                        avatarPeopleList={["UweF23", "TonyCerl", "大发发", "m大Gsd哈"]}
+                        // downloadAvatarUrl={`https://picsum.photos/200/${Number(Math.random() * 200).toFixed(0)}`}
+                        downloadAvatarUrl={`https://picsum.photos/200`}
+                        genAvatarLink={function (downloadAvatarUrl, personName) {
+                            return downloadAvatarUrl// + personName
+                        }}
 
                         onSubmit={function (preHtml, { editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum, setDisableSubmit, clearState }) {
 
@@ -92,10 +98,10 @@ export default function App() {
                                 setDisableSubmit(false)
                                 clearState()
                                 setPostArr(pre => [{ keyId: Math.random(), preHtml }, ...pre])
-                               // setPostArr(pre => [{ keyId: Math.random(), preHtml }])
+                                // setPostArr(pre => [{ keyId: Math.random(), preHtml }])
                             })
                         }}
- 
+
                     />
                 </Grid>
             </Grid>
@@ -112,8 +118,15 @@ export default function App() {
 
                             return (
                                 <EditorViewer key={preHtml.keyId} preHtml={preHtml.preHtml}
-                                //    downloadImageUrl="/api/picture/downloadPicture/"
-                                //    downloadVoteUrl="/api/voteBlock/"
+                                    //    downloadImageUrl="/api/picture/downloadPicture/"
+                                    //    downloadVoteUrl="/api/voteBlock/"
+                                   // peopleList={["UweF23", "UweF22", "TonyCerl", "JimWil", "大发发", "Jimberg", "m大Gsd哈"]}
+                                    avatarPeopleList={["UweF23", "TonyCerl", "大发发", "m大Gsd哈"]}                    
+                                    downloadAvatarUrl={`https://picsum.photos/200`}
+                                    genAvatarLink={function (downloadAvatarUrl, personName) {
+                                        return downloadAvatarUrl// + personName
+                                    }}
+
                                 />
                             )
                         })}

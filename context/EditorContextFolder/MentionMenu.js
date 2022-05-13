@@ -3,6 +3,8 @@ import Avatar from '@mui/material/Avatar';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import { ThemeProvider, useTheme, createTheme } from '@mui/material/styles';
+import { EditorContext } from "../EditorContextProvider"
+
 import multiavatar from '@multiavatar/multiavatar';
 import { blue, red, grey } from '@mui/material/colors';
 
@@ -14,7 +16,7 @@ export default function MentionMenu({ tabIndex, setShowing, setTabName, nameList
     const inTab = tabIndex % nameList.length
 
 
-    const theme = useTheme()
+
 
 
 
@@ -71,7 +73,7 @@ export default function MentionMenu({ tabIndex, setShowing, setTabName, nameList
                 let avatarString = multiavatar(name)
                 avatarString = "data:image/svg+xml;base64," + btoa(avatarString)
                 return (
-                    <MenuItem key={index} {...{ name, index, inTab, insertMention }} />
+                    <MentionMenuItem key={index} {...{ name, index, inTab, insertMention }} />
                 )
             })}
 
@@ -85,11 +87,18 @@ export default function MentionMenu({ tabIndex, setShowing, setTabName, nameList
 
 
 
-export function MenuItem({ name, index, inTab, insertMention }) {
+export function MentionMenuItem({ name, index, inTab, insertMention }) {
 
-    let avatarString = multiavatar(name)
-    avatarString = "data:image/svg+xml;base64," + btoa(avatarString)
     const theme = useTheme()
+    const { peopleList, avatarPeopleList, downloadAvatarUrl, genAvatarLink } = useContext(EditorContext)
+
+    const hasAvatar = avatarPeopleList.includes(name)
+
+    const avatarString = hasAvatar ? genAvatarLink(downloadAvatarUrl, name) : "data:image/svg+xml;base64," + btoa(multiavatar(name))
+
+    // let avatarString = multiavatar(name)
+    // avatarString = "data:image/svg+xml;base64," + btoa(avatarString)
+
     const colorObj = theme.colorObj
     const colorBgObj = theme.colorBgObj
     return (
@@ -125,7 +134,7 @@ export function MenuItem({ name, index, inTab, insertMention }) {
                 ...inTab === index && {
                     // color: theme.isLight ? colorObj[500] : colorObj[100],
                     //color: theme.palette.text.primary,
-                    color: theme.isLight ? colorObj[500] :colorObj[300],
+                    color: theme.isLight ? colorObj[500] : colorObj[300],
                     bgcolor: colorBgObj,
                 }
 
