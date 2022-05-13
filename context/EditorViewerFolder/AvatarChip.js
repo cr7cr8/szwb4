@@ -46,7 +46,7 @@ export default function AvatarChip({ personName, children,
                 borderWidth: "1px",
                 borderColor: "transparent",
                 //boxSizing: "border-box",
-                transition: "all 100ms ease",
+                transition: "all 200ms ease",
 
                 "&::before": {
                     content: `""`,

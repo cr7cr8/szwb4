@@ -69,12 +69,12 @@ export default function App() {
                     <EditorCtx
 
 
-                        // onChange={function (preHtml) {
-                        //     startTransition(function () {
-                        //        // setPreHtml(preHtml)
-                        //        setPostArr(pre => [{ keyId: "test___test", preHtml }])
-                        //     })
-                        // }}
+                        onChange={function (preHtml) {
+                            startTransition(function () {
+                                // setPreHtml(preHtml)
+                                setPostArr(pre => [{ keyId: "test___test", preHtml }])
+                            })
+                        }}
 
                         peopleList={["UweF23", "UweF22", "TonyCerl", "JimWil", "大发发", "Jimberg", "m大Gsd哈"]}
                         avatarPeopleList={["UweF23", "TonyCerl", "大发发", "m大Gsd哈"]}
@@ -88,6 +88,7 @@ export default function App() {
 
                             console.log(preHtml)
                             const promiseArr = [
+                                //      ...uploadPreHtml(preHtml)
                                 //      ...uploadImage(imageObj),
                                 //      ...uploadVote({ voteArr, voteTopic, pollDuration, voteId })
                             ]
@@ -117,17 +118,27 @@ export default function App() {
                         {postArr.map((preHtml, index) => {
 
                             return (
-                                <EditorViewer key={preHtml.keyId} preHtml={preHtml.preHtml}
-                                    //    downloadImageUrl="/api/picture/downloadPicture/"
-                                    //    downloadVoteUrl="/api/voteBlock/"
-                                   // peopleList={["UweF23", "UweF22", "TonyCerl", "JimWil", "大发发", "Jimberg", "m大Gsd哈"]}
-                                    avatarPeopleList={["UweF23", "TonyCerl", "大发发", "m大Gsd哈"]}                    
-                                    downloadAvatarUrl={`https://picsum.photos/200`}
-                                    genAvatarLink={function (downloadAvatarUrl, personName) {
-                                        return downloadAvatarUrl// + personName
-                                    }}
+                                <>
+                                    <Box sx={(theme)=>{return{
+                                        bgcolor:theme.colorBgObj, marginTop:"32px",marginBottom:"32px",
+                                        borderRadius:"8px",
+                                        boxShadow:5,
+                                        overflow:"hidden"
 
-                                />
+                                    } }}>
+                                    <EditorViewer key={preHtml.keyId} preHtml={preHtml.preHtml}
+                                        //    downloadImageUrl="/api/picture/downloadPicture/"
+                                        //    downloadVoteUrl="/api/voteBlock/"
+                                        // peopleList={["UweF23", "UweF22", "TonyCerl", "JimWil", "大发发", "Jimberg", "m大Gsd哈"]}
+                                        avatarPeopleList={["UweF23", "TonyCerl", "大发发", "m大Gsd哈"]}
+                                        downloadAvatarUrl={`https://picsum.photos/200`}
+                                        genAvatarLink={function (downloadAvatarUrl, personName) {
+                                            return downloadAvatarUrl// + personName
+                                        }}
+
+                                    />
+                                </Box>
+                                </>
                             )
                         })}
                     </Grid>
@@ -140,6 +151,13 @@ export default function App() {
 
 }
 
+
+function uploadPreHtml(preHtml){
+
+    const promiseUploadArr = []
+
+
+}
 
 
 function uploadImage(imageObj) {
