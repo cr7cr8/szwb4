@@ -25,6 +25,7 @@ const { authenticateToken, generateAndDispatchToken, checkingToken } = require("
 const cookieApi = require("./router/cookieApi")
 const picture = require("./router/picture")
 const voteBlock = require("./router/voteBlock")
+const textBlock = require("./router/textBlock")
 
 console.log(">> Process.env.NODE_ENV = " + process.env.NODE_ENV, process.env.PORT || port)
 
@@ -44,7 +45,7 @@ app.prepare().then(
         express.use('/api/userCookie', cookieApi)
         express.use('/api/picture', picture)
         express.use('/api/voteBlock', voteBlock)
-
+        express.use('/api/textBlock', textBlock)
 
 
         // express.use('/api/404', function (req, res) {

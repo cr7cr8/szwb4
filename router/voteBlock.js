@@ -29,7 +29,7 @@ router.get("/getVoteCount/:voteid", function (req, res, next) {
 
 router.put("/updateVoteCount/:voteId/:choicePos", function (req, res, next) {
 
-    console.log()
+    
 
     const arrPos = "voteCountArr." + req.params.choicePos
 

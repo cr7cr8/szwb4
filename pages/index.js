@@ -69,36 +69,36 @@ export default function App() {
                     <EditorCtx
 
 
-                        onChange={function (preHtml) {
-                            startTransition(function () {
-                                // setPreHtml(preHtml)
-                                setPostArr(pre => [{ keyId: "test___test", preHtml }])
-                            })
-                        }}
+                        // onChange={function (preHtmlObj) {
+                        //     startTransition(function () {
+                        //         // setPreHtml(preHtml)
+                        //         setPostArr(pre => [preHtmlObj])
+                        //     })
+                        // }}
 
                         peopleList={["UweF23", "UweF22", "TonyCerl", "JimWil", "大发发", "Jimberg", "m大Gsd哈"]}
                         avatarPeopleList={["UweF23", "TonyCerl", "大发发", "m大Gsd哈"]}
-                        // downloadAvatarUrl={`https://picsum.photos/200/${Number(Math.random() * 200).toFixed(0)}`}
                         downloadAvatarUrl={`https://picsum.photos/200`}
                         genAvatarLink={function (downloadAvatarUrl, personName) {
                             return downloadAvatarUrl// + personName
                         }}
 
-                        onSubmit={function (preHtml, { editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum, setDisableSubmit, clearState }) {
+                        onSubmit={function (preHtmlObj, { editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum, setDisableSubmit, clearState }) {
 
-                            console.log(preHtml)
+                            console.log(preHtmlObj)
                             const promiseArr = [
-                                //      ...uploadPreHtml(preHtml)
-                                //      ...uploadImage(imageObj),
-                                //      ...uploadVote({ voteArr, voteTopic, pollDuration, voteId })
+                                ...uploadPreHtml(preHtmlObj),
+                                ...uploadImage(imageObj),
+                                ...uploadVote({ voteArr, voteTopic, pollDuration, voteId })
                             ]
+
 
 
 
                             Promise.allSettled(promiseArr).then((arr) => {
                                 setDisableSubmit(false)
                                 clearState()
-                                setPostArr(pre => [{ keyId: Math.random(), preHtml }, ...pre])
+                                setPostArr(pre => [preHtmlObj, ...pre])
                                 // setPostArr(pre => [{ keyId: Math.random(), preHtml }])
                             })
                         }}
@@ -115,21 +115,23 @@ export default function App() {
                     sx={{}}
                 >
                     <Grid item xs={10} sm={10} md={10} lg={10} xl={10} sx={{}}>
-                        {postArr.map((preHtml, index) => {
+                        {postArr.map((preHtmlObj, index) => {
 
                             return (
-                                <>
-                                    <Box sx={(theme)=>{return{
-                                        bgcolor:theme.colorBgObj, marginTop:"32px",marginBottom:"32px",
-                                        borderRadius:"8px",
-                                        boxShadow:5,
-                                        overflow:"hidden"
 
-                                    } }}>
-                                    <EditorViewer key={preHtml.keyId} preHtml={preHtml.preHtml}
-                                        //    downloadImageUrl="/api/picture/downloadPicture/"
-                                        //    downloadVoteUrl="/api/voteBlock/"
-                                        // peopleList={["UweF23", "UweF22", "TonyCerl", "JimWil", "大发发", "Jimberg", "m大Gsd哈"]}
+                                <Box key={preHtmlObj._id} sx={(theme) => {
+                                    return {
+                                        bgcolor: theme.colorBgObj, marginTop: "32px", marginBottom: "32px",
+                                        borderRadius: "8px",
+                                        boxShadow: 5,
+                                        overflow: "hidden"
+
+                                    }
+                                }}>
+                                    <EditorViewer preHtml={preHtmlObj.content}
+                                        downloadImageUrl="/api/picture/downloadPicture/"
+                                        downloadVoteUrl="/api/voteBlock/"
+                                       
                                         avatarPeopleList={["UweF23", "TonyCerl", "大发发", "m大Gsd哈"]}
                                         downloadAvatarUrl={`https://picsum.photos/200`}
                                         genAvatarLink={function (downloadAvatarUrl, personName) {
@@ -138,7 +140,7 @@ export default function App() {
 
                                     />
                                 </Box>
-                                </>
+
                             )
                         })}
                     </Grid>
@@ -152,11 +154,24 @@ export default function App() {
 }
 
 
-function uploadPreHtml(preHtml){
+function uploadPreHtml(preHtmlObj) {
 
     const promiseUploadArr = []
 
+    if (preHtmlObj.content) {
 
+        promiseUploadArr.push(
+            axios.post(`/api/textBlock/createText`, {
+                ...preHtmlObj
+            }, {
+                //  headers: { 'content-type': 'multipart/form-data' },
+            }).then(response => {
+                console.log(response.data)
+            })
+        )
+
+    }
+    return promiseUploadArr
 }
 
 

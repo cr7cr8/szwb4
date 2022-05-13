@@ -30,7 +30,7 @@ export default function VoteBlock(props) {
         if (voteArr.length === 0) {
             setVoteArr([""])
         }
-        setVoteId("VoteId" + Number(Math.random() * 100000000).toFixed(0))
+        setVoteId("VoteId-" + Date.now())
 
         return function () { setVoteId(pre => { return "" }) }
 

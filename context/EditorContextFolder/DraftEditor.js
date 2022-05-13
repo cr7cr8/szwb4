@@ -121,7 +121,15 @@ export default function DraftEditor() {
     onChange && setTimeout(function () {
 
       const preHtml = toPreHtml({ editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum })
-      onChange(preHtml)
+      const preHtmlObj = {
+        _id: "test___test",
+        content: preHtml,
+        ownerName: "Bob Wells",
+        postDate: new Date()
+      }
+
+
+      onChange(preHtmlObj)
 
     }, 0)
 
@@ -617,7 +625,16 @@ export default function DraftEditor() {
           setDisableSubmit(true)
           onSubmit && setTimeout(() => {
             const preHtml = toPreHtml({ editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum })
-            onSubmit(preHtml, { editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum, setDisableSubmit, clearState })
+
+            const preHtmlObj = {
+              _id: String("content-" + Date.now()),
+              content: preHtml,
+              ownerName: "Bob Wells",
+              postDate: new Date()
+            }
+
+
+            onSubmit(preHtmlObj, { editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum, setDisableSubmit, clearState })
           }, 0);
         }}>
           Submit

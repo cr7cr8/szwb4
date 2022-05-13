@@ -196,7 +196,8 @@ export function EditorViewer({ preHtml, peopleList = [], avatarPeopleList = [], 
 
                 return (
                     <Box sx={{
-                        bgcolor:theme.palette.background.default,
+                        bgcolor:theme.isLight?"pink":"skyblue",
+                      //  bgcolor:theme.palette.background.default,
                         fontSize: theme.sizeObj,
                         ...attribs["text-align"] && { textAlign: attribs["text-align"] },
                         // "& .MuiChip-root.MuiChip-filled": { fontSize: theme.scaleSizeObj(0.8), }
