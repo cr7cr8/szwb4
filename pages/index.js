@@ -19,20 +19,40 @@ import {
     Slider, TextField
 } from '@mui/material';
 import { EmojiEmotions, FormatSize, FormatAlignLeft, FormatAlignCenter, FormatAlignRight, StackedBarChart, HorizontalSplitOutlined } from '@mui/icons-material';
-
-
 import myImageSrc from "../public/vercel.svg";
-
-
-
 
 import { EditorContextProvider as EditorCtx, EditorViewer } from "../context/EditorContextProvider";
 
 import parse, { domToReact, attributesToProps } from 'html-react-parser';
 
+//import { TextBlock } from "../db/schema"
+const { TextBlock } = require("../db/schema")
 
 
-export default function App() {
+
+
+export async function getServerSideProps(context) {
+
+    //console.log("===>>> req", context.req.dataObj)
+
+    return TextBlock.find({}).then(docs => {
+        //console.log(docs[0])
+
+        return {
+            props: {
+                contentArr: docs.map(doc => ({ _id: doc._id, content: doc.content, ownerName: doc.ownerName }))
+            },
+        }
+
+    })
+
+
+
+}
+
+
+
+export default function App({ contentArr = [] }) {
 
     const windowObj = (typeof window === "undefined") ? {} : window
     const myLoader = ({ src }) => { return src }
@@ -40,11 +60,11 @@ export default function App() {
 
     const [isPending, startTransition] = useTransition()
 
-
+    console.log(contentArr)
 
     // const [preHtml, setPreHtml] = useState("")
 
-    const [postArr, setPostArr] = useState([])
+    const [postArr, setPostArr] = useState(contentArr)
 
 
     return (
@@ -99,7 +119,7 @@ export default function App() {
                                 setDisableSubmit(false)
                                 clearState()
                                 setPostArr(pre => [preHtmlObj, ...pre])
-                            
+
                             })
                         }}
 
@@ -129,9 +149,9 @@ export default function App() {
                                     }
                                 }}>
                                     <EditorViewer preHtml={preHtmlObj.content}
-                                        //downloadImageUrl="/api/picture/downloadPicture/"
-                                       // downloadVoteUrl="/api/voteBlock/"
-                                       
+                                        downloadImageUrl="/api/picture/downloadPicture/"
+                                        downloadVoteUrl="/api/voteBlock/"
+
                                         avatarPeopleList={["UweF23", "TonyCerl", "大发发", "m大Gsd哈"]}
                                         downloadAvatarUrl={`https://picsum.photos/200`}
                                         genAvatarLink={function (downloadAvatarUrl, personName) {

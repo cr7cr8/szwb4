@@ -925,10 +925,10 @@ export function toPreHtml({ editorState, theme, voteArr, voteTopic, pollDuration
           // object Tag caanot self close
           if (!imageObj[key]) { return }
           const imageHtml = imageObj[key].reduce(function (imageHtml, currentValue, index, arr) {
-            return imageHtml = imageHtml + `<object data-imageIndex="${index}" data-imgUrl="${arr[index].imgUrl}" data-imgSnap="${arr[index].imgSnap}" data-blockKey="${key}" ></object>`
+            return imageHtml = imageHtml + `<object data-imageindex="${index}" data-imgurl="${arr[index].imgUrl}" data-imgsnap="${arr[index].imgSnap}" data-blockkey="${key}" ></object>`
           }, "")
 
-          return `<object data-type="image-block"  data-block_key="${key}" data-block_data="${data}">` + imageHtml + '</object>'
+          return `<object data-type="image-block"  data-block_key="${key}" >` + imageHtml + '</object>'
         },
 
         voteBlock: function (block) {

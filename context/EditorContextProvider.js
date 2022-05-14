@@ -138,7 +138,7 @@ export function EditorViewer({ preHtml, peopleList = [], avatarPeopleList = [], 
                 let imgUrlArr = []
 
                 children.forEach((item, index) => {
-                    if (downloadImageUrl) {
+                    if (downloadImageUrl)  {
                         imgSnapArr.push(downloadImageUrl + item.attribs["data-imgsnap"].substr(item.attribs["data-imgsnap"].lastIndexOf("/") + 1) + "-snap")
                         imgUrlArr.push(downloadImageUrl + item.attribs["data-imgurl"].substr(item.attribs["data-imgurl"].lastIndexOf("/") + 1) + "-img")
                     }
