@@ -35,7 +35,7 @@ export async function getServerSideProps(context) {
 
     //console.log("===>>> req", context.req.dataObj)
 
-    return TextBlock.find({}).then(docs => {
+    return TextBlock.find({}).sort({ postDate: -1 }).then(docs => {
         //console.log(docs[0])
 
         return {
