@@ -224,8 +224,6 @@ export function EditorViewer({ preHtml, peopleList = [], avatarPeopleList = [], 
             if (name === "span" && attribs["data-type"] === "link") {
                 const linkAdd = extractText(children)
                 return (
-
-
                     <LinkTag {...{ linkAdd }} />
                 )
             }
