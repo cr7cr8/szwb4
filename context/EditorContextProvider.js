@@ -125,6 +125,8 @@ export function EditorContextProvider({
 export function EditorViewer({ preHtml, peopleList = [], avatarPeopleList = [], genAvatarLink = () => { }, downloadImageUrl = "", downloadVoteUrl = "", downloadAvatarUrl = "" }) {
 
     const theme = useTheme()
+    const colorObj = theme.colorObj
+    const colorBgObj = theme.colorBgObj
 
     const options = useMemo(() => ({
         replace: (domNode) => {
@@ -196,8 +198,8 @@ export function EditorViewer({ preHtml, peopleList = [], avatarPeopleList = [], 
 
                 return (
                     <Box sx={{
-
-                        bgcolor: theme.palette.background.default,
+                        bgcolor: theme.isLight?theme.palette.background.default:"transparent",
+                        //  bgcolor: theme.isLight?theme.palette.background.default:colorObj[500],
                         fontSize: theme.sizeObj,
                         ...attribs["text-align"] && { textAlign: attribs["text-align"] },
                         // "& .MuiChip-root.MuiChip-filled": { fontSize: theme.scaleSizeObj(0.8), }
@@ -210,7 +212,8 @@ export function EditorViewer({ preHtml, peopleList = [], avatarPeopleList = [], 
             else if (name === "div" && attribs["small-font"]) {
                 return (
                     <Box sx={{
-                        bgcolor: theme.palette.background.default,
+                        bgcolor: theme.isLight?theme.palette.background.default:"transparent",
+                        //   bgcolor: theme.isLight?theme.palette.background.default:colorBgObj,
                         fontSize: theme.scaleSizeObj(0.8),
                         ...attribs["text-align"] && { textAlign: attribs["text-align"] },
                         "& .MuiChip-root.MuiChip-filled": { fontSize: theme.scaleSizeObj(0.8), }
