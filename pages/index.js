@@ -129,8 +129,8 @@ export default function App() {
                                     }
                                 }}>
                                     <EditorViewer preHtml={preHtmlObj.content}
-                                        downloadImageUrl="/api/picture/downloadPicture/"
-                                        downloadVoteUrl="/api/voteBlock/"
+                                        //downloadImageUrl="/api/picture/downloadPicture/"
+                                       // downloadVoteUrl="/api/voteBlock/"
                                        
                                         avatarPeopleList={["UweF23", "TonyCerl", "大发发", "m大Gsd哈"]}
                                         downloadAvatarUrl={`https://picsum.photos/200`}
@@ -157,6 +157,8 @@ export default function App() {
 function uploadPreHtml(preHtmlObj) {
 
     const promiseUploadArr = []
+
+
 
     if (preHtmlObj.content) {
 

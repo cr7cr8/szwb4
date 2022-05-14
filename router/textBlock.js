@@ -17,6 +17,11 @@ router.post("/createText", function (req, res, next) {
 
 router.get("/getText", function (req, res, next) {
 
+    TextBlock.find({}).then(docs => {
+
+        res.json(docs)
+
+    })
 
 
 })
