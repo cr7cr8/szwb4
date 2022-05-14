@@ -112,14 +112,10 @@ export default function App({ contentArr = [] }) {
                                 ...uploadVote({ voteArr, voteTopic, pollDuration, voteId })
                             ]
 
-
-
-
                             Promise.allSettled(promiseArr).then((arr) => {
                                 setDisableSubmit(false)
                                 clearState()
                                 setPostArr(pre => [preHtmlObj, ...pre])
-
                             })
                         }}
 
