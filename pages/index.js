@@ -107,9 +107,9 @@ export default function App({ contentArr = [] }) {
 
                             console.log(preHtmlObj)
                             const promiseArr = [
-                                ...uploadPreHtml(preHtmlObj),  // commentOut when local
-                                ...uploadImage(imageObj), // commentOut when local
-                                ...uploadVote({ voteArr, voteTopic, pollDuration, voteId }) // commentOut when local
+                            //    ...uploadPreHtml(preHtmlObj),  // commentOut when local
+                            //    ...uploadImage(imageObj), // commentOut when local
+                            //    ...uploadVote({ voteArr, voteTopic, pollDuration, voteId }) // commentOut when local
                             ]
 
                             Promise.allSettled(promiseArr).then((arr) => {
@@ -137,8 +137,8 @@ export default function App({ contentArr = [] }) {
                                     <EditorViewer
                                         key={preHtmlObj._id}
                                         preHtml={preHtmlObj.content}
-                                        downloadImageUrl="/api/picture/downloadPicture/" // commentOut when local
-                                        downloadVoteUrl="/api/voteBlock/" // commentOut when local
+                                     //   downloadImageUrl="/api/picture/downloadPicture/" // commentOut when local
+                                     //   downloadVoteUrl="/api/voteBlock/" // commentOut when local
 
                                         avatarPeopleList={["UweF23", "TonyCerl", "大发发", "m大Gsd哈"]}
                                         downloadAvatarUrl={`https://picsum.photos/200`}
