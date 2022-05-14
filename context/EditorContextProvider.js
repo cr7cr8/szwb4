@@ -138,7 +138,7 @@ export function EditorViewer({ preHtml, peopleList = [], avatarPeopleList = [], 
                 let imgUrlArr = []
 
                 children.forEach((item, index) => {
-                    if (downloadImageUrl)  {
+                    if (downloadImageUrl) {
                         imgSnapArr.push(downloadImageUrl + item.attribs["data-imgsnap"].substr(item.attribs["data-imgsnap"].lastIndexOf("/") + 1) + "-snap")
                         imgUrlArr.push(downloadImageUrl + item.attribs["data-imgurl"].substr(item.attribs["data-imgurl"].lastIndexOf("/") + 1) + "-img")
                     }
@@ -198,7 +198,7 @@ export function EditorViewer({ preHtml, peopleList = [], avatarPeopleList = [], 
 
                 return (
                     <Box sx={{
-                        bgcolor: theme.isLight?theme.palette.background.default:"transparent",
+                        bgcolor: theme.isLight ? theme.palette.background.default : "transparent",
                         //  bgcolor: theme.isLight?theme.palette.background.default:colorObj[500],
                         fontSize: theme.sizeObj,
                         ...attribs["text-align"] && { textAlign: attribs["text-align"] },
@@ -212,7 +212,7 @@ export function EditorViewer({ preHtml, peopleList = [], avatarPeopleList = [], 
             else if (name === "div" && attribs["small-font"]) {
                 return (
                     <Box sx={{
-                        bgcolor: theme.isLight?theme.palette.background.default:"transparent",
+                        bgcolor: theme.isLight ? theme.palette.background.default : "transparent",
                         //   bgcolor: theme.isLight?theme.palette.background.default:colorBgObj,
                         fontSize: theme.scaleSizeObj(0.8),
                         ...attribs["text-align"] && { textAlign: attribs["text-align"] },
@@ -234,7 +234,20 @@ export function EditorViewer({ preHtml, peopleList = [], avatarPeopleList = [], 
 
 
 
-    return parse(preHtml, options)
+    return (
+        <Box sx={(theme) => {
+            return {
+                bgcolor: theme.colorBgObj, marginTop: "32px", marginBottom: "32px",
+                borderRadius: "8px",
+                boxShadow: 5,
+                overflow: "hidden"
+
+            }
+        }}>
+            {parse(preHtml, options)}
+        </Box>
+
+    )
 
 
 }

@@ -40,7 +40,7 @@ export async function getServerSideProps(context) {
 
         return {
             props: {
-                contentArr: docs.map(doc => ({ _id: doc._id, content: doc.content, ownerName: doc.ownerName }))
+                contentArr: docs.map(doc => ({ _id: doc._id, content: doc.content, ownerName: doc.ownerName })).reverse()
             },
         }
 
@@ -134,17 +134,9 @@ export default function App({ contentArr = [] }) {
                         {postArr.map((preHtmlObj, index) => {
 
                             return (
-
-                                <Box key={preHtmlObj._id} sx={(theme) => {
-                                    return {
-                                        bgcolor: theme.colorBgObj, marginTop: "32px", marginBottom: "32px",
-                                        borderRadius: "8px",
-                                        boxShadow: 5,
-                                        overflow: "hidden"
-
-                                    }
-                                }}>
-                                    <EditorViewer preHtml={preHtmlObj.content}
+                                    <EditorViewer
+                                        key={preHtmlObj._id}
+                                        preHtml={preHtmlObj.content}
                                         downloadImageUrl="/api/picture/downloadPicture/"
                                         downloadVoteUrl="/api/voteBlock/"
 
@@ -155,8 +147,6 @@ export default function App({ contentArr = [] }) {
                                         }}
 
                                     />
-                                </Box>
-
                             )
                         })}
                     </Grid>
