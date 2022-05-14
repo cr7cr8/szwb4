@@ -238,7 +238,7 @@ export function EditorViewer({ preHtml, peopleList = [], avatarPeopleList = [], 
         <Box sx={(theme) => {
             return {
                 bgcolor: theme.colorBgObj, marginTop: "32px", marginBottom: "32px",
-                borderRadius: "8px",
+                borderRadius: "4px",
                 boxShadow: 5,
                 overflow: "hidden"
 

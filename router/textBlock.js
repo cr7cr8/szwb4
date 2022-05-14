@@ -17,7 +17,7 @@ router.post("/createText", function (req, res, next) {
 
 router.get("/getText", function (req, res, next) {
 
-    TextBlock.find({}).then(docs => {
+    TextBlock.find({}).sort({ postingTime: -1 }).then(docs => {
 
         res.json(docs)
 
