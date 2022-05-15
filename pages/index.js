@@ -28,26 +28,18 @@ import parse, { domToReact, attributesToProps } from 'html-react-parser';
 //import { TextBlock } from "../db/schema"
 const { TextBlock } = require("../db/schema")
 
-
-
-
 export async function getServerSideProps(context) {
 
     //console.log("===>>> req", context.req.dataObj)
 
     return TextBlock.find({}).sort({ postDate: -1 }).then(docs => {
         //console.log(docs[0])
-
         return {
             props: {
                 contentArr: docs.map(doc => ({ _id: doc._id, content: doc.content, ownerName: doc.ownerName }))
             },
         }
-
     })
-
-
-
 }
 
 
