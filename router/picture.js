@@ -10,7 +10,7 @@ router.post("/uploadPicture",
 
     function (req, res, next) {
 
-        console.log("hihihi")
+      
 
         next()
     },
@@ -38,10 +38,6 @@ router.post("/uploadPicture2",
         res.json("got picture2")
 
     })
-
-
-
-
 
 router.get("/downloadPicture/:filename",
 

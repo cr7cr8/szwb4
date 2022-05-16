@@ -10,6 +10,8 @@ const Jimp = require('jimp');
 
 function createFileManager(connDB, collectionName) {
 
+
+
   return {
 
     checkConnState: function (req, res, next) { checkConnState(connDB, collectionName, req, res, next) },
@@ -18,7 +20,7 @@ function createFileManager(connDB, collectionName) {
     uploadFile: function (req, res, next) { uploadFile(connDB, collectionName, req, res, next) },
     downloadFile: function (req, res, next) { downloadFile(connDB, collectionName, req, res, next) },
     deleteFileByUserName: function (req, res, next) { deleteFileByUserName(connDB, collectionName, req, res, next) },
-    
+
 
     isFileThere: function (req, res, next) { return isFileThere(connDB, collectionName, req, res, next) },
 
@@ -63,7 +65,7 @@ function uploadFile(connDB, collectionName, req, res, next) {
   req.files.forEach(function (file, index) {
 
 
-  console.log("in uploadingfile")
+    console.log("in uploadingfile")
 
     const gfs = new mongoose.mongo.GridFSBucket(connDB.db, {
       chunkSizeBytes: 255 * 1024,
@@ -78,12 +80,12 @@ function uploadFile(connDB, collectionName, req, res, next) {
 
 
 
-    //   metadata: {
-    //     ...req.body.obj, fieldname, originalname, encoding, mimetype, size, oriantation,
+      //   metadata: {
+      //     ...req.body.obj, fieldname, originalname, encoding, mimetype, size, oriantation,
 
-    //     mongooseID: String(mongooseID),
-    //     ...req.body.obj.picName && { picName: req.body.obj.picName[index] },
-    //   },
+      //     mongooseID: String(mongooseID),
+      //     ...req.body.obj.picName && { picName: req.body.obj.picName[index] },
+      //   },
       contentType: file.mimetype,
     })
 
@@ -121,19 +123,21 @@ function downloadFile(connDB, collectionName, req, res, next) {
     //  bucketName: "avatar",
   });
 
-  let querryObj = req.params.picname
+  let querryObj = req.params?.picname
     ? { 'metadata.picName': req.params.picname }
-    : { "_id": mongoose.Types.ObjectId(req.params.id) }
+    : { "_id": mongoose.Types.ObjectId(req.params?.id) }
 
-  if (req.params.emojiname) {
+  if (req.params?.emojiname) {
     querryObj = { 'filename': req.params.emojiname }
   }
 
-  if (req.params.filename) {
+  if (req.params?.filename) {
     querryObj = { 'filename': req.params.filename }
   }
 
-
+  if (req?.query?.filename) {
+    querryObj = { 'filename': req.query.filename }
+  }
 
   const cursor = gfs.find({ ...querryObj }, { limit: 1 })
   // const cursor = gfs.find({ 'metadata.ownerName': req.params.username, /* "metadata.owner": req.user.username */ }, { limit: 1 })
@@ -149,19 +153,19 @@ function downloadFile(connDB, collectionName, req, res, next) {
 
       let gfsrs = gfs.openDownloadStream(doc._id);
 
-      res.header('content-type', doc.contentType);
-      res.header("access-control-expose-headers", "content-type")
+      res?.header?.('content-type', doc.contentType);
+      res?.header?.("access-control-expose-headers", "content-type")
 
-      res.header("file-name", encodeURIComponent(doc.filename))
-      res.header("access-control-expose-headers", "file-name")
-
-
-    //   doc.metadata.oriantation && res.header("file-oriantation", doc.metadata.oriantation)
-    //   doc.metadata.oriantation && res.header("access-control-expose-headers", "file-oriantation")
+      res?.header?.("file-name", encodeURIComponent(doc.filename))
+      res?.header?.("access-control-expose-headers", "file-name")
 
 
-      res.header("content-length", doc.length)
-      res.header("access-control-expose-headers", "content-length") // this line can be omitted
+      //   doc.metadata.oriantation && res.header("file-oriantation", doc.metadata.oriantation)
+      //   doc.metadata.oriantation && res.header("access-control-expose-headers", "file-oriantation")
+
+
+      res?.header?.("content-length", doc.length)
+      res?.header?.("access-control-expose-headers", "content-length") // this line can be omitted
 
       gfsrs.on("data", function (data) {
         res.write(data);
@@ -274,7 +278,7 @@ function deleteFileByUserName(connDB, collectionName, req, res, next) {
   });
   const cursor = gfs.find({ 'metadata.ownerName': req.user.userName, /* "metadata.owner": req.user.username */ }, { limit: 1000 })
 
- console.log("------", req.user.userName)
+  console.log("------", req.user.userName)
 
   cursor.toArray().then(function (fileArr) {
     if (fileArr.length === 0) { next() }
@@ -365,7 +369,7 @@ function deleteFileById(connDB, collectionName, req, res, next) {
 function getSmallImageArray(connDB, collectionName, req, res, next,) {
 
 
-  console.log(req.files.length)
+  console.log("req.files.length is", req.files.length)
   req.files.forEach(function (imgFile, index) {
 
     console.log(index)
@@ -406,8 +410,7 @@ function getSmallImageArray(connDB, collectionName, req, res, next,) {
 
 function getSmallImageArray2(connDB, collectionName, req, res, next,) {
 
-
-  console.log(req.files.length)
+  console.log("getSmallImageArray2,,req.files.length is", req.files.length)
   req.files.forEach(function (imgFile, index) {
 
     console.log(index)
