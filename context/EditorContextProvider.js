@@ -5,6 +5,8 @@ import {
     RichUtils, Modifier, convertFromHTML, AtomicBlockUtils, getDefaultKeyBinding, KeyBindingUtil
 } from 'draft-js';
 
+import { NoSsr } from '@mui/base';
+
 import DraftEditor from "./EditorContextFolder/DraftEditor"
 import parse, { domToReact, attributesToProps, Element } from 'html-react-parser';
 import reactElementToJSXString from 'react-element-to-jsx-string';
@@ -14,15 +16,18 @@ import VoteViewerBlock from "./EditorViewerFolder/VoteViewerBlock";
 import AvatarChip from "./EditorViewerFolder/AvatarChip";
 import LinkTag from "./EditorViewerFolder/LinkTag";
 
-
+import Countdown from "react-countdown";
 import { ThemeProvider, useTheme, createTheme } from '@mui/material/styles';
-import { Container, Grid, Paper, IconButton, ButtonGroup, Stack, Button, Switch, Box, Hidden, Collapse } from '@mui/material';
+import { Container, Grid, Paper, IconButton, ButtonGroup, Stack, Button, Switch, Box, Hidden, Collapse, Typography, Divider } from '@mui/material';
+
+import { Close } from "@mui/icons-material";
 
 
 export const EditorContext = createContext()
 
 export function EditorContextProvider({
 
+    userName,
     downloadAvatarUrl = "",
     genAvatarLink = () => { },
 
@@ -92,7 +97,7 @@ export function EditorContextProvider({
     return (
 
         <EditorContext.Provider value={{
-
+            userName,
             editorState, setEditorState,
             currentBlockKey, setCurrentBlockKey,
 
@@ -122,7 +127,14 @@ export function EditorContextProvider({
     )
 }
 
-export function EditorViewer({ preHtml, peopleList = [], avatarPeopleList = [], genAvatarLink = () => { }, downloadImageUrl = "", downloadVoteUrl = "", downloadAvatarUrl = "" }) {
+export function EditorViewer({
+    userName,
+    preHtmlId,
+    ownerName,
+    postDate,
+    preHtml, peopleList = [], avatarPeopleList = [], genAvatarLink = () => { },
+    downloadImageUrl = "", downloadVoteUrl = "", downloadAvatarUrl = ""
+}) {
 
     const theme = useTheme()
     const colorObj = theme.colorObj
@@ -175,11 +187,11 @@ export function EditorViewer({ preHtml, peopleList = [], avatarPeopleList = [], 
                     return item?.children?.[0]?.data ?? ""
                 })
 
-                return <VoteViewerBlock {...{ topic, duration, voteArr, expireDate, voteId, downloadVoteUrl }} />
+                return <VoteViewerBlock {...{ topic, duration, voteArr, expireDate, voteId, downloadVoteUrl, userName }} />
             }
             else if (name === "object" && attribs["data-type"] === "person-tag") {
                 //only children and domNode are dom
-                //children[0] children[1] ... are NOT 
+                //children[0] children[1] ... are NOT
 
 
                 return (
@@ -202,8 +214,8 @@ export function EditorViewer({ preHtml, peopleList = [], avatarPeopleList = [], 
                         //  bgcolor: theme.isLight?theme.palette.background.default:colorObj[500],
                         fontSize: theme.sizeObj,
                         ...attribs["text-align"] && { textAlign: attribs["text-align"] },
-                        // "& .MuiChip-root.MuiChip-filled": { fontSize: theme.scaleSizeObj(0.8), }
-                        "& .MuiChip-root.MuiChip-filled": { fontSize: theme.sizeObj }
+
+                        //    "& .MuiChip-root.MuiChip-filled": { fontSize: theme.sizeObj }
                     }}>
                         {domToReact(children, options)}
                     </Box>
@@ -216,7 +228,8 @@ export function EditorViewer({ preHtml, peopleList = [], avatarPeopleList = [], 
                         //   bgcolor: theme.isLight?theme.palette.background.default:colorBgObj,
                         fontSize: theme.scaleSizeObj(0.8),
                         ...attribs["text-align"] && { textAlign: attribs["text-align"] },
-                        "& .MuiChip-root.MuiChip-filled": { fontSize: theme.scaleSizeObj(0.8), }
+
+                        //   "& .MuiChip-root.MuiChip-filled": { fontSize: theme.scaleSizeObj(0.8), }
 
                     }}>{domToReact(children, options)}</Box>
                 )
@@ -230,20 +243,48 @@ export function EditorViewer({ preHtml, peopleList = [], avatarPeopleList = [], 
 
 
         }
-    }), [preHtml, theme])
+    })/*, [preHtml, theme, userName]*/)
 
 
 
     return (
         <Box sx={(theme) => {
             return {
-                bgcolor: theme.colorBgObj, marginTop: "32px", marginBottom: "32px",
+                bgcolor: theme.colorBgObj,
+                marginTop: "32px", marginBottom: "32px",
                 borderRadius: "4px",
                 boxShadow: 5,
                 overflow: "hidden"
 
             }
         }}>
+
+            <Box sx={{ display: "flex", p: "4px", alignItems: "center", justifyContent: "flex-start", "& .MuiBox-root": { fontSize: theme.sizeObj } }}>
+
+                <AvatarChip
+                    bgTrans={true}
+                    personName={ownerName}
+                    downloadAvatarUrl={downloadAvatarUrl}
+                    avatarPeopleList={avatarPeopleList}
+                    genAvatarLink={genAvatarLink}
+                >
+                    <span>{ownerName}</span>
+                </AvatarChip>
+                &nbsp;&nbsp;
+                <NoSsr>
+                    <Countdown date={new Date(postDate)} intervalDelay={1 * 1000}
+                        renderer={function ({ days, hours, minutes, seconds, completed, ...props }) {
+                            return <PostTimeRender  {...{ days, hours, minutes, seconds, completed, ...props }} />
+                        }}
+                        overtime={true}
+                    />
+                </NoSsr>
+                &nbsp;&nbsp;
+
+                <Typography className="count-down" style={{ fontSize: "1rem" }} sx={{ color: theme.palette.text.secondary }}>{preHtmlId}</Typography>
+                <IconButton size="small" onClick={function () { }}><Close fontSize="large" /></IconButton>
+
+            </Box>
             {parse(preHtml, options)}
         </Box>
 
@@ -269,4 +310,33 @@ function extractText(dom) {
 
 
     return text
+}
+
+
+
+function PostTimeRender({ days, hours, minutes, seconds, completed, ...props }) {
+
+    const theme = useTheme()
+
+
+
+    const message = completed
+
+        ? days > 0
+            ? `${days}d`
+            : hours > 0
+                ? `${hours}h`
+                : minutes > 0
+                    ? `${minutes}m`
+                    : `0m`//`${seconds}s`//`Just now` //`${seconds} sec ago`
+        : days > 0
+            ? `Remaining ${days}+ days`
+            : hours > 0
+                ? `Remaining ${hours}+ hours`
+                : minutes > 0
+                    ? `Remaining ${minutes}+ minutes`
+                    : `Remaining ${seconds} seconds`
+
+    return <Typography  className="count-down" style={{ fontSize: "1rem" }} sx={{ color: theme.palette.text.secondary }}>{message} </Typography>
+
 }

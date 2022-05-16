@@ -6,7 +6,7 @@ const express = express_()
 
 const cors = require("cors")
 
- 
+
 
 const dev = process.env.NODE_ENV !== 'production'
 const hostname = '192.168.0.100'
@@ -22,6 +22,12 @@ const cookieParser = require('cookie-parser')
 
 const { authenticateToken, generateAndDispatchToken, checkingToken } = require("./middware/auth")
 
+
+
+const { getCookie, getCookies, setCookies } = require('cookies-next');
+const signer = require('cookie-signature');
+
+
 const cookieApi = require("./router/cookieApi")
 const picture = require("./router/picture")
 const voteBlock = require("./router/voteBlock")
@@ -35,17 +41,57 @@ app.prepare().then(
         express.disable('x-powered-by');
         express.use(express_.json())
         express.use(express_.urlencoded({ extended: true }))
-        
+
         express.use(cors({}))
-        express.use(cookieParser('cookieSecretKey'))
+        //  express.use(cookieParser('this-is-a-cookieSecretKey'))
 
+        express.use((req, res, next) => {
+            req.isCookieValid = null
+            const cookie = getCookie("signedCookieObj", { req, res })
+            //console.log("hasCookie", cookie ? true : false)
 
+            if (cookie) {
+                const checkedCookie = signer.unsign(cookie, 'this-is-a-cookieSecretKey')
+                // console.log("is Cookie valid", checkedCookie ? true : false)
+                // checkedCookie && console.log("Cookie value is ", JSON.parse(checkedCookie).userName)
+                req.userName = JSON.parse(checkedCookie).userName
+            }
+            else {
+                setCookies('signedCookieObj', { userName: "User" + Number(Math.random() * 1000).toFixed(0) }, { req, res, maxAge: 3600 * 24 * 365, httpOnly: true, sameSite: "lax" });
+                const newCookie = getCookie("signedCookieObj", { req, res })
+                const newSignedCookie = signer.sign(newCookie, 'this-is-a-cookieSecretKey')
+                setCookies('signedCookieObj', newSignedCookie, { req, res, maxAge: 3600 * 24 * 365, httpOnly: true, sameSite: "lax" });
+                // console.log("new Signed Cookie", newSignedCookie)
+                req.userName = JSON.parse(newSignedCookie).userName
+            }
+            next()
+         
+        })
 
-
-        express.use('/api/userCookie', cookieApi)
+        //express.use('/api/cookie', cookieApi)
         express.use('/api/picture', picture)
         express.use('/api/voteBlock', voteBlock)
         express.use('/api/textBlock', textBlock)
+
+        express.get("/", function (req, res, next) {
+
+
+
+            //let userName = req.signedCookies?.signedCookieObj?.userName || "User" + String(Math.random()).substring(4, 7)
+            // if (!(req.signedCookies?.signedCookieObj?.userName)) {
+            //     res.cookie('signedCookieObj', { userName }, {
+            //         maxAge: 1000 * 60 * 60 * 24 * 365, // would expire after 15 minutes
+            //         httpOnly: true, // The cookie only accessible by the web server
+            //         signed: true // Indicates if the cookie should be signed
+            //     });
+
+            // }
+
+            app.render(req, res, "/", { userName: req.userName })
+        })
+
+
+
 
 
         // express.use('/api/404', function (req, res) {
@@ -110,7 +156,7 @@ app.prepare().then(
 
         //             console.log(req.signedCookies)
         //             //  res.cookie('cookieName', 'cookie-'+Date.now(), { signed: true })
-        //             res.cookie('signedCookieObj', { a: 1, b: 2 }, {
+        //             res.cookie('signedCookieObj', { userName: "User" + String(Math.random()).substring(4, 7) }, {
         //                 maxAge: 1000 * 60 * 60 * 24 * 365, // would expire after 15 minutes
         //                 httpOnly: true, // The cookie only accessible by the web server
         //                 signed: true // Indicates if the cookie should be signed

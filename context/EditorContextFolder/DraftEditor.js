@@ -69,7 +69,7 @@ export default function DraftEditor() {
     onChange,
     onSubmit,
 
-
+    userName,
     clearState
 
   } = useContext(EditorContext)
@@ -629,7 +629,7 @@ export default function DraftEditor() {
             const preHtmlObj = {
               _id: String("content-" + Date.now()),
               content: preHtml,
-              ownerName: "Bob Wells",
+              ownerName: userName,
               postDate: new Date()
             }
 

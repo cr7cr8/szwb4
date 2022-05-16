@@ -28,7 +28,7 @@ const voteBlockSchema = new mongoose.Schema({
 
     pollDuration: { type: Object },
     expireDate: { type: Date, default: Date.now },
-    postID: { type: String },
+    postId: { type: String },
     ownerName: { type: String },
     whoVoted: { type: [String], default: [] },
 

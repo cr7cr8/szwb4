@@ -8,7 +8,7 @@ const { VoteBlock } = require("../db/schema")
 
 router.post("/createVote", function (req, res, next) {
 
-
+    console.log("vvvvvv")
     VoteBlock.create({
         _id: req.body.voteId,
         ...req.body,
@@ -27,9 +27,9 @@ router.get("/getVoteCount/:voteid", function (req, res, next) {
     })
 })
 
-router.put("/updateVoteCount/:voteId/:choicePos", function (req, res, next) {
+router.put("/updateVoteCount/:voteId/:choicePos/:userName", function (req, res, next) {
 
-    
+
 
     const arrPos = "voteCountArr." + req.params.choicePos
 
@@ -38,7 +38,7 @@ router.put("/updateVoteCount/:voteId/:choicePos", function (req, res, next) {
 
         "$inc": { [arrPos]: 1 }, //"$inc": { "voteCountArr.$[keyName]": 1 },
 
-        //  "$addToSet": { whoVoted: req.body.userName }
+          "$addToSet": { whoVoted: req.params.userName }
 
 
     }).then((doc) => {

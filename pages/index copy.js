@@ -31,21 +31,6 @@ import { ThemeProvider, useTheme, createTheme } from '@mui/material/styles';
 ///////////////////////////////////////import { TextBlock } from "../db/schema"
 const { TextBlock } = require("../db/schema")
 
-
-function runMiddleware(req, res, fn) {
-    return new Promise((resolve, reject) => {
-      fn(req, res, (result) => {
-        if (result instanceof Error) {
-          return reject(result)
-        }
-  
-        return resolve(result)
-      })
-    })
-  }
-  
-
-
 export async function getServerSideProps(context) {
 
 
@@ -57,17 +42,7 @@ export async function getServerSideProps(context) {
     //     }
     // }
 
-    const { params, query, req, res, ...props } = context
-
-    await runMiddleware(req,res,function(req,res,next){
-        console.log("xxxx")
-        next()
-    })
-
-
-
-    console.log(req.headers.cookie)
-
+    const { params, query } = context
     return TextBlock.find({}).sort({ postDate: -1 }).limit(5).then(docs => {
 
         return {
@@ -93,6 +68,10 @@ export default function App({ userName, contentArr = [] }) {
 
 
     const [isPending, startTransition] = useTransition()
+
+    //console.log(contentArr)
+
+    // const [preHtml, setPreHtml] = useState("")
 
     const [postArr, setPostArr] = useState(contentArr)
 
@@ -139,9 +118,9 @@ export default function App({ userName, contentArr = [] }) {
 
                                 //    console.log(preHtmlObj)
                                 const promiseArr = [
-                                    ...uploadPreHtml(preHtmlObj),  // commentOut when local
-                                    ...uploadImage(imageObj), // commentOut when local
-                                    ...uploadVote({ voteArr, voteTopic, pollDuration, voteId, postId: preHtmlObj._id }) // commentOut when local
+                                   ...uploadPreHtml(preHtmlObj),  // commentOut when local
+                                   ...uploadImage(imageObj), // commentOut when local
+                                   ...uploadVote({ voteArr, voteTopic, pollDuration, voteId }) // commentOut when local
                                 ]
 
                                 Promise.allSettled(promiseArr).then((arr) => {
@@ -164,11 +143,10 @@ export default function App({ userName, contentArr = [] }) {
                     >
                         <Grid item xs={10} sm={10} md={10} lg={10} xl={10} sx={{}}>
                             {postArr.map((preHtmlObj, index) => {
-
+                                console.log(Date.parse(preHtmlObj.postDate))
                                 return (
                                     <EditorViewer
                                         key={preHtmlObj._id}
-                                        userName={userName}
                                         ownerName={preHtmlObj.ownerName}
                                         preHtml={preHtmlObj.content}
                                         preHtmlId={preHtmlObj._id}
@@ -219,6 +197,7 @@ function uploadPreHtml(preHtmlObj) {
     }
     return promiseUploadArr
 }
+
 
 function uploadImage(imageObj) {
 
@@ -282,7 +261,7 @@ function uploadImage(imageObj) {
 
 }
 
-function uploadVote({ voteArr, voteTopic, pollDuration, voteId, postId }) {
+function uploadVote({ voteArr, voteTopic, pollDuration, voteId }) {
     const promiseUploadArr = []
 
     if (voteId) {
@@ -290,7 +269,7 @@ function uploadVote({ voteArr, voteTopic, pollDuration, voteId, postId }) {
         const expireDate = new Date(Date.now() + (3600 * 24 * d + 3600 * h + 60 * m) * 1000)
 
         promiseUploadArr.push(
-            axios.post(`/api/voteBlock/createVote`, { voteId, voteTopic, voteArr, expireDate, postId }, {
+            axios.post(`/api/voteBlock/createVote`, { voteId, voteTopic, voteArr, expireDate }, {
                 //  headers: { 'content-type': 'multipart/form-data' },
             }).then(response => {
                 console.log(response.data)

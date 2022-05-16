@@ -7,7 +7,7 @@ import { IndeterminateCheckBox } from "@mui/icons-material";
 import axios from "axios";
 
 
-export default function VoteViewerBlock({ topic, duration, voteArr, voteId, expireDate, downloadVoteUrl }) {
+export default function VoteViewerBlock({ topic, duration, voteArr, voteId, expireDate, downloadVoteUrl, userName }) {
 
 
 
@@ -58,12 +58,20 @@ export default function VoteViewerBlock({ topic, duration, voteArr, voteId, expi
 
         downloadVoteUrl && axios.get(`/api/voteBlock/getVoteCount/${voteId}`).then(response => {
 
-
+            console.log(response.data)
+            console.log("username is", userName)
             if (response.data?.voteCountArr) {
 
                 setVoteCountArr(response.data?.voteCountArr)
                 setIsLoaded(true)
             }
+
+            if (response.data?.whoVoted) {
+
+                response.data?.whoVoted.includes(userName) && setIsVotting(false)
+            }
+
+
 
         })
 
@@ -141,7 +149,7 @@ export default function VoteViewerBlock({ topic, duration, voteArr, voteId, expi
                                     return newCountArr
                                 })
                                 setIsVotting(false)
-                                axios.put(`/api/voteBlock/updateVoteCount/${voteId}/${index}`).then(resposne => {
+                                axios.put(`/api/voteBlock/updateVoteCount/${voteId}/${index}/${userName}`).then(resposne => {
 
                                 })
                             }

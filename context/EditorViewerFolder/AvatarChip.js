@@ -8,7 +8,7 @@ import { blue, red, grey } from '@mui/material/colors';
 
 
 
-export default function AvatarChip({ personName, children,
+export default function AvatarChip({ personName, children, bgTrans = false,
     downloadAvatarUrl = "", avatarPeopleList = [], genAvatarLink = () => { }
 }) {
 
@@ -32,7 +32,7 @@ export default function AvatarChip({ personName, children,
                 verticalAlign: "text-top",
                 //verticalAlign: blockData.isSmallFont ? "text-top" : "top",
                 lineHeight: 1,
-                bgcolor: colorBgObj,
+                bgcolor: bgTrans ? "transparent" : theme.isLight ? colorBgObj : "transparent",
                 alignItems: "center",
                 padding: "4px",
                 color: theme.isLight ? colorObj[500] : colorObj[300],
@@ -69,7 +69,7 @@ export default function AvatarChip({ personName, children,
                 },
                 "&:hover": {
                     //  bgcolor: theme.palette.action.hover,
-                    bgcolor: "transparent",
+                    bgcolor: theme.isLight?"transparent":colorBgObj,
                     cursor: "pointer",
                     borderColor: theme.isLight ? colorObj[500] : colorObj[300],
 
