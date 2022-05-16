@@ -3,6 +3,8 @@ import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 
 
+
+
 import React, { useState, useContext, useEffect, useId, useTransition } from "react"
 
 
@@ -26,53 +28,70 @@ import { EditorContextProvider as EditorCtx, EditorViewer } from "../context/Edi
 import parse, { domToReact, attributesToProps } from 'html-react-parser';
 
 import { ThemeProvider, useTheme, createTheme } from '@mui/material/styles';
+import { getCookie, getCookies, setCookies } from 'cookies-next';
+
 
 
 ///////////////////////////////////////import { TextBlock } from "../db/schema"
-const { TextBlock } = require("../db/schema")
+const { TextBlock } = require("../db/schema");
+const signer = require('cookie-signature');
+import { NextResponse } from 'next/server';
 
 
 function runMiddleware(req, res, fn) {
     return new Promise((resolve, reject) => {
-      fn(req, res, (result) => {
-        if (result instanceof Error) {
-          return reject(result)
-        }
-  
-        return resolve(result)
-      })
+        fn(req, res, (result) => {
+            if (result instanceof Error) {
+                return reject(result)
+            }
+
+            return resolve(result)
+        })
     })
-  }
-  
+}
+
+function checkingCookie(req, res, next) {
+    req.isCookieValid = null
+    const cookie = getCookie("signedCookieObj", { req, res })
+    //console.log("hasCookie", cookie ? true : false)
+
+    if (cookie) {
+        const checkedCookie = signer.unsign(cookie, 'this-is-a-cookieSecretKey')
+      
+        // console.log("is Cookie valid", checkedCookie ? true : false)
+        // checkedCookie && console.log("Cookie value is ", JSON.parse(checkedCookie).userName)
+        req.userName = checkedCookie?JSON.parse(checkedCookie).userName:false
+    }
+    else {
+        const userName = "User" + Number(Math.random() * 1000).toFixed(0)
+        setCookies('signedCookieObj', { userName }, { req, res, maxAge: 3600 * 24 * 365, httpOnly: true, sameSite: "lax" });
+        const newCookie = getCookie("signedCookieObj", { req, res })
+        const newSignedCookie = signer.sign(newCookie, 'this-is-a-cookieSecretKey')
+        setCookies('signedCookieObj', newSignedCookie, { req, res, maxAge: 3600 * 24 * 365, httpOnly: true, sameSite: "lax" });
+        console.log("new Signed Cookie", newSignedCookie)
+
+
+        req.userName = userName
+    }
+    next()
+
+}
+
 
 
 export async function getServerSideProps(context) {
 
-
-
-    // return {
-    //     props: {
-    //         userName: "guest",
-    //         contentArr: []
-    //     }
-    // }
+    // return { props: {userName: "guest", contentArr: []}}
 
     const { params, query, req, res, ...props } = context
+    await runMiddleware(req, res, checkingCookie)
 
-    await runMiddleware(req,res,function(req,res,next){
-        console.log("xxxx")
-        next()
-    })
- 
-
-
-    console.log(req.headers.cookie)
 
     return TextBlock.find({}).sort({ postDate: -1 }).limit(5).then(docs => {
 
         return {
             props: {
-                userName: query?.userName || "guest",
+                userName: req?.userName || "guest",
                 contentArr: docs.map(doc => {
                     //  console.log(doc.postDate)
                     return { _id: doc._id, content: doc.content, ownerName: doc.ownerName, postDate: String(doc.postDate) }
