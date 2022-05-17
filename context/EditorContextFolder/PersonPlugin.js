@@ -8,7 +8,7 @@ import { useTheme } from '@mui/private-theming';
 
 import { EditorContext } from "../EditorContextProvider";
 import { blue, red, grey } from '@mui/material/colors';
-import AvatarChip from '../EditorViewerFolder/AvatarChip';
+import AvatarChip from '../ViewerContextFolder/AvatarChip';
 
 export default function createPersonPlugin() {
 

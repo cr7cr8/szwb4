@@ -23,12 +23,15 @@ import {
 import { EmojiEmotions, FormatSize, FormatAlignLeft, FormatAlignCenter, FormatAlignRight, StackedBarChart, HorizontalSplitOutlined, Menu } from '@mui/icons-material';
 import myImageSrc from "../public/vercel.svg";
 
-import { EditorContextProvider as EditorCtx, EditorViewer } from "../context/EditorContextProvider";
+import { EditorContextProvider as EditorCtx } from "../context/EditorContextProvider";
+import { ViewerContextProvider as ViewerCtx} from "../context/ViewerContextProvider";
+
 
 import parse, { domToReact, attributesToProps } from 'html-react-parser';
 
 import { ThemeProvider, useTheme, createTheme } from '@mui/material/styles';
 import { getCookie, getCookies, setCookies } from 'cookies-next';
+import { ViewerContextProvider } from '../context/ViewerContextProvider'
 
 
 
@@ -215,13 +218,15 @@ export default function App({ userName, contentArr = [] }) {
                             {postArr.map((preHtmlObj, index) => {
 
                                 return (
-                                    <EditorViewer
+                                    <ViewerCtx
                                         key={preHtmlObj._id}
                                         userName={userName}
                                         ownerName={preHtmlObj.ownerName}
                                         preHtml={preHtmlObj.content}
                                         preHtmlId={preHtmlObj._id}
                                         postDate={Date.parse(preHtmlObj.postDate)}
+
+                                        setPostArr={setPostArr}
 
                                         downloadImageUrl="/api/picture/downloadPicture/" // commentOut when local
                                         downloadVoteUrl="/api/voteBlock/" // commentOut when local
