@@ -5,6 +5,13 @@ import Lightbox from 'react-image-lightbox';
 import 'react-image-lightbox/style.css';
 
 
+import Image from 'next/image'
+import { NoSsr } from '@mui/base';
+
+const myLoader = ({ src }) => {
+    // return `${API}/user/photo/${blog.postedBy.username}`;
+    return src
+}
 
 
 export default function ImageViewerBlock({ imgSnapArr, imgUrlArr }) {
@@ -91,7 +98,8 @@ export default function ImageViewerBlock({ imgSnapArr, imgUrlArr }) {
         overflow: 'hidden',
 
         width: "100%",
-        height,
+        ...height && { height },
+        aspectRatio: ["16 / 9", "16 / 9", "2 / 1", "3 / 1", "16 / 9"][numOfImage],
         // bgcolor: "pink",
 
         ...numOfImage > 0 && {
@@ -167,7 +175,8 @@ export default function ImageViewerBlock({ imgSnapArr, imgUrlArr }) {
                 }}
                     onClick={function () { setPhotoIndex(index); setIsOpen(true) }}
                 >
-                    <img src={item} style={{ width: "100%", height: "100%", verticalAlign: "bottom", objectFit: "cover", }} />
+                    {/* <Image loader={myLoader} layout='fill' src={item} style={{ width: "100%", height: "100%", verticalAlign: "bottom", objectFit: "contain", }} /> */}
+                    <NoSsr><img src={item} style={{ width: "100%", height: "100%", verticalAlign: "bottom", objectFit: "cover", }} /></NoSsr>
                 </Box>
             })}
 

@@ -245,8 +245,6 @@ export function EditorViewer({
         }
     })/*, [preHtml, theme, userName]*/)
 
-
-
     return (
         <Box sx={(theme) => {
             return {
@@ -259,7 +257,7 @@ export function EditorViewer({
             }
         }}>
 
-            <Box sx={{ display: "flex", p: "4px", alignItems: "center", justifyContent: "flex-start", "& .MuiBox-root": { fontSize: theme.sizeObj } }}>
+            <Box sx={{ display: "flex", px: "4px", py:"0px", alignItems: "center", justifyContent: "flex-start", "& .MuiBox-root": { fontSize: theme.sizeObj } }}>
 
                 <AvatarChip
                     bgTrans={true}
@@ -283,7 +281,6 @@ export function EditorViewer({
 
                 <Typography className="count-down" style={{ fontSize: "1rem" }} sx={{ color: theme.palette.text.secondary }}>{preHtmlId}</Typography>
                 <IconButton size="small" onClick={function () { }}><Close fontSize="large" /></IconButton>
-
             </Box>
             {parse(preHtml, options)}
         </Box>

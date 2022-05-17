@@ -4,9 +4,11 @@ import { context, AppContextProvider } from "../context/AppContextProvider"
 import ThemeContextProvider from "../context/ThemeContextProvider"
 
 
+
+
 function MyApp({ Component, pageProps }) {
 
-  //console.log(Component)
+  //console.log(pageProps)
 
   return (
     <ThemeContextProvider >

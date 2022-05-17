@@ -153,19 +153,27 @@ function downloadFile(connDB, collectionName, req, res, next) {
 
       let gfsrs = gfs.openDownloadStream(doc._id);
 
-      res?.header?.('content-type', doc.contentType);
-      res?.header?.("access-control-expose-headers", "content-type")
+      if (res.setHeader) {
+        res.setHeader('content-type', doc.contentType);
+        res.setHeader("access-control-expose-headers", "content-type")
+        res.setHeader("file-name", encodeURIComponent(doc.filename))
+        res.setHeader("access-control-expose-headers", "file-name")
+        res.setHeader("content-length", doc.length)
+        res.setHeader("access-control-expose-headers", "content-length") // this line can be omitted
 
-      res?.header?.("file-name", encodeURIComponent(doc.filename))
-      res?.header?.("access-control-expose-headers", "file-name")
+      }
+      else {
 
+        res.header?.('content-type', doc.contentType);
+        res.header?.("access-control-expose-headers", "content-type")
+        res.header?.("file-name", encodeURIComponent(doc.filename))
+        res.header?.("access-control-expose-headers", "file-name")
+        res.header?.("content-length", doc.length)
+        res.header?.("access-control-expose-headers", "content-length") // this line can be omitted
 
-      //   doc.metadata.oriantation && res.header("file-oriantation", doc.metadata.oriantation)
-      //   doc.metadata.oriantation && res.header("access-control-expose-headers", "file-oriantation")
-
-
-      res?.header?.("content-length", doc.length)
-      res?.header?.("access-control-expose-headers", "content-length") // this line can be omitted
+        //   doc.metadata.oriantation && res.header("file-oriantation", doc.metadata.oriantation)
+        //   doc.metadata.oriantation && res.header("access-control-expose-headers", "file-oriantation")
+      }
 
       gfsrs.on("data", function (data) {
         res.write(data);
