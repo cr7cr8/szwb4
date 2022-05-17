@@ -10,8 +10,10 @@ function MyApp({ Component, pageProps }) {
 
   //console.log(pageProps)
 
+
+
   return (
-    <ThemeContextProvider >
+    <ThemeContextProvider colorIndex={pageProps.colorIndex ?? 5} themeMode={pageProps.themeMode ?? "light"}>
       <AppContextProvider>
         <Component {...pageProps} />
       </AppContextProvider>

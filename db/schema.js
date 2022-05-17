@@ -3,6 +3,24 @@ const { connSzwb4DB } = require("./db")
 
 
 
+const userSchema = new mongoose.Schema({
+
+    // _id: { type: String, required: true },
+
+    userName: { type: String, unique: true },
+    description: { type: String, default: "Nothing wrritten yet ..." },
+    colorIndex: { type: Number, default: 5 },
+    themeMode: { type: String, default: "light" },
+    createDate: { type: Date, default: Date.now }
+
+}, {
+    toObject: { virtuals: true },
+    collection: "user",
+    //  timestamps: true, 
+})
+
+
+
 const textBlockSchema = new mongoose.Schema({
 
     _id: { type: String, required: true },
@@ -38,7 +56,7 @@ const voteBlockSchema = new mongoose.Schema({
     //  timestamps: true, 
 })
 
-
+const User = connSzwb4DB.model("user", userSchema);
 const VoteBlock = connSzwb4DB.model("voteBlocks", voteBlockSchema);
 const TextBlock = connSzwb4DB.model("textBlocks", textBlockSchema);
-module.exports = { VoteBlock, TextBlock }
+module.exports = { User, VoteBlock, TextBlock }

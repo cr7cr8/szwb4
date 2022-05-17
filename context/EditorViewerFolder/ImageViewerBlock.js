@@ -164,7 +164,7 @@ export default function ImageViewerBlock({ imgSnapArr, imgUrlArr }) {
 
             {imgSnapArr.map((item, index) => {
                 return <Box key={index} sx={{
-                    bgcolor: "pink",
+                    bgcolor: theme.colorBgObj,
 
                     width: "100%",
                     ...imageHeight,

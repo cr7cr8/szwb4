@@ -49,7 +49,7 @@ const { personPlugin } = createPersonPlugin()
 const { hasCommandModifier } = KeyBindingUtil;
 
 
-
+import axios from "axios"
 
 
 export default function DraftEditor() {
@@ -286,6 +286,8 @@ export default function DraftEditor() {
                   event.target.checked
                     ? theme.setMode("dark")
                     : theme.setMode("light")
+
+                  axios.put(`/api/user/updateThemeMode/${event.target.checked ? "dark" : "light"}`)
                 }}
               />
             </Box>
@@ -301,6 +303,9 @@ export default function DraftEditor() {
                     <IconButton key={index} size="small" onClick={function () {
 
                       theme.setColorObj(index)
+                      console.log(userName)
+                      axios.put(`/api/user/updateColorIndex/${index}`)
+
                     }}>
                       <Circle fontSize="large" sx={{ color: theme.isLight ? colorItem[500] : colorItem[300] }} />
                     </IconButton>

@@ -33,7 +33,7 @@ import { getCookie, getCookies, setCookies } from 'cookies-next';
 
 
 ///////////////////////////////////////import { TextBlock } from "../db/schema"
-const { TextBlock } = require("../db/schema");
+const { TextBlock, User } = require("../db/schema");
 const signer = require('cookie-signature');
 
 
@@ -57,10 +57,31 @@ function checkingCookie(req, res, next) {
 
     if (cookie) {
         const checkedCookie = signer.unsign(cookie, 'this-is-a-cookieSecretKey')
-      
-        // console.log("is Cookie valid", checkedCookie ? true : false)
-        // checkedCookie && console.log("Cookie value is ", JSON.parse(checkedCookie).userName)
-        req.userName = checkedCookie?JSON.parse(checkedCookie).userName:false
+
+
+
+        if (checkedCookie) {
+            req.userName = JSON.parse(checkedCookie).userName
+
+            User.findOne({ userName: req.userName }).then(doc => {
+                if (doc) {
+                    next(doc?.colorIndex
+                        ? { themeMode: doc.themeMode, colorIndex: doc.colorIndex }
+                        : { themeMode: "light", colorIndex: 5 }
+                    )
+                }
+                else {
+                    next({ themeMode: "light", colorIndex: 5 })
+                }
+            })
+        }
+        else {
+
+            req.userName = false
+            next({ themeMode: "light", colorIndex: 5 })
+        }
+
+
     }
     else {
         const userName = "User" + Number(Math.random() * 1000).toFixed(0)
@@ -69,11 +90,12 @@ function checkingCookie(req, res, next) {
         const newSignedCookie = signer.sign(newCookie, 'this-is-a-cookieSecretKey')
         setCookies('signedCookieObj', newSignedCookie, { req, res, maxAge: 3600 * 24 * 365, httpOnly: true, sameSite: "lax" });
         console.log("new Signed Cookie", newSignedCookie)
-
+        User.create({ userName })
 
         req.userName = userName
+        next({ themeMode: "light", colorIndex: 5 })
     }
-    next()
+
 
 }
 
@@ -84,14 +106,22 @@ export async function getServerSideProps(context) {
     // return { props: {userName: "guest", contentArr: []}}
 
     const { params, query, req, res, ...props } = context
-    await runMiddleware(req, res, checkingCookie)
+    const { themeMode, colorIndex } = await runMiddleware(req, res, checkingCookie)
 
 
     return TextBlock.find({}).sort({ postDate: -1 }).limit(5).then(docs => {
 
         return {
+            ...(!req.userName) && {
+                redirect: {
+                    destination: '/auth-page',
+                    permanent: false,
+                }
+            },
             props: {
                 userName: req?.userName || "guest",
+                colorIndex: colorIndex ?? 5,
+                themeMode: themeMode ?? "light",
                 contentArr: docs.map(doc => {
                     //  console.log(doc.postDate)
                     return { _id: doc._id, content: doc.content, ownerName: doc.ownerName, postDate: String(doc.postDate) }

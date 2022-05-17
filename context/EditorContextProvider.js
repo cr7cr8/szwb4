@@ -21,7 +21,7 @@ import { ThemeProvider, useTheme, createTheme } from '@mui/material/styles';
 import { Container, Grid, Paper, IconButton, ButtonGroup, Stack, Button, Switch, Box, Hidden, Collapse, Typography, Divider } from '@mui/material';
 
 import { Close } from "@mui/icons-material";
-
+import axios from "axios";
 
 export const EditorContext = createContext()
 
@@ -257,7 +257,7 @@ export function EditorViewer({
             }
         }}>
 
-            <Box sx={{ display: "flex", px: "4px", py:"0px", alignItems: "center", justifyContent: "flex-start", "& .MuiBox-root": { fontSize: theme.sizeObj } }}>
+            <Box sx={{ display: "flex", px: "4px", py: "2px", alignItems: "center", justifyContent: "flex-start", "& .MuiBox-root": { fontSize: theme.sizeObj } }}>
 
                 <AvatarChip
                     bgTrans={true}
@@ -279,10 +279,17 @@ export function EditorViewer({
                 </NoSsr>
                 &nbsp;&nbsp;
 
-                <Typography className="count-down" style={{ fontSize: "1rem" }} sx={{ color: theme.palette.text.secondary }}>{preHtmlId}</Typography>
-                <IconButton size="small" onClick={function () { }}><Close fontSize="large" /></IconButton>
+                <Typography className="count-down" style={{ fontSize: "1rem" }} sx={{ color: theme.palette.text.secondary, }}>{preHtmlId}</Typography>
+                <IconButton size="small" sx={{ marginLeft: "auto" }} onClick={function () {
+
+                    axios.delete(`/api/textBlock/deleteText/${preHtmlId}`)
+                }}><Close fontSize="medium" /></IconButton>
             </Box>
             {parse(preHtml, options)}
+
+            <Box sx={{ display: "flex", px: "4px", py: "0px", alignItems: "center", justifyContent: "flex-start", "& .MuiBox-root": { fontSize: theme.sizeObj } }}>
+                FF
+            </Box>
         </Box>
 
     )
@@ -334,6 +341,6 @@ function PostTimeRender({ days, hours, minutes, seconds, completed, ...props }) 
                     ? `Remaining ${minutes}+ minutes`
                     : `Remaining ${seconds} seconds`
 
-    return <Typography  className="count-down" style={{ fontSize: "1rem" }} sx={{ color: theme.palette.text.secondary }}>{message} </Typography>
+    return <Typography className="count-down" style={{ fontSize: "1rem" }} sx={{ color: theme.palette.text.secondary }}>{message} </Typography>
 
 }

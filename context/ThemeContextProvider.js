@@ -11,10 +11,10 @@ const colorArr = [red, pink, purple, deepPurple, indigo, blue, lightBlue, cyan, 
 
 function useColorObj(colorIndex = 5) {
 
-    const [colorObj, setColorIndex] = useState(colorArr[colorIndex])
+    const [colorObj, setColorIndex] = useState(colorArr[colorIndex % colorArr.length])
 
     function setColorObj(index) {
-        setColorIndex(colorArr[index])
+        setColorIndex(colorArr[index % colorArr.length])
     }
 
     return [colorObj, setColorObj]
@@ -22,11 +22,12 @@ function useColorObj(colorIndex = 5) {
 }
 
 
-export default function ThemeContextProvider({ cssBaseLine = true, ...props }) {
+export default function ThemeContextProvider({ cssBaseLine = true, colorIndex, themeMode, ...props }) {
 
+  
 
     const [sizeObj, setSizeObj] = useState(props.sizeObj || { xs: "1.5rem", sm: "1.5rem", md: "1.5rem", lg: "1.5rem", xl: "1.5rem" })
-    const [colorObj, setColorObj] = useColorObj(5)
+    const [colorObj, setColorObj] = useColorObj(colorIndex)
 
 
 
@@ -58,7 +59,7 @@ export default function ThemeContextProvider({ cssBaseLine = true, ...props }) {
     }, [sizeObj])
 
 
-    const [mode, setMode] = React.useState(props.mode || 'light');
+    const [mode, setMode] = React.useState(themeMode);
 
 
 
