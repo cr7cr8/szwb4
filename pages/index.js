@@ -113,7 +113,7 @@ export async function getServerSideProps(context) {
     const { params, query, req, res, ...props } = context
     const { themeMode, colorIndex } = await runMiddleware(req, res, checkingCookie)
 
-    return TextBlock.find({}).sort({ postDate: -1 }).limit(1).then(docs => {
+    return TextBlock.find({}).sort({ postDate: -1 }).limit(123).then(docs => {
 
         return {
             ...(!req.userName) && {
