@@ -8,7 +8,8 @@
     "start-next-prod": "next start",
     "start-prod": "set NODE_ENV=production&nodemon server.js",
     "start-dev": "set NODE_ENV=development&nodemon server.js",
-    "start": "set NODE_ENV=production&node server.js",
+    "start-2": "set NODE_ENV=production&node server.js",
+    "start": "next start",
     "export": "next export",
     "lint": "next lint"
   },
