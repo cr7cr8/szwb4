@@ -21,8 +21,13 @@ import Countdown from "react-countdown";
 import { ThemeProvider, useTheme, createTheme } from '@mui/material/styles';
 import { Container, Grid, Paper, IconButton, ButtonGroup, Stack, Button, Switch, Box, Hidden, Collapse, Typography, Divider } from '@mui/material';
 
-import { Close } from "@mui/icons-material";
+import {
+    EmojiEmotions, FormatSize, FormatAlignLeft, FormatAlignCenter, FormatAlignRight, StackedBarChart, HorizontalSplitOutlined,
+    ChatBubbleOutline, Edit, DeleteOutline, OpenInFullOutlined, AspectRatioOutlined, Close
+} from '@mui/icons-material';
+
 import axios from "axios";
+
 
 export const ViewerContext = createContext()
 
@@ -146,17 +151,38 @@ export function ViewerContextProvider({
         }
     })/*, [preHtml, theme, userName]*/)
 
+
+    const extractText = (dom) => {
+        let text = ""
+        const option = {
+            replace: (domNode) => {
+                const { name, type, attribs, children } = domNode
+                if (type === "text") {
+
+                    text = text + domNode.data
+                }
+
+
+            }
+        }
+        domToReact(dom, option)
+
+
+        return text
+    }
+
+
     return (
 
         <ViewerContext.Provider value={{}}>
             <Box sx={(theme) => {
                 return {
                     bgcolor: theme.colorBgObj,
-                    marginTop: "32px", marginBottom: "32px",
+                    //   marginTop: "32px", marginBottom: "32px",
                     borderRadius: "4px",
-                    boxShadow: 5,
-                    overflow: "hidden"
-
+                    boxShadow: 1,
+                    overflow: "hidden",
+                    marginBottom: "8px",
                 }
             }}>
 
@@ -188,7 +214,9 @@ export function ViewerContextProvider({
                 </Box>
                 {parse(preHtml, options)}
                 <Box sx={{ display: "flex", px: "4px", py: "0px", alignItems: "center", justifyContent: "flex-start", "& .MuiBox-root": { fontSize: theme.sizeObj } }}>
-                    FF
+                    <IconButton size="small" sx={{ }} onClick={function () {
+                      
+                    }}><ChatBubbleOutline fontSize="medium" /></IconButton>
                 </Box>
             </Box>
         </ViewerContext.Provider>
@@ -196,51 +224,3 @@ export function ViewerContextProvider({
 
 
 }
-
-function extractText(dom) {
-    let text = ""
-    const option = {
-        replace: (domNode) => {
-            const { name, type, attribs, children } = domNode
-            if (type === "text") {
-
-                text = text + domNode.data
-            }
-
-
-        }
-    }
-    domToReact(dom, option)
-
-
-    return text
-}
-
-
-
-// function PostTimeRender({ days, hours, minutes, seconds, completed, ...props }) {
-
-//     const theme = useTheme()
-
-
-
-//     const message = completed
-
-//         ? days > 0
-//             ? `${days}d`
-//             : hours > 0
-//                 ? `${hours}h`
-//                 : minutes > 0
-//                     ? `${minutes}m`
-//                     : `0m`//`${seconds}s`//`Just now` //`${seconds} sec ago`
-//         : days > 0
-//             ? `Remaining ${days}+ days`
-//             : hours > 0
-//                 ? `Remaining ${hours}+ hours`
-//                 : minutes > 0
-//                     ? `Remaining ${minutes}+ minutes`
-//                     : `Remaining ${seconds} seconds`
-
-//     return <Typography className="count-down" style={{ fontSize: "1rem" }} sx={{ color: theme.palette.text.secondary }}>{message} </Typography>
-
-// }

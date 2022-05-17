@@ -113,6 +113,8 @@ export function MentionMenuItem({ name, index, inTab, insertMention }) {
                         "&.MuiAvatar-root.MuiChip-avatar": {
                             width: theme.scaleSizeObj(1),
                             height: theme.scaleSizeObj(1),
+                            // minWidth:"1.5rem",
+                            // minHeight:"1.5rem",
                             transform: "scale(1.1)",
                 
                         }

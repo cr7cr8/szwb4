@@ -24,20 +24,22 @@ import { EmojiEmotions, FormatSize, FormatAlignLeft, FormatAlignCenter, FormatAl
 import myImageSrc from "../public/vercel.svg";
 
 import { EditorContextProvider as EditorCtx } from "../context/EditorContextProvider";
-import { ViewerContextProvider as ViewerCtx} from "../context/ViewerContextProvider";
+import { ViewerContextProvider as ViewerCtx } from "../context/ViewerContextProvider";
 
 
 import parse, { domToReact, attributesToProps } from 'html-react-parser';
 
 import { ThemeProvider, useTheme, createTheme } from '@mui/material/styles';
 import { getCookie, getCookies, setCookies } from 'cookies-next';
-import { ViewerContextProvider } from '../context/ViewerContextProvider'
 
 
+
+import Masonry from 'react-masonry-css';
 
 ///////////////////////////////////////import { TextBlock } from "../db/schema"
 const { TextBlock, User } = require("../db/schema");
 const signer = require('cookie-signature');
+
 
 
 
@@ -111,8 +113,7 @@ export async function getServerSideProps(context) {
     const { params, query, req, res, ...props } = context
     const { themeMode, colorIndex } = await runMiddleware(req, res, checkingCookie)
 
-
-    return TextBlock.find({}).sort({ postDate: -1 }).limit(5).then(docs => {
+    return TextBlock.find({}).sort({ postDate: -1 }).limit(35).then(docs => {
 
         return {
             ...(!req.userName) && {
@@ -148,9 +149,17 @@ export default function App({ userName, contentArr = [] }) {
 
     const [postArr, setPostArr] = useState(contentArr)
 
-
-
     const theme = useTheme()
+    const breakpointColumnsObj = {
+        [theme.breakpoints.values.xs]: 1,
+        [theme.breakpoints.values.sm]: 1,
+        [theme.breakpoints.values.md]: 2,
+        [theme.breakpoints.values.lg]: 3,
+        [theme.breakpoints.values.xl]: 4,
+        2000: 4, 3000: 5, 4000: 6, 5000: 7, 6000: 8, 7000: 9, 9999999: 10,
+    };
+
+
 
     return (
         <>
@@ -206,7 +215,42 @@ export default function App({ userName, contentArr = [] }) {
                         />
                     </Grid>
                 </Grid>
-                <Box sx={{ display: "flex", flexDirection: "column" }}>
+
+                <Divider sx={{ margin: "8px", opacity: 0 }} />
+                <Masonry
+                    breakpointCols={breakpointColumnsObj}
+                    className="my-masonry-grid"
+                    columnClassName="my-masonry-grid_column"
+                >
+                    {postArr.map((preHtmlObj, index) => {
+
+                        return (
+                            <ViewerCtx
+                                key={preHtmlObj._id}
+                                userName={userName}
+                                ownerName={preHtmlObj.ownerName}
+                                preHtml={preHtmlObj.content}
+                                preHtmlId={preHtmlObj._id}
+                                postDate={Date.parse(preHtmlObj.postDate)}
+
+                                setPostArr={setPostArr}
+
+                                downloadImageUrl="/api/picture/downloadPicture/" // commentOut when local
+                                downloadVoteUrl="/api/voteBlock/" // commentOut when local
+
+                                avatarPeopleList={["UweF23", "TonyCerl", "大发发", "m大Gsd哈"]}
+                                downloadAvatarUrl={`https://picsum.photos/200`}
+                                genAvatarLink={function (downloadAvatarUrl, personName) {
+                                    return downloadAvatarUrl// + personName
+                                }}
+
+                            />
+                        )
+                    })}
+                </Masonry>
+
+
+                {/* <Box sx={{ display: "flex", flexDirection: "column" }}>
                     <Grid container
                         direction="row"
                         justifyContent="space-around"
@@ -243,7 +287,7 @@ export default function App({ userName, contentArr = [] }) {
                         </Grid>
 
                     </Grid>
-                </Box>
+                </Box> */}
 
             </Container>
         </>
