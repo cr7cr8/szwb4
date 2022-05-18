@@ -26,7 +26,7 @@ export default function ThemeContextProvider({ cssBaseLine = true, colorIndex, t
 
   
 
-    const [sizeObj, setSizeObj] = useState(props.sizeObj || { xs: "1.5rem", sm: "1.5rem", md: "1.5rem", lg: "1.5rem", xl: "1.5rem" })
+    const [sizeObj, setSizeObj] = useState(props.sizeObj || { xs: "1.2rem", sm: "1.2rem", md: "1.2rem", lg: "1.2rem", xl: "1.2rem" })
     const [colorObj, setColorObj] = useColorObj(colorIndex)
 
 

@@ -8,7 +8,97 @@ import { blue, red, grey } from '@mui/material/colors';
 
 
 
-export default function AvatarChip({ personName, children, bgTrans = false,
+// export default function AvatarChip({ personName, children, bgTrans = false, iconOn = false,
+//     downloadAvatarUrl = "", avatarPeopleList = [], genAvatarLink = () => { }
+// }) {
+
+
+//     const theme = useTheme()
+//     const colorObj = theme.colorObj
+//     const colorBgObj = theme.colorBgObj
+
+
+//     const backgroundImage = avatarPeopleList.includes(personName)
+//         ? `url(${genAvatarLink(downloadAvatarUrl, personName)})`
+//         : `url(${"data:image/svg+xml;base64," + btoa(multiavatar(personName))})`
+
+
+//     return (
+
+//         <Box //contentEditable={false} suppressContentEditableWarning={true}
+//             sx={{
+
+//                 display: "inline-flex",
+//                 verticalAlign: "text-top",
+//                 //verticalAlign: blockData.isSmallFont ? "text-top" : "top",
+//                 lineHeight: 1,
+//                 ...iconOn && { bgcolor: bgTrans ? "transparent" : theme.isLight ? colorBgObj : "transparent" },
+//                 alignItems: "center",
+
+//                 color: theme.isLight ? colorObj[500] : colorObj[300],
+//                 padding: "4px",
+//                 ...iconOn && { paddingRight: "12px" },
+//                 // paddingRight: theme.scaleSizeObj(blockData.isSmallFont ? 0.4 : 0.5),
+//                 borderRadius: "1000px",
+
+
+//                 borderStyle: "solid",
+//                 borderWidth: "1px",
+//                 borderColor: "transparent",
+//                 //boxSizing: "border-box",
+//                 transition: "all 200ms ease",
+
+//                 ...iconOn && {
+//                     "&::before": {
+//                         content: `""`,
+//                         backgroundImage,
+//                         backgroundSize: "contain",
+//                         // paddingLeft: theme.scaleSizeObj(blockData.isSmallFont ? 1.2 : 1.2),
+//                         // paddingRight: theme.scaleSizeObj(blockData.isSmallFont ? 0.4 : 0.5),
+//                         width: theme.scaleSizeObj(1),
+//                         height: theme.scaleSizeObj(1),
+//                         minWidth: "1.5rem",
+//                         minHeight: "1.5rem",
+
+//                         transform: "scale(1.2)",
+//                         borderRadius: "1000px",
+//                         backgroundRepeat: "no-repeat",
+//                         overflow: "hidden",
+//                         //   backgroundSize: theme.sizeObj,
+//                         backgroundPositionX: "left",
+//                         backgroundPositionY: "center",
+//                         display: "inline-block",
+//                         marginRight: "7px",
+
+//                     }
+//                 },
+//                 "&:hover": {
+//                     //  bgcolor: theme.palette.action.hover,
+//                     bgcolor: theme.isLight ? "transparent" : colorBgObj,
+//                     cursor: "pointer",
+//                     borderColor: theme.isLight ? colorObj[500] : colorObj[300],
+
+//                 },
+//                 "& > *": {
+//                     //    transform: "translateY(-2px)"
+//                 }
+//             }}
+//         >
+//             {children}
+//         </Box>
+
+//     )
+
+
+
+
+
+
+// }
+
+
+
+export default function AvatarChip({ personName, children, bgTrans = false, iconOn = false,
     downloadAvatarUrl = "", avatarPeopleList = [], genAvatarLink = () => { }
 }) {
 
@@ -34,7 +124,7 @@ export default function AvatarChip({ personName, children, bgTrans = false,
                 lineHeight: 1,
                 bgcolor: bgTrans ? "transparent" : theme.isLight ? colorBgObj : "transparent",
                 alignItems: "center",
-                padding: "4px",
+               
                 color: theme.isLight ? colorObj[500] : colorObj[300],
                 padding: "4px",
                 paddingRight: "12px",
@@ -56,9 +146,10 @@ export default function AvatarChip({ personName, children, bgTrans = false,
                     // paddingRight: theme.scaleSizeObj(blockData.isSmallFont ? 0.4 : 0.5),
                     width: theme.scaleSizeObj(1),
                     height: theme.scaleSizeObj(1),
-                    // minWidth:"1.5rem",
-                    // minHeight:"1.5rem",
-
+                    ...iconOn && {
+                        minWidth: "1.5rem",
+                        minHeight: "1.5rem",
+                    },
                     transform: "scale(1.2)",
                     borderRadius: "1000px",
                     backgroundRepeat: "no-repeat",
@@ -72,13 +163,13 @@ export default function AvatarChip({ personName, children, bgTrans = false,
                 },
                 "&:hover": {
                     //  bgcolor: theme.palette.action.hover,
-                    bgcolor: theme.isLight?"transparent":colorBgObj,
+                    bgcolor: theme.isLight ? "transparent" : colorBgObj,
                     cursor: "pointer",
                     borderColor: theme.isLight ? colorObj[500] : colorObj[300],
 
                 },
                 "& > *": {
-                    transform: "translateY(-2px)"
+                   // transform: "translateY(-2px)"
                 }
             }}
         >

@@ -111,11 +111,11 @@ export function MentionMenuItem({ name, index, inTab, insertMention }) {
                     {...{ src: avatarString }}
                     sx={{
                         "&.MuiAvatar-root.MuiChip-avatar": {
-                            width: theme.scaleSizeObj(1),
-                            height: theme.scaleSizeObj(1),
+                            width: theme.scaleSizeObj(1.1),
+                            height: theme.scaleSizeObj(1.1),
                             // minWidth:"1.5rem",
                             // minHeight:"1.5rem",
-                            transform: "scale(1.1)",
+                            transform: "scale(1.3)",
                 
                         }
                     }}

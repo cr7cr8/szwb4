@@ -1,4 +1,4 @@
-import React, { useState, createContext, useMemo, useId, useDeferredValue, useCallback } from "react"
+import React, { useState, createContext, useMemo, useId, useDeferredValue, useCallback, memo } from "react"
 
 import {
     EditorState, ContentState, ContentBlock, CharacterMetadata, SelectionState, convertToRaw, convertFromRaw,
@@ -29,6 +29,8 @@ import {
 import axios from "axios";
 
 
+
+import { EditorContextProvider as EditorCtx, SimpleContextProvider as SimpleEtx } from "../context/EditorContextProvider";
 export const ViewerContext = createContext()
 
 export function ViewerContextProvider({
@@ -181,12 +183,12 @@ export function ViewerContextProvider({
                     //   marginTop: "32px", marginBottom: "32px",
                     borderRadius: "4px",
                     boxShadow: 1,
-                    overflow: "hidden",
+                 //   overflow: "hidden",
                     marginBottom: "8px",
                 }
             }}>
 
-                <Box sx={{ display: "flex", px: "4px", py: "2px", alignItems: "center", justifyContent: "flex-start", "& .MuiBox-root": { fontSize: theme.sizeObj } }}>
+                <Box sx={{ display: "flex", px: "0px", py: "2px", alignItems: "center", justifyContent: "flex-start", "& .MuiBox-root": { fontSize: theme.sizeObj } }}>
 
                     <AvatarChip
                         bgTrans={true}
@@ -194,6 +196,7 @@ export function ViewerContextProvider({
                         downloadAvatarUrl={downloadAvatarUrl}
                         avatarPeopleList={avatarPeopleList}
                         genAvatarLink={genAvatarLink}
+                        iconOn={true}
                     >
                         <span>{ownerName}</span>
                     </AvatarChip>
@@ -214,10 +217,40 @@ export function ViewerContextProvider({
                 </Box>
                 {parse(preHtml, options)}
                 <Box sx={{ display: "flex", px: "4px", py: "0px", alignItems: "center", justifyContent: "flex-start", "& .MuiBox-root": { fontSize: theme.sizeObj } }}>
-                    <IconButton size="small" sx={{ }} onClick={function () {
-                      
-                    }}><ChatBubbleOutline fontSize="medium" /></IconButton>
+                    <IconButton size="small" sx={{}} onClick={function () { }}>
+                        <ChatBubbleOutline fontSize="medium" />
+                    </IconButton>
                 </Box>
+                <SimpleEtx contentId={preHtmlId} key={preHtmlId} peopleList={["UweF23", "UweF22", "TonyCerl", "JimWil", "大发发", "Jimberg", "m大Gsd哈"]} />
+                {/* <EditorCtx
+
+
+                 
+                    userName={userName}
+                    peopleList={["UweF23", "UweF22", "TonyCerl", "JimWil", "大发发", "Jimberg", "m大Gsd哈"]}
+                    avatarPeopleList={["UweF23", "TonyCerl", "大发发", "m大Gsd哈"]}
+                    downloadAvatarUrl={`https://picsum.photos/200`}
+                    genAvatarLink={function (downloadAvatarUrl, personName) {
+                        return downloadAvatarUrl// + personName
+                    }}
+
+                    onSubmit={function (preHtmlObj, { editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum, setDisableSubmit, clearState }) {
+
+                        //    console.log(preHtmlObj)
+                        const promiseArr = [
+                            ...uploadPreHtml(preHtmlObj),  // commentOut when local
+                            ...uploadImage(imageObj), // commentOut when local
+                            ...uploadVote({ voteArr, voteTopic, pollDuration, voteId, postId: preHtmlObj._id }) // commentOut when local
+                        ]
+
+                        Promise.allSettled(promiseArr).then((arr) => {
+                            setDisableSubmit(false)
+                            clearState()
+                            setPostArr(pre => [preHtmlObj, ...pre])
+                        })
+                    }}
+
+                /> */}
             </Box>
         </ViewerContext.Provider>
     )

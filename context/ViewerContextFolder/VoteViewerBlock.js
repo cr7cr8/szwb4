@@ -58,8 +58,8 @@ export default function VoteViewerBlock({ topic, duration, voteArr, voteId, expi
 
         downloadVoteUrl && axios.get(`/api/voteBlock/getVoteCount/${voteId}`).then(response => {
 
-            console.log(response.data)
-            console.log("username is", userName)
+            // console.log(response.data)
+            // console.log("username is", userName)
             if (response.data?.voteCountArr) {
 
                 setVoteCountArr(response.data?.voteCountArr)

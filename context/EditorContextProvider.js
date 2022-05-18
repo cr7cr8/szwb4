@@ -8,6 +8,8 @@ import {
 import { NoSsr } from '@mui/base';
 
 import DraftEditor from "./EditorContextFolder/DraftEditor"
+import SimpleDraft from "./EditorContextFolder/SimpleEditor"
+
 import parse, { domToReact, attributesToProps, Element } from 'html-react-parser';
 import reactElementToJSXString from 'react-element-to-jsx-string';
 
@@ -127,3 +129,48 @@ export function EditorContextProvider({
     )
 }
 
+export function SimpleContextProvider(
+    {
+        userName,
+       
+        downloadAvatarUrl = "",
+        genAvatarLink = () => { },
+        onChange,
+        onSubmit,
+        contentId,
+        ...props
+    }
+) {
+
+    const [editorState, setEditorState] = useState(EditorState.createEmpty())
+    const [currentBlockKey, setCurrentBlockKey] = useState("ddd")
+    const [peopleList, setPeopleList] = useState(props.peopleList || [])
+    const [avatarPeopleList, setAvatarPeopleList] = useState(props.avatarPeopleList || [])
+
+    const clearState = useCallback(function () {
+        setEditorState(EditorState.createEmpty())
+    }, [])
+
+
+    return (
+        <EditorContext.Provider value={{
+            userName,
+            contentId,
+            editorState, setEditorState,
+            currentBlockKey, setCurrentBlockKey,
+
+            peopleList, setPeopleList,
+            avatarPeopleList, setAvatarPeopleList,
+            downloadAvatarUrl,
+            genAvatarLink,
+
+            onChange,
+            onSubmit,
+
+            clearState
+        }}>
+
+            <SimpleDraft />
+        </EditorContext.Provider>
+    )
+}

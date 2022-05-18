@@ -5,7 +5,7 @@ import styles from '../styles/Home.module.css'
 
 
 
-import React, { useState, useContext, useEffect, useId, useTransition } from "react"
+import React, { useState, useContext, useEffect, useId, useTransition, memo } from "react"
 
 
 import { NoSsr } from '@mui/base';
@@ -25,6 +25,7 @@ import myImageSrc from "../public/vercel.svg";
 
 import { EditorContextProvider as EditorCtx } from "../context/EditorContextProvider";
 import { ViewerContextProvider as ViewerCtx } from "../context/ViewerContextProvider";
+
 
 
 import parse, { domToReact, attributesToProps } from 'html-react-parser';
@@ -151,6 +152,7 @@ export default function App({ userName, contentArr = [] }) {
 
     const theme = useTheme()
     const breakpointColumnsObj = {
+        default: 1,
         [theme.breakpoints.values.xs]: 1,
         [theme.breakpoints.values.sm]: 1,
         [theme.breakpoints.values.md]: 2,
@@ -227,7 +229,7 @@ export default function App({ userName, contentArr = [] }) {
                         return (
                             <NoSsr key={preHtmlObj._id}>
                                 <ViewerCtx
-                                    // key={preHtmlObj._id}
+                                    
                                     userName={userName}
                                     ownerName={preHtmlObj.ownerName}
                                     preHtml={preHtmlObj.content}
