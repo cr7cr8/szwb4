@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from "react"
-import { Context } from "../context/AppContextProvider"
+import { AppContext } from "../context/AppContextProvider"
 
 import { Button } from "@mui/material"
 import Link from "next/link"
@@ -24,7 +24,7 @@ export default function Other({ paramArr, queryObj }) {
 
 
 
-    const { count, setCount } = useContext(Context)
+    const { count, setCount } = useContext(AppContext)
 
 
     useEffect(function () {

@@ -7,7 +7,7 @@ import React, { useContext, useEffect } from "react"
 
 
 
-import { Context } from "../context/AppContextProvider"
+import { AppContext } from "../context/AppContextProvider"
 
 import Link from "next/link"
 import axios from "axios"
@@ -60,7 +60,7 @@ export async function getStaticProps(context) {
 export default function Home() {
 
   console.log("home")
-  const { count, setCount } = useContext(Context)
+  const { count, setCount } = useContext(AppContext)
   const router = useRouter();
 
   const myLoader = ({ src }) => {

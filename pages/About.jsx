@@ -1,5 +1,5 @@
 import React, { useContext } from "react"
-import { Context } from "../context/AppContextProvider"
+import { AppContext } from "../context/AppContextProvider"
 
 import { Button } from "@mui/material"
 import Link from "next/link"
@@ -12,7 +12,7 @@ import { useRouter } from 'next/router';
 export default function About() {
 
 
-    const { count, setCount } = useContext(Context)
+    const { count, setCount } = useContext(ContextApp)
     const router = useRouter();
 
     return (
