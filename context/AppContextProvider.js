@@ -1,17 +1,20 @@
 import React, { useState, createContext } from "react"
 
-export const Context = createContext()
+export const AppContext = createContext()
 
 export function AppContextProvider({ children, ...props }) {
 
-    const [count, setCount] = useState(0)
+    //const [count, setCount] = useState(0)
+
+    const [voteRecordingArr, setVoteRecordingArr] = useState([])
 
     return (
 
-        <Context.Provider value={{
-            count, setCount
+        <AppContext.Provider value={{
+            //count, setCount,
+            voteRecordingArr, setVoteRecordingArr
         }}>
             {children}
-        </Context.Provider>
+        </AppContext.Provider>
     )
 }

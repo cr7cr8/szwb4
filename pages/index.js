@@ -8,7 +8,7 @@ import styles from '../styles/Home.module.css'
 import React, { useState, useContext, useEffect, useId, useTransition } from "react"
 
 
-
+import { NoSsr } from '@mui/base';
 import { Context, ContextProvider } from "../context/AppContextProvider"
 
 import Link from "next/link"
@@ -225,26 +225,28 @@ export default function App({ userName, contentArr = [] }) {
                     {postArr.map((preHtmlObj, index) => {
 
                         return (
-                            <ViewerCtx
-                                key={preHtmlObj._id}
-                                userName={userName}
-                                ownerName={preHtmlObj.ownerName}
-                                preHtml={preHtmlObj.content}
-                                preHtmlId={preHtmlObj._id}
-                                postDate={Date.parse(preHtmlObj.postDate)}
+                            <NoSsr key={preHtmlObj._id}>
+                                <ViewerCtx
+                                    // key={preHtmlObj._id}
+                                    userName={userName}
+                                    ownerName={preHtmlObj.ownerName}
+                                    preHtml={preHtmlObj.content}
+                                    preHtmlId={preHtmlObj._id}
+                                    postDate={Date.parse(preHtmlObj.postDate)}
 
-                                setPostArr={setPostArr}
+                                    setPostArr={setPostArr}
 
-                                downloadImageUrl="/api/picture/downloadPicture/" // commentOut when local
-                                downloadVoteUrl="/api/voteBlock/" // commentOut when local
+                                    downloadImageUrl="/api/picture/downloadPicture/" // commentOut when local
+                                    downloadVoteUrl="/api/voteBlock/" // commentOut when local
 
-                                avatarPeopleList={["UweF23", "TonyCerl", "大发发", "m大Gsd哈"]}
-                                downloadAvatarUrl={`https://picsum.photos/200`}
-                                genAvatarLink={function (downloadAvatarUrl, personName) {
-                                    return downloadAvatarUrl// + personName
-                                }}
+                                    avatarPeopleList={["UweF23", "TonyCerl", "大发发", "m大Gsd哈"]}
+                                    downloadAvatarUrl={`https://picsum.photos/200`}
+                                    genAvatarLink={function (downloadAvatarUrl, personName) {
+                                        return downloadAvatarUrl// + personName
+                                    }}
 
-                            />
+                                />
+                            </NoSsr>
                         )
                     })}
                 </Masonry>
