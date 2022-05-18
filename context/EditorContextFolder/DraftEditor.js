@@ -102,8 +102,9 @@ export default function DraftEditor() {
 
   useEffect(function () {
 
-    setEditorState(taggingLink())
-    // //setEditorState(EditorState.forceSelection(editorState, editorState.getSelection()))
+    //bothOk
+    //setEditorState(taggingLink())
+    setEditorState(EditorState.forceSelection(editorState, editorState.getSelection()))
 
     // document.querySelectorAll("[style*='--mylinkcolor']").forEach(element => {
     //   element.style.setProperty("--mylinkcolor", theme.isLight ? colorObj[500] : colorObj[300])

@@ -86,7 +86,7 @@ export default function SimpleEditor() {
 
     <>
       <Box sx={{
-        bgcolor: "pink",
+        bgcolor: theme.palette.background.default,
         position: "relative", wordBreak: "break-all", //top: "5vh"
         //margin: "4px",
         "m": "1px",
