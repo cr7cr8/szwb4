@@ -12,7 +12,7 @@ import { useRouter } from 'next/router';
 export default function About() {
 
 
-    const { count, setCount } = useContext(ContextApp)
+    const { count, setCount } = useContext(AppContext)
     const router = useRouter();
 
     return (

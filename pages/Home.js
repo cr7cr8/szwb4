@@ -37,7 +37,7 @@ export async function getStaticProps(context) {
   // console.log(random)
   // if (random > 0.5) {
 
-  
+
   //   return {
   //     redirect: {
   //       destination: '/api',
@@ -49,7 +49,7 @@ export async function getStaticProps(context) {
 
   return {
     props: {},
-   // revalidate: 10
+    // revalidate: 10
   }
 
 }
