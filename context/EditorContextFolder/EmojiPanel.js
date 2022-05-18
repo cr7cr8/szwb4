@@ -37,7 +37,7 @@ import { EditorContext } from "../EditorContextProvider";
 
 
 
-export default function EmojiPanel({ insertEmoji, editorRef, typeName, ...props }) {
+export default function EmojiPanel({ insertEmoji, editorRef, typeName, isSimple, ...props }) {
 
   const theme = useTheme()
   const { editorState, setEditorState, sizeObj } = useContext(EditorContext)
@@ -86,7 +86,7 @@ export default function EmojiPanel({ insertEmoji, editorRef, typeName, ...props 
 
         sx={{ ...(typeName !== "SimpleDraft") && { alignSelf: "right" } }}>
 
-        <EmojiEmotionsOutlined fontSize={typeName === "SimpleDraft" ? "medium" : "large"} />
+        <EmojiEmotionsOutlined fontSize={isSimple ? "medium" : "large"} />
       </IconButton>
 
       <Popover
@@ -161,7 +161,10 @@ export default function EmojiPanel({ insertEmoji, editorRef, typeName, ...props 
         <Stack direction="row" style={{}}>
           {dataArr.map((item, index) => {
 
-            return <IconButton key={index} sx={{ fontSize: "2rem", width: "2.5rem", height: "2.5rem" }}
+            return <IconButton key={index} sx={{
+              fontSize: "2rem", width: "2.5rem", height: "2.5rem",
+
+            }}
               onClick={function () {
                 setEmojiIndex(index)
               }}

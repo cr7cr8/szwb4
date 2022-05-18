@@ -6,7 +6,7 @@ import {
   RichUtils, Modifier, convertFromHTML, AtomicBlockUtils, getDefaultKeyBinding, KeyBindingUtil
 } from 'draft-js';
 
- 
+
 
 import { Container, Grid, Paper, IconButton, ButtonGroup, Stack, Button, Switch, Box, Hidden, Collapse } from '@mui/material';
 import Editor from "@draft-js-plugins/editor";
@@ -71,7 +71,8 @@ export default function SimpleEditor() {
   useEffect(function () {
 
     // console.log(contentId)
-    setEditorState(taggingLink())
+    //  setEditorState(taggingLink())
+    setEditorState(EditorState.forceSelection(editorState, editorState.getSelection()))
 
 
   }, [colorObj])
@@ -87,7 +88,8 @@ export default function SimpleEditor() {
       <Box sx={{
         bgcolor: "pink",
         position: "relative", wordBreak: "break-all", //top: "5vh"
-        margin: "4px",
+        //margin: "4px",
+        "m": "1px",
         borderRadius: "4px",
         // boxShadow: 5,
         // width:100,
@@ -154,7 +156,9 @@ export default function SimpleEditor() {
 
 
         />
-        <span style={{transform:"scale(0.5)"}}><EmojiComp editorRef={editorRef} /></span>
+      </Box>
+      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+        <EmojiComp editorRef={editorRef} isSimple={true} />
       </Box>
     </>
 

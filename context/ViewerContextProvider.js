@@ -19,7 +19,7 @@ import PostTimeRender from "./ViewerContextFolder/PostTimeRender";
 
 import Countdown from "react-countdown";
 import { ThemeProvider, useTheme, createTheme } from '@mui/material/styles';
-import { Container, Grid, Paper, IconButton, ButtonGroup, Stack, Button, Switch, Box, Hidden, Collapse, Typography, Divider } from '@mui/material';
+import { Container, Grid, Paper, IconButton, ButtonGroup, Stack, Button, Switch, Box, Hidden, Collapse, Typography, Divider, Chip, Avatar } from '@mui/material';
 
 import {
     EmojiEmotions, FormatSize, FormatAlignLeft, FormatAlignCenter, FormatAlignRight, StackedBarChart, HorizontalSplitOutlined,
@@ -122,7 +122,7 @@ export function ViewerContextProvider({
                         //  bgcolor: theme.isLight?theme.palette.background.default:colorObj[500],
                         fontSize: theme.sizeObj,
                         ...attribs["text-align"] && { textAlign: attribs["text-align"] },
-
+                        "px":"4px",
                         //    "& .MuiChip-root.MuiChip-filled": { fontSize: theme.sizeObj }
                     }}>
                         {domToReact(children, options)}
@@ -136,7 +136,7 @@ export function ViewerContextProvider({
                         //   bgcolor: theme.isLight?theme.palette.background.default:colorBgObj,
                         fontSize: theme.scaleSizeObj(0.8),
                         ...attribs["text-align"] && { textAlign: attribs["text-align"] },
-
+                        "px":"4px",
                         //   "& .MuiChip-root.MuiChip-filled": { fontSize: theme.scaleSizeObj(0.8), }
 
                     }}>{domToReact(children, options)}</Box>
@@ -183,7 +183,7 @@ export function ViewerContextProvider({
                     //   marginTop: "32px", marginBottom: "32px",
                     borderRadius: "4px",
                     boxShadow: 1,
-                 //   overflow: "hidden",
+                    //   overflow: "hidden",
                     marginBottom: "8px",
                 }
             }}>
@@ -200,7 +200,9 @@ export function ViewerContextProvider({
                     >
                         <span>{ownerName}</span>
                     </AvatarChip>
-                    &nbsp;&nbsp;
+
+
+      
                     <NoSsr>
                         <Countdown date={new Date(postDate)} intervalDelay={1 * 1000}
                             renderer={function ({ days, hours, minutes, seconds, completed, ...props }) {
@@ -216,7 +218,7 @@ export function ViewerContextProvider({
                     }}><Close fontSize="medium" /></IconButton>
                 </Box>
                 {parse(preHtml, options)}
-                <Box sx={{ display: "flex", px: "4px", py: "0px", alignItems: "center", justifyContent: "flex-start", "& .MuiBox-root": { fontSize: theme.sizeObj } }}>
+                <Box sx={{ display: "flex", px: "0px", py: "0px", alignItems: "center", justifyContent: "flex-start", "& .MuiBox-root": { fontSize: theme.sizeObj } }}>
                     <IconButton size="small" sx={{}} onClick={function () { }}>
                         <ChatBubbleOutline fontSize="medium" />
                     </IconButton>

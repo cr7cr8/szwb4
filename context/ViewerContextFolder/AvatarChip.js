@@ -169,7 +169,7 @@ export default function AvatarChip({ personName, children, bgTrans = false, icon
 
                 },
                 "& > *": {
-                   // transform: "translateY(-2px)"
+                    transform: "translateY(-1px)"
                 }
             }}
         >

@@ -98,9 +98,9 @@ export default function createEmojiPlugin() {
 
 
 
-  function EmojiComp({ editorRef, typeName, ...props }) {
+  function EmojiComp({ editorRef, typeName, isSimple, ...props }) {
 
-    return <EmojiPanel insertEmoji={insertEmoji} editorRef={editorRef} setFocus={setFocus} typeName={typeName} />
+    return <EmojiPanel insertEmoji={insertEmoji} editorRef={editorRef} setFocus={setFocus} typeName={typeName} isSimple={isSimple} />
 
 
   }
