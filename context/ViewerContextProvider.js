@@ -122,7 +122,7 @@ export function ViewerContextProvider({
                         //  bgcolor: theme.isLight?theme.palette.background.default:colorObj[500],
                         fontSize: theme.sizeObj,
                         ...attribs["text-align"] && { textAlign: attribs["text-align"] },
-                        "px":"4px",
+                        "px": "4px",
                         //    "& .MuiChip-root.MuiChip-filled": { fontSize: theme.sizeObj }
                     }}>
                         {domToReact(children, options)}
@@ -136,7 +136,7 @@ export function ViewerContextProvider({
                         //   bgcolor: theme.isLight?theme.palette.background.default:colorBgObj,
                         fontSize: theme.scaleSizeObj(0.8),
                         ...attribs["text-align"] && { textAlign: attribs["text-align"] },
-                        "px":"4px",
+                        "px": "4px",
                         //   "& .MuiChip-root.MuiChip-filled": { fontSize: theme.scaleSizeObj(0.8), }
 
                     }}>{domToReact(children, options)}</Box>
@@ -202,7 +202,7 @@ export function ViewerContextProvider({
                     </AvatarChip>
 
 
-      
+
                     <NoSsr>
                         <Countdown date={new Date(postDate)} intervalDelay={1 * 1000}
                             renderer={function ({ days, hours, minutes, seconds, completed, ...props }) {
@@ -223,10 +223,10 @@ export function ViewerContextProvider({
                         <ChatBubbleOutline fontSize="medium" />
                     </IconButton>
                 </Box>
-                <SimpleEtx contentId={preHtmlId} key={preHtmlId} peopleList={["UweF23", "UweF22", "TonyCerl", "JimWil", "大发发", "Jimberg", "m大Gsd哈"]} />
+                <SimpleEtx contentId={preHtmlId} key={preHtmlId} peopleList={["Ada", "分为二分", "Bob", "Cat", "Frank", "就能收到", "的我发dsd"]}
+                    avatarPeopleList={["Cat"]}
+                />
                 {/* <EditorCtx
-
-
                  
                     userName={userName}
                     peopleList={["UweF23", "UweF22", "TonyCerl", "JimWil", "大发发", "Jimberg", "m大Gsd哈"]}
@@ -237,7 +237,6 @@ export function ViewerContextProvider({
                     }}
 
                     onSubmit={function (preHtmlObj, { editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum, setDisableSubmit, clearState }) {
-
                         //    console.log(preHtmlObj)
                         const promiseArr = [
                             ...uploadPreHtml(preHtmlObj),  // commentOut when local
@@ -251,7 +250,6 @@ export function ViewerContextProvider({
                             setPostArr(pre => [preHtmlObj, ...pre])
                         })
                     }}
-
                 /> */}
             </Box>
         </ViewerContext.Provider>

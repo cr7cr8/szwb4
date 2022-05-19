@@ -8,7 +8,7 @@ import {
 import { NoSsr } from '@mui/base';
 
 import DraftEditor from "./EditorContextFolder/DraftEditor"
-import SimpleDraft from "./EditorContextFolder/SimpleEditor"
+import SimpleEditor from "./EditorContextFolder/SimpleEditor"
 
 import parse, { domToReact, attributesToProps, Element } from 'html-react-parser';
 import reactElementToJSXString from 'react-element-to-jsx-string';
@@ -170,7 +170,7 @@ export function SimpleContextProvider(
             clearState
         }}>
 
-            <SimpleDraft />
+            <SimpleEditor />
         </EditorContext.Provider>
     )
 }

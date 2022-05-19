@@ -22,7 +22,7 @@ import {
   EmojiEmotions, FormatSize, FormatAlignLeft, FormatAlignCenter, FormatAlignRight, StackedBarChart, HorizontalSplitOutlined,
 
   ColorLensOutlined,
-  Circle
+  Circle, Send
 
 } from '@mui/icons-material';
 
@@ -41,7 +41,7 @@ import createPersonPlugin from './PersonPlugin';
 
 const { emojiPlugin, EmojiComp } = createEmojiPlugin()
 
-const { linkPlugin, taggingLink } = createLinkPlugin()
+const { linkPlugin, taggingLink, taggingLocalLink } = createLinkPlugin()
 
 
 const { mentionPlugin, taggingMention, checkShowing } = createMentionPlugin()
@@ -71,13 +71,17 @@ export default function SimpleEditor() {
   useEffect(function () {
 
     // console.log(contentId)
-    //  setEditorState(taggingLink())
-    setEditorState(EditorState.forceSelection(editorState, editorState.getSelection()))
+    setEditorState(taggingLocalLink(editorState))
+    //setEditorState(EditorState.forceSelection(editorState, editorState.getSelection()))
 
 
   }, [colorObj])
 
+  // useEffect(function(){
+  //   window.currenContentId = contentId
 
+
+  // })
 
 
 
@@ -148,9 +152,10 @@ export default function SimpleEditor() {
 
 
           plugins={[
+            mentionPlugin,
             emojiPlugin,
             linkPlugin,
-            mentionPlugin,
+
             personPlugin,
           ]}
 
@@ -159,10 +164,151 @@ export default function SimpleEditor() {
       </Box>
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
         <EmojiComp editorRef={editorRef} isSimple={true} />
+        <IconButton size='small' onClick={function () {
+          console.log(toPreHtml({ editorState }))
+          console.log(contentId)
+        }}>
+          <Send fontSize='medium' />
+        </IconButton>
       </Box>
     </>
-
-
   )
+}
 
+
+
+function toPreHtml({ editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum }) {
+
+
+
+  const preHtml = stateToHTML(
+    editorState.getCurrentContent(),
+    {
+      defaultBlockTag: "div",
+
+      inlineStyleFn: function (styleNameSet) {
+
+        const styleObj = {
+          element: "span",
+          style: {},
+          attributes: {}
+        }
+
+
+        const isLink = styleNameSet.toArray().some(item => {
+          return (item.indexOf("linkTagOn") >= 0) || (item.indexOf("linkTagOff") >= 0)
+        })
+
+
+        if (isLink) {
+
+          styleObj.attributes["data-type"] = "link"
+        }
+
+        return styleObj
+      },
+
+
+      entityStyleFn: function (entity) {
+        const { type, data, mutablity } = entity.toObject()
+
+        //  console.log(type, data, mutablity)
+
+        if (type.indexOf("mention") >= 0) {
+          return {
+            element: 'object',
+            attributes: {
+              "data-type": "mention-tag"
+            },
+          }
+        }
+        else if (type.indexOf("personTag") >= 0) {
+          return {
+            element: 'object',
+            attributes: {
+              "data-type": "person-tag"
+            },
+
+          }
+
+        }
+
+      },
+
+      blockStyleFn: function (block) {
+
+        const text = block.getText()
+        const data = block.getData().toObject()
+        const type = block.getType()
+        const key = block.getKey()
+
+        return {
+          style: {
+            ...(type === "centerBlock") && { textAlign: "center" },  // style will be a string not an object during toHtmll call
+            ...(type === "rightBlock") && { textAlign: "right" },
+
+
+            // ...(data.isSmallFont&&type==="rightBlock")&&{transform:"translateX(10%) scale(0.8) ",backgroundColor:"pink",lineHeight:1},
+            // ...(data.isSmallFont&&type==="unstyled")&&{transform:"translateX(-10%) scale(0.8) ",backgroundColor:"pink",lineHeight:1},
+            // ...(data.isSmallFont&&type==="centerBlock")&&{transform:"scale(0.8) ",backgroundColor:"pink",lineHeight:1},
+
+            // ...styleObj.centerBlock && { textAlign: "center" },
+            // ...styleObj.rightBlock && { textAlign: "right" }
+
+          },
+          attributes: {
+            ...data.isSmallFont && { "small-font": "small-font" },
+            ...(type === "centerBlock") && { "text-align": "center" },
+            ...(type === "rightBlock") && { "text-align": "right" },
+
+            // ...styleObj.centerBlock && { className: "text-center" },
+            // ...styleObj.rightBlock && { className: "text-right" }
+          }
+        }
+
+      },
+
+      blockRenderers: {
+
+        imageBlock: function (block) {
+
+          const text = block.getText()
+          const data = encodeURI(JSON.stringify(block.getData().toObject()))
+          const type = block.getType()
+          const key = block.getKey()
+
+          // object Tag caanot self close
+          if (!imageObj[key]) { return }
+          const imageHtml = imageObj[key].reduce(function (imageHtml, currentValue, index, arr) {
+            return imageHtml = imageHtml + `<object data-imageindex="${index}" data-imgurl="${arr[index].imgUrl}" data-imgsnap="${arr[index].imgSnap}" data-blockkey="${key}" ></object>`
+          }, "")
+
+          return `<object data-type="image-block"  data-block_key="${key}" >` + imageHtml + '</object>'
+        },
+
+        voteBlock: function (block) {
+          const { d, h, m } = pollDuration
+          const expireDate = new Date(Date.now() + (3600 * 24 * d + 3600 * h + 60 * m) * 1000)
+
+          const voteTopicHtml = `<object data-topic>${voteTopic || ""}</object>`
+          const pollDurationHtml = `<object data-duration>${JSON.stringify(pollDuration).trim()}</object>`
+          const voteArrHtml = voteArr.map((vote, index) => `<object data-item-${index}>${vote}</object>`)
+
+          const data = encodeURI(JSON.stringify({ ...block.getData().toObject() }))
+          const type = block.getType()
+          const key = block.getKey()
+
+
+          // return `< object data - vote_arr="${voteArr}" data - type="vote-block"  data - block_key="${key}" data - block_data="${data}" > ` + encodeURI(block.getText()) + '</object>'
+          return `<object data-vote_arr="${voteArr}" date-vote_id="${voteId}" date-expire_date="${expireDate}" data-type="vote-block"  data-block_key="${key}" data-block_data="${data}">` + voteTopicHtml + pollDurationHtml + voteArrHtml.join("") + '</object>'
+
+        },
+
+      },
+
+
+
+    }
+  )
+  return preHtml
 }
