@@ -8,7 +8,7 @@ import {
 
 
 
-import { Container, Grid, Paper, IconButton, ButtonGroup, Stack, Button, Switch, Box, Hidden, Collapse } from '@mui/material';
+import { Container, Grid, Paper, IconButton, ButtonGroup, Stack, Button, Switch, Box, Hidden, Collapse, Divider } from '@mui/material';
 import Editor from "@draft-js-plugins/editor";
 
 import Immutable from 'immutable';
@@ -22,7 +22,7 @@ import {
   EmojiEmotions, FormatSize, FormatAlignLeft, FormatAlignCenter, FormatAlignRight, StackedBarChart, HorizontalSplitOutlined,
 
   ColorLensOutlined,
-  Circle, Send
+  Circle, Send, Edit
 
 } from '@mui/icons-material';
 
@@ -59,6 +59,7 @@ export default function SimpleEditor() {
     editorState, setEditorState,
     currentBlockKey, setCurrentBlockKey,
     contentId,
+    onSubmit,
   } = useContext(EditorContext)
   const editorRef = useRef()
 
@@ -77,11 +78,11 @@ export default function SimpleEditor() {
 
   }, [colorObj])
 
-  // useEffect(function(){
-  //   window.currenContentId = contentId
+  useEffect(function () {
+   // window.currenContentId = contentId
 
-
-  // })
+    editorRef.current.focus()
+  }, [])
 
 
 
@@ -91,6 +92,7 @@ export default function SimpleEditor() {
     <>
       <Box sx={{
         bgcolor: theme.palette.background.default,
+
         position: "relative", wordBreak: "break-all", //top: "5vh"
         //margin: "4px",
         "m": "1px",
@@ -98,7 +100,9 @@ export default function SimpleEditor() {
         // boxShadow: 5,
         // width:100,
         // border: `${isOnFocus?"1px":"0px"} solid ${blue[500]}`,
-        paddingLeft: "4px",
+        //paddingLeft: "4px",
+        "& [data-editor]": { paddingLeft: "4px" },
+
         fontSize: theme.sizeObj,
       }}>
         <Editor
@@ -161,16 +165,38 @@ export default function SimpleEditor() {
 
 
         />
+
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <EmojiComp editorRef={editorRef} isSimple={true} />
+          <IconButton size='small' onClick={function () {
+            console.log(toPreHtml({ editorState }))
+            console.log(contentId)
+
+
+            const newComment = {
+              _id: "comment-" + Date.now(),
+              content: toPreHtml({ editorState }),
+              ownerName: userName,
+              contentId: contentId,
+              postDate: Date.now()
+            }
+
+
+            onSubmit && setTimeout(function () { onSubmit(newComment) })
+
+
+
+
+
+
+
+          }}>
+            <Send fontSize='medium' />
+          </IconButton>
+        </Box>
+
       </Box>
-      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-        <EmojiComp editorRef={editorRef} isSimple={true} />
-        <IconButton size='small' onClick={function () {
-          console.log(toPreHtml({ editorState }))
-          console.log(contentId)
-        }}>
-          <Send fontSize='medium' />
-        </IconButton>
-      </Box>
+
     </>
   )
 }

@@ -138,6 +138,7 @@ export function SimpleContextProvider(
         onChange,
         onSubmit,
         contentId,
+
         ...props
     }
 ) {

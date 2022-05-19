@@ -84,7 +84,7 @@ export default function EmojiPanel({ insertEmoji, editorRef, typeName, isSimple,
 
       <IconButton size="small" onClick={handleClick}
 
-        sx={{ ...(typeName !== "SimpleDraft") && { alignSelf: "right" } }}>
+        sx={{  }}>
 
         <EmojiEmotionsOutlined fontSize={isSimple ? "medium" : "large"} />
       </IconButton>

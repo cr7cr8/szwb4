@@ -7,19 +7,23 @@ import {
 
 import { NoSsr } from '@mui/base';
 
-import DraftEditor from "./EditorContextFolder/DraftEditor"
 import parse, { domToReact, attributesToProps, Element } from 'html-react-parser';
-import reactElementToJSXString from 'react-element-to-jsx-string';
+
 
 import ImageViewerBlock from "./ViewerContextFolder/ImageViewerBlock";
 import VoteViewerBlock from "./ViewerContextFolder/VoteViewerBlock";
 import AvatarChip from "./ViewerContextFolder/AvatarChip";
 import LinkTag from "./ViewerContextFolder/LinkTag";
 import PostTimeRender from "./ViewerContextFolder/PostTimeRender";
+import CommentBlock from "./ViewerContextFolder/CommentBlock";
 
 import Countdown from "react-countdown";
 import { ThemeProvider, useTheme, createTheme } from '@mui/material/styles';
-import { Container, Grid, Paper, IconButton, ButtonGroup, Stack, Button, Switch, Box, Hidden, Collapse, Typography, Divider, Chip, Avatar } from '@mui/material';
+import {
+    Container, Grid, Paper, IconButton, ButtonGroup,
+
+    Stack, Button, Switch, Box, Hidden, Collapse, Typography, Divider, Chip, Avatar
+} from '@mui/material';
 
 import {
     EmojiEmotions, FormatSize, FormatAlignLeft, FormatAlignCenter, FormatAlignRight, StackedBarChart, HorizontalSplitOutlined,
@@ -174,6 +178,10 @@ export function ViewerContextProvider({
     }
 
 
+    const [commentArr, setCommentArr] = useState([])
+    const [showComment, setShowComment] = useState(false)
+    const [showEdit, setShowEdit] = useState(false)
+
     return (
 
         <ViewerContext.Provider value={{}}>
@@ -188,7 +196,11 @@ export function ViewerContextProvider({
                 }
             }}>
 
-                <Box sx={{ display: "flex", px: "0px", py: "2px", alignItems: "center", justifyContent: "flex-start", "& .MuiBox-root": { fontSize: theme.sizeObj } }}>
+                <Box sx={{
+                    display: "flex", px: "0px", py: "2px", alignItems: "center", justifyContent: "flex-start",
+                    //  "& .MuiBox-root": { fontSize: theme.sizeObj }
+
+                }}>
 
                     <AvatarChip
                         bgTrans={true}
@@ -211,21 +223,75 @@ export function ViewerContextProvider({
                             overtime={true}
                         />
                     </NoSsr>
-                    &nbsp;&nbsp;
+
                     <IconButton size="small" sx={{ marginLeft: "auto" }} onClick={function () {
                         axios.delete(`/api/textBlock/deleteText/${preHtmlId}`)
                         setPostArr(pre => pre.filter(preHtmlObj => preHtmlObj._id !== preHtmlId))
                     }}><Close fontSize="medium" /></IconButton>
                 </Box>
                 {parse(preHtml, options)}
-                <Box sx={{ display: "flex", px: "0px", py: "0px", alignItems: "center", justifyContent: "flex-start", "& .MuiBox-root": { fontSize: theme.sizeObj } }}>
-                    <IconButton size="small" sx={{}} onClick={function () { }}>
+                <Box sx={{ display: "flex", px: "0px", py: "0px", alignItems: "center", justifyContent: "space-between", "& .MuiBox-root": { fontSize: theme.sizeObj } }}>
+                    <IconButton size="small" sx={{}} onClick={function () {
+
+                        setShowComment(pre => !pre)
+                        //setShowComment(true)
+                    }}>
                         <ChatBubbleOutline fontSize="medium" />
                     </IconButton>
+
+
+                    <IconButton size="small" sx={{}} onClick={function () {
+
+                        setShowEdit(pre => !pre)
+                    }}>
+                        <Edit fontSize="medium" />
+                    </IconButton>
+
                 </Box>
-                <SimpleEtx contentId={preHtmlId} key={preHtmlId} peopleList={["Ada", "分为二分", "Bob", "Cat", "Frank", "就能收到", "的我发dsd"]}
-                    avatarPeopleList={["Cat"]}
-                />
+                {(showComment) && (!showEdit) && <Divider />}
+                <Collapse in={showEdit} unmountOnExit={true}>
+                    <SimpleEtx
+                        contentId={preHtmlId}
+                        key={preHtmlId}
+                        peopleList={["Ada", "分为二分", "Bob", "Cat", "Frank", "就能收到", "的我发dsd"]}
+                        avatarPeopleList={["Bob"]}
+                        genAvatarLink={genAvatarLink}
+                        downloadAvatarUrl={downloadAvatarUrl}
+                        userName={userName}
+                        onSubmit={function (newComment) {
+
+                            axios.post(`/api/commentBlock/createComment`, {
+                                ...newComment,
+
+                            }).then(response => {
+
+                                console.log(response.data)
+
+                            })
+                            //    newComment.postDate = String(newComment.postDate)
+                            setShowEdit(false)
+                            setShowComment(true)
+                            setCommentArr(pre => [newComment, ...pre])
+                        }}
+                    />
+                </Collapse>
+                <Collapse in={showComment} unmountOnExit={true}>
+                    <CommentBlock
+                        contentId={preHtmlId} options={options} extractText={extractText}
+                        peopleList={["Ada", "分为二分", "Bob", "Cat", "Frank", "就能收到", "的我发dsd"]}
+                        avatarPeopleList={["Bob"]}
+                        genAvatarLink={genAvatarLink}
+                        downloadAvatarUrl={downloadAvatarUrl}
+                        commentArr={commentArr}
+                        setCommentArr={setCommentArr}
+                    />
+                </Collapse>
+
+
+
+
+
+
                 {/* <EditorCtx
                  
                     userName={userName}
