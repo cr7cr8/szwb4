@@ -37,6 +37,7 @@ export default function CommentBlock({ contentId, options,
 
     const theme = useTheme()
 
+    const [disableButton, setDisableButton] = useState(false)
 
 
     useEffect(function () {
@@ -80,10 +81,13 @@ export default function CommentBlock({ contentId, options,
 
 
             {(commentArr.length < commentNum) && < Button sx={{ borderTopLeftRadius: "0px", borderTopRightRadius: "0px" }} fullWidth
+                disabled={disableButton}
+
                 onClick={function () {
+                    setDisableButton(true)
                     axios.get(`/api/commentBlock/getComment/${contentId}/${String(commentArr.at(-1).postDate)}`).then(response => {
 
-
+                        setDisableButton(false)
                         setCommentArr(pre => [...pre, ...response.data])
 
                     })
@@ -113,6 +117,8 @@ function Comment({ comment, userName, options, downloadAvatarUrl, avatarPeopleLi
 
     const [subCommentNum, setSubCommentNum] = useState(0)
 
+    const [disableButton, setDisableButton] = useState(false)
+
     useEffect(function () {
 
         axios.get(`/api/subCommentBlock/getSubComment/${comment._id}`).then(response => {
@@ -133,7 +139,7 @@ function Comment({ comment, userName, options, downloadAvatarUrl, avatarPeopleLi
 
     }, [])
 
-  
+
 
     return (
         <>
@@ -182,28 +188,49 @@ function Comment({ comment, userName, options, downloadAvatarUrl, avatarPeopleLi
                     {parse(comment.content, options)}
                 </Box>
 
-                <Collapse in={showEdit} unmountOnExit={true}>
-                    <SimpleEtx
-                        contentId={comment._id}
 
-                        peopleList={["Ada", "分为二分", "Bob", "Cat", "Frank", "就能收到", "的我发dsd"]}
-                        avatarPeopleList={["Bob"]}
-                        genAvatarLink={genAvatarLink}
-                        downloadAvatarUrl={downloadAvatarUrl}
-                        userName={userName}
-                        onSubmit={function (newComment) {
+                <Box sx={{ display: "flex", px: "0px", py: "0px", alignItems: "center", justifyContent: "space-between", "& .MuiBox-root": { fontSize: theme.sizeObj } }}>
 
-                            newComment.commentId = newComment.contentId.replace("content", "subComment")
-                            newComment._id = newComment._id.replace("comment", "subComment")
-                            delete newComment.contentId
+                    <Button fullWidth variant='clear' sx={{ bgcolor: "transparent" }}
+                        onClick={function () {
+                            setShowSubComment(pre => !pre)
 
-                            axios.post(`/api/subCommentBlock/createSubComment`, newComment)
-                            setShowEdit(false)
-                            setSubCommentArr(pre => [newComment, ...pre])
-                            setShowSubComment(true)
-                            setSubCommentNum(pre => pre + 1)
                         }}
-                    />
+
+                    ><ChatBubbleOutline fontSize="medium" />{subCommentNum}</Button>
+                    <Button fullWidth variant='clear' sx={{ bgcolor: "transparent" }}
+                        onClick={function () {
+                            setShowEdit(pre => !pre)
+
+                        }}
+                    ><Reply fontSize="medium" /></Button>
+                </Box>
+
+
+                <Collapse in={showEdit} unmountOnExit={true}>
+                    <Box sx={{}}>
+                        <SimpleEtx
+                            contentId={comment._id}
+
+                            peopleList={["Ada", "分为二分", "Bob", "Cat", "Frank", "就能收到", "的我发dsd"]}
+                            avatarPeopleList={["Bob"]}
+                            genAvatarLink={genAvatarLink}
+                            downloadAvatarUrl={downloadAvatarUrl}
+                            userName={userName}
+                            onSubmit={function (newComment) {
+
+                                newComment.commentId = newComment.contentId.replace("content", "subComment")
+                                newComment._id = newComment._id.replace("comment", "subComment")
+                                delete newComment.contentId
+
+                                axios.post(`/api/subCommentBlock/createSubComment`, newComment)
+                                setShowEdit(false)
+                                setSubCommentArr(pre => [newComment, ...pre])
+                                setShowSubComment(true)
+                                setSubCommentNum(pre => pre + 1)
+                            }}
+                        />
+                    </Box>
                 </Collapse>
 
                 {
@@ -213,7 +240,7 @@ function Comment({ comment, userName, options, downloadAvatarUrl, avatarPeopleLi
 
 
                             <Collapse in={showSubComment} unmountOnExit={false}>
-                                <Box key={subComment._id} sx={{ bgcolor: "pink" }}>
+                                <Box key={subComment._id} sx={{ bgcolor: theme.isLight ? theme.colorObj[100] : theme.colorObj[900] }}>
                                     <Divider />
                                     <Box sx={{ display: "flex", alignItems: "center", "py": "2px" }}>
                                         <AvatarChip
@@ -244,41 +271,35 @@ function Comment({ comment, userName, options, downloadAvatarUrl, avatarPeopleLi
                             </Collapse>
                         )
 
-                        // return <Comment
-                        // key={comment._id}
-                        // userName={userName}
-                        // comment={comment}
-                        // optons={options}
-                        // downloadAvatarUrl={downloadAvatarUrl}
-                        // avatarPeopleList={avatarPeopleList}
-                        // genAvatarLink={genAvatarLink}
-                        // setCommentArr={setCommentArr}
-                        // setCommentNum={setCommentNum}
-                        // />
 
 
                     })
 
                 }
 
+                {(subCommentArr.length < subCommentNum) && showSubComment && < Button
+
+                    disabled={disableButton}
+                    sx={{ borderTopLeftRadius: "0px", borderTopRightRadius: "0px" }} fullWidth
+                    onClick={function () {
+                        setDisableButton(true)
+                        axios.get(`/api/subCommentBlock/getSubComment/${comment._id}/${String(subCommentArr.at(-1).postDate)}`).then(response => {
+
+                            setDisableButton(false)
+                            setSubCommentArr(pre => [...pre, ...response.data])
+
+                        })
 
 
-                <Box sx={{ display: "flex", px: "0px", py: "0px", alignItems: "center", justifyContent: "space-between", "& .MuiBox-root": { fontSize: theme.sizeObj } }}>
+                    }}
 
-                    <Button fullWidth variant='clear' sx={{ bgcolor: "transparent" }}
-                        onClick={function () {
-                            setShowSubComment(pre => !pre)
 
-                        }}
+                >
+                    {subCommentArr.length + "/" + subCommentNum}
+                </Button>
+                }
 
-                    ><ChatBubbleOutline fontSize="medium" />{subCommentArr.length}/{subCommentNum}</Button>
-                    <Button fullWidth variant='clear' sx={{ bgcolor: "transparent" }}
-                        onClick={function () {
-                            setShowEdit(pre => !pre)
 
-                        }}
-                    ><Reply fontSize="medium" /></Button>
-                </Box>
             </Box>
 
 

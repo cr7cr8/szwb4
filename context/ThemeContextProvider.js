@@ -24,7 +24,7 @@ function useColorObj(colorIndex = 5) {
 
 export default function ThemeContextProvider({ cssBaseLine = true, colorIndex, themeMode, ...props }) {
 
-  
+
 
     const [sizeObj, setSizeObj] = useState(props.sizeObj || { xs: "1.2rem", sm: "1.2rem", md: "1.2rem", lg: "1.2rem", xl: "1.2rem" })
     const [colorObj, setColorObj] = useColorObj(colorIndex)
@@ -67,7 +67,6 @@ export default function ThemeContextProvider({ cssBaseLine = true, colorIndex, t
         ? `rgba( ${hexToRgb(colorObj[100]).r}, ${hexToRgb(colorObj[100]).g}, ${hexToRgb(colorObj[100]).b},   0.5)`
         : `rgba( ${hexToRgb(colorObj[900]).r}, ${hexToRgb(colorObj[900]).g}, ${hexToRgb(colorObj[900]).b},   0.5)`
 
-
     const myTheme = React.useMemo(
         () =>
             createTheme({
@@ -89,6 +88,7 @@ export default function ThemeContextProvider({ cssBaseLine = true, colorIndex, t
                 colorArr,
                 colorObj, setColorObj,
                 colorBgObj,
+              
 
                 setMode,
                 scaleSizeObj,
@@ -117,8 +117,8 @@ export default function ThemeContextProvider({ cssBaseLine = true, colorIndex, t
                                         color: theme.palette.text.secondary,
                                         fontSize: theme.addingSizeObj(-5),
                                         "&:hover": {
-                                           // bgcolor: theme.isLight ? colorObj[300] : colorObj[500],
-                                            bgcolor:theme.colorBgObj
+                                            // bgcolor: theme.isLight ? colorObj[300] : colorObj[500],
+                                            bgcolor: theme.colorBgObj
                                         },
                                         backdropFilter: "blur(20px)",
                                     }),

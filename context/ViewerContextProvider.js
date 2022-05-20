@@ -186,6 +186,7 @@ export function ViewerContextProvider({
 
     const [commentNum, setCommentNum] = useState(0)
 
+
     useEffect(function () {
         axios.get(`/api/commentBlock/countComment/${preHtmlId}`).then(response => {
 
@@ -249,26 +250,7 @@ export function ViewerContextProvider({
 
                 <Box sx={{ display: "flex", px: "0px", py: "0px", alignItems: "center", justifyContent: "space-between", "& .MuiBox-root": { fontSize: theme.sizeObj } }}>
 
-                    {/* {commentNum !== 0 && <IconButton
-                        size="small"
-
-                        onClick={function () {
-
-                            setShowComment(pre => !pre)
-                            //setShowComment(true)
-                        }}>
-
-                        <ChatBubbleOutline fontSize="medium" />
-                        <Typography sx={{ color: theme.palette.text.secondary }}>{commentNum}</Typography>
-                    </IconButton>}
-
-
-                    <IconButton size="small" sx={{ marginLeft: "auto" }} onClick={function () {
-
-                        setShowEdit(pre => !pre)
-                    }}>
-                        <Edit fontSize="medium" />
-                    </IconButton> */}
+                  
 
                     <Button fullWidth variant="clear"
                         onClick={function () {
@@ -334,31 +316,7 @@ export function ViewerContextProvider({
 
 
 
-                {/* <EditorCtx
-                 
-                    userName={userName}
-                    peopleList={["UweF23", "UweF22", "TonyCerl", "JimWil", "大发发", "Jimberg", "m大Gsd哈"]}
-                    avatarPeopleList={["UweF23", "TonyCerl", "大发发", "m大Gsd哈"]}
-                    downloadAvatarUrl={`https://picsum.photos/200`}
-                    genAvatarLink={function (downloadAvatarUrl, personName) {
-                        return downloadAvatarUrl// + personName
-                    }}
-
-                    onSubmit={function (preHtmlObj, { editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum, setDisableSubmit, clearState }) {
-                        //    console.log(preHtmlObj)
-                        const promiseArr = [
-                            ...uploadPreHtml(preHtmlObj),  // commentOut when local
-                            ...uploadImage(imageObj), // commentOut when local
-                            ...uploadVote({ voteArr, voteTopic, pollDuration, voteId, postId: preHtmlObj._id }) // commentOut when local
-                        ]
-
-                        Promise.allSettled(promiseArr).then((arr) => {
-                            setDisableSubmit(false)
-                            clearState()
-                            setPostArr(pre => [preHtmlObj, ...pre])
-                        })
-                    }}
-                /> */}
+    
             </Box>
         </ViewerContext.Provider>
     )
