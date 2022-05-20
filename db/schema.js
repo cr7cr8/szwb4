@@ -48,7 +48,16 @@ const commentBlockSchema = new mongoose.Schema({
     //  timestamps: true, 
 })
 
-
+const subCommentBlockSchema = new mongoose.Schema({
+    _id: { type: String, required: true },
+    content: { type: String, required: true },
+    ownerName: { type: String },
+    postDate: { type: Date, default: Date.now },
+    commentId: { type: String, required: true },
+}, {
+    toObject: { virtuals: true },
+    collection: "subCommentBlocks",
+})
 
 
 const voteBlockSchema = new mongoose.Schema({
@@ -74,6 +83,7 @@ const User = connSzwb4DB.model("user", userSchema);
 const VoteBlock = connSzwb4DB.model("voteBlocks", voteBlockSchema);
 const TextBlock = connSzwb4DB.model("textBlocks", textBlockSchema);
 const commentBlock = connSzwb4DB.model("commentBlocks", commentBlockSchema);
+const subCommentBlock = connSzwb4DB.model("subCommentBlocks", subCommentBlockSchema);
 
 
-module.exports = { User, VoteBlock, TextBlock, commentBlock }
+module.exports = { User, VoteBlock, TextBlock, commentBlock, subCommentBlock }

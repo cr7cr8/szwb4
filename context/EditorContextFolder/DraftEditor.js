@@ -328,7 +328,7 @@ export default function DraftEditor() {
           editorState={editorState}
           ref={function (element) { editorRef.current = element; }}
 
-          onFocus={function () { setShadowValue(10) }}
+          onFocus={function () { setShadowValue(5) }}
           onBlur={function () { setShadowValue(3) }}
 
 
@@ -627,7 +627,11 @@ export default function DraftEditor() {
           }}
 
         />
-        <Button fullWidth disabled={disableSubmit} sx={{ boxShadow: 0, borderRadius: 0 }} onClick={function () {
+        <Button variant="clear" fullWidth disabled={disableSubmit} sx={{ boxShadow: 0, borderRadius: 0,"&:hover":{
+         opacity:0.8
+
+
+        } }} onClick={function () {
           setDisableSubmit(true)
           onSubmit && setTimeout(() => {
             const preHtml = toPreHtml({ editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum })

@@ -117,7 +117,8 @@ export default function ThemeContextProvider({ cssBaseLine = true, colorIndex, t
                                         color: theme.palette.text.secondary,
                                         fontSize: theme.addingSizeObj(-5),
                                         "&:hover": {
-                                            bgcolor: theme.isLight ? colorObj[300] : colorObj[500],
+                                           // bgcolor: theme.isLight ? colorObj[300] : colorObj[500],
+                                            bgcolor:theme.colorBgObj
                                         },
                                         backdropFilter: "blur(20px)",
                                     }),

@@ -122,7 +122,8 @@ export function ViewerContextProvider({
 
                 return (
                     <Box sx={{
-                        bgcolor: theme.isLight ? theme.palette.background.default : "transparent",
+                        bgcolor: "transparent",
+                        //  bgcolor: theme.isLight ? theme.palette.background.default : "transparent",
                         //  bgcolor: theme.isLight?theme.palette.background.default:colorObj[500],
                         fontSize: theme.sizeObj,
                         ...attribs["text-align"] && { textAlign: attribs["text-align"] },
@@ -136,7 +137,8 @@ export function ViewerContextProvider({
             else if (name === "div" && attribs["small-font"]) {
                 return (
                     <Box sx={{
-                        bgcolor: theme.isLight ? theme.palette.background.default : "transparent",
+                        bgcolor: "transparent",
+                        //    bgcolor: theme.isLight ? theme.palette.background.default : "transparent",
                         //   bgcolor: theme.isLight?theme.palette.background.default:colorBgObj,
                         fontSize: theme.scaleSizeObj(0.8),
                         ...attribs["text-align"] && { textAlign: attribs["text-align"] },
@@ -185,7 +187,7 @@ export function ViewerContextProvider({
     const [commentNum, setCommentNum] = useState(0)
 
     useEffect(function () {
-        axios.get(`/api/commentBlock/countDocument/${preHtmlId}`).then(response => {
+        axios.get(`/api/commentBlock/countComment/${preHtmlId}`).then(response => {
 
             setCommentNum(response.data)
         })
@@ -244,28 +246,48 @@ export function ViewerContextProvider({
                     </IconButton>
                 </Box>
                 {parse(preHtml, options)}
-                <Box sx={{ display: "flex", px: "0px", py: "0px", alignItems: "center", justifyContent: "space-between", "& .MuiBox-root": { fontSize: theme.sizeObj } }}>
-                    <IconButton size="small" sx={{}} onClick={function () {
 
-                        setShowComment(pre => !pre)
-                        //setShowComment(true)
-                    }}>
+                <Box sx={{ display: "flex", px: "0px", py: "0px", alignItems: "center", justifyContent: "space-between", "& .MuiBox-root": { fontSize: theme.sizeObj } }}>
+
+                    {/* {commentNum !== 0 && <IconButton
+                        size="small"
+
+                        onClick={function () {
+
+                            setShowComment(pre => !pre)
+                            //setShowComment(true)
+                        }}>
 
                         <ChatBubbleOutline fontSize="medium" />
                         <Typography sx={{ color: theme.palette.text.secondary }}>{commentNum}</Typography>
-                    </IconButton>
+                    </IconButton>}
 
 
-                    <IconButton size="small" sx={{}} onClick={function () {
+                    <IconButton size="small" sx={{ marginLeft: "auto" }} onClick={function () {
 
                         setShowEdit(pre => !pre)
                     }}>
                         <Edit fontSize="medium" />
-                    </IconButton>
+                    </IconButton> */}
+
+                    <Button fullWidth variant="clear"
+                        onClick={function () {
+                            setShowComment(pre => !pre)
+                        }}
+                        sx={{ bgcolor: "transparent", borderTopLeftRadius: 0, borderTopRightRadius: 0, "&:hover": { bgcolor: theme.colorBgObj } }}>
+                        <ChatBubbleOutline fontSize="small" sx={{ color:theme.palette.text.secondary}} /><Typography sx={{color:theme.palette.text.secondary}}>{commentNum}</Typography>
+                    </Button>
+                    <Button fullWidth variant="clear"
+                        onClick={function () {
+                            setShowEdit(pre => !pre)
+                        }}
+                        sx={{ bgcolor: "transparent", borderTopLeftRadius: 0, borderTopRightRadius: 0, "&:hover": { bgcolor: theme.colorBgObj } }}>
+                        <Edit fontSize="small"  sx={{ color:theme.palette.text.secondary}} />
+                    </Button>
 
                 </Box>
-                {(showComment) && (!showEdit) && <Divider />}
-                <Collapse in={showEdit} unmountOnExit={false}>
+                {/* {(showComment) && (!showEdit) && <Divider />} */}
+                <Collapse in={showEdit} unmountOnExit={true}>
                     <SimpleEtx
                         contentId={preHtmlId}
                         key={preHtmlId}
@@ -281,7 +303,7 @@ export function ViewerContextProvider({
 
                             }).then(response => {
 
-                                console.log(response.data)
+                                //   console.log(response.data)
 
                             })
                             //    newComment.postDate = String(newComment.postDate)
@@ -294,6 +316,7 @@ export function ViewerContextProvider({
                 </Collapse>
                 <Collapse in={showComment} unmountOnExit={false}>
                     <CommentBlock
+                        userName={userName}
                         contentId={preHtmlId} options={options} extractText={extractText}
                         peopleList={["Ada", "分为二分", "Bob", "Cat", "Frank", "就能收到", "的我发dsd"]}
                         avatarPeopleList={["Bob"]}

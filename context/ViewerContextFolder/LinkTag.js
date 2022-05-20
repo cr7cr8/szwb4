@@ -24,7 +24,7 @@ export default function LinkTag({ linkAdd }) {
         React.createElement(
             content ? Link : Box,
             { sx: cssObj, ...content ? { href: linkAdd, target: "_blank", rel: "noopener" } : { onClick } },
-            content ? linkAdd : linkAdd.match(/(\/\/)([a-z0-9\-._~%]+)/)[2]
+            content ? linkAdd : linkAdd?.match?.(/(\/\/)([a-z0-9\-._~%]+)/)?.[2]
         )
 
     )

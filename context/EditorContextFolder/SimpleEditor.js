@@ -78,11 +78,17 @@ export default function SimpleEditor() {
 
   }, [colorObj])
 
+  const [autoFocused, setAutoFocused] = useState(false)
   useEffect(function () {
-   // window.currenContentId = contentId
+    setTimeout(function () {
+      if (!autoFocused) {
+        setAutoFocused(true)
+        setEditorState(EditorState.forceSelection(editorState, editorState.getSelection()))
+      }
+    }, 50)
 
-    editorRef.current.focus()
-  }, [])
+
+  }, [editorState, autoFocused])
 
 
 
