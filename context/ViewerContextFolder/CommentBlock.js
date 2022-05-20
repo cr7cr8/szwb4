@@ -28,10 +28,12 @@ export default function CommentBlock({ contentId, options,
     downloadAvatarUrl,
     commentArr,
     setCommentArr,
+    commentNum,
+    setCommentNum,
     ...props }) {
 
     const theme = useTheme()
- 
+
 
     useEffect(function () {
 
@@ -77,10 +79,11 @@ export default function CommentBlock({ contentId, options,
                             <IconButton size="small" sx={{ marginLeft: "auto" }} onClick={function () {
                                 axios.delete(`/api/commentBlock/deleteComment/${comment._id}`)
                                 setCommentArr(pre => {
-                                 
+
                                     return pre.filter((item) => (item._id !== comment._id))
-                                   
+
                                 })
+                                setCommentNum(pre => pre - 1)
                             }}><Close fontSize="medium" /></IconButton>
 
                         </Box>
@@ -93,7 +96,25 @@ export default function CommentBlock({ contentId, options,
             })}
 
 
-        </Box>
+
+            {(commentArr.length < commentNum) && < Button sx={{ borderTopLeftRadius: "0px", borderTopRightRadius: "0px" }} fullWidth
+                onClick={function () {
+                    axios.get(`/api/commentBlock/getComment/${contentId}/${String(commentArr.at(-1).postDate)}`).then(response => {
+
+
+                        setCommentArr(pre => [...pre, ...response.data])
+
+                    })
+
+                    //  console.log(String(commentArr.at(-1).postDate))
+                }}
+
+
+            >
+                {commentArr.length + "/" + commentNum}
+            </Button>
+            }
+        </Box >
     )
 
 

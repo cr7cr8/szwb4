@@ -1,4 +1,4 @@
-import React, { useState, createContext, useMemo, useId, useDeferredValue, useCallback, memo } from "react"
+import React, { useState, createContext, useMemo, useId, useDeferredValue, useCallback, memo, useEffect } from "react"
 
 import {
     EditorState, ContentState, ContentBlock, CharacterMetadata, SelectionState, convertToRaw, convertFromRaw,
@@ -182,6 +182,17 @@ export function ViewerContextProvider({
     const [showComment, setShowComment] = useState(false)
     const [showEdit, setShowEdit] = useState(false)
 
+    const [commentNum, setCommentNum] = useState(0)
+
+    useEffect(function () {
+        axios.get(`/api/commentBlock/countDocument/${preHtmlId}`).then(response => {
+
+            setCommentNum(response.data)
+        })
+
+    }, [])
+
+
     return (
 
         <ViewerContext.Provider value={{}}>
@@ -227,7 +238,10 @@ export function ViewerContextProvider({
                     <IconButton size="small" sx={{ marginLeft: "auto" }} onClick={function () {
                         axios.delete(`/api/textBlock/deleteText/${preHtmlId}`)
                         setPostArr(pre => pre.filter(preHtmlObj => preHtmlObj._id !== preHtmlId))
-                    }}><Close fontSize="medium" /></IconButton>
+                    }}>
+                        <Close fontSize="medium" />
+
+                    </IconButton>
                 </Box>
                 {parse(preHtml, options)}
                 <Box sx={{ display: "flex", px: "0px", py: "0px", alignItems: "center", justifyContent: "space-between", "& .MuiBox-root": { fontSize: theme.sizeObj } }}>
@@ -236,7 +250,9 @@ export function ViewerContextProvider({
                         setShowComment(pre => !pre)
                         //setShowComment(true)
                     }}>
+
                         <ChatBubbleOutline fontSize="medium" />
+                        <Typography sx={{ color: theme.palette.text.secondary }}>{commentNum}</Typography>
                     </IconButton>
 
 
@@ -249,7 +265,7 @@ export function ViewerContextProvider({
 
                 </Box>
                 {(showComment) && (!showEdit) && <Divider />}
-                <Collapse in={showEdit} unmountOnExit={true}>
+                <Collapse in={showEdit} unmountOnExit={false}>
                     <SimpleEtx
                         contentId={preHtmlId}
                         key={preHtmlId}
@@ -272,10 +288,11 @@ export function ViewerContextProvider({
                             setShowEdit(false)
                             setShowComment(true)
                             setCommentArr(pre => [newComment, ...pre])
+                            setCommentNum(pre => pre + 1)
                         }}
                     />
                 </Collapse>
-                <Collapse in={showComment} unmountOnExit={true}>
+                <Collapse in={showComment} unmountOnExit={false}>
                     <CommentBlock
                         contentId={preHtmlId} options={options} extractText={extractText}
                         peopleList={["Ada", "分为二分", "Bob", "Cat", "Frank", "就能收到", "的我发dsd"]}
@@ -284,6 +301,8 @@ export function ViewerContextProvider({
                         downloadAvatarUrl={downloadAvatarUrl}
                         commentArr={commentArr}
                         setCommentArr={setCommentArr}
+                        commentNum={commentNum}
+                        setCommentNum={setCommentNum}
                     />
                 </Collapse>
 

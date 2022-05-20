@@ -185,11 +185,6 @@ export default function SimpleEditor() {
             onSubmit && setTimeout(function () { onSubmit(newComment) })
 
 
-
-
-
-
-
           }}>
             <Send fontSize='medium' />
           </IconButton>
