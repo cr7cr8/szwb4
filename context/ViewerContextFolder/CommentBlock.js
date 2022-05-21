@@ -123,20 +123,14 @@ function Comment({ comment, peopleList, userName, options, downloadAvatarUrl, av
     useEffect(function () {
 
         axios.get(`/api/subCommentBlock/getSubComment/${comment._id}`).then(response => {
-
             console.log(response.data)
             setSubCommentArr(response.data)
-
         })
-
 
         axios.get(`/api/subCommentBlock/countSubComment/${comment._id}`).then(response => {
 
             setSubCommentNum(response.data)
         })
-
-
-
 
     }, [])
 
@@ -165,10 +159,6 @@ function Comment({ comment, peopleList, userName, options, downloadAvatarUrl, av
                         }}
                         overtime={true}
                     />
-
-
-
-
 
                     <IconButton size="small" sx={{ marginLeft: "auto" }} onClick={function () {
                         axios.delete(`/api/commentBlock/deleteComment/${comment._id}`)
@@ -214,7 +204,7 @@ function Comment({ comment, peopleList, userName, options, downloadAvatarUrl, av
                             contentId={comment._id}
 
                             peopleList={peopleList}
-                            avatarPeopleList={["Bob"]}
+                            avatarPeopleList={avatarPeopleList}
                             genAvatarLink={genAvatarLink}
                             downloadAvatarUrl={downloadAvatarUrl}
                             userName={userName}
@@ -303,21 +293,14 @@ function Comment({ comment, peopleList, userName, options, downloadAvatarUrl, av
                     onClick={function () {
                         setDisableButton(true)
                         axios.get(`/api/subCommentBlock/getSubComment/${comment._id}/${String(subCommentArr.at(-1).postDate)}`).then(response => {
-
                             setDisableButton(false)
                             setSubCommentArr(pre => [...pre, ...response.data])
-
                         })
-
-
                     }}
-
-
                 >
                     {subCommentArr.length + "/" + subCommentNum}
                 </Button>
                 }
-
 
             </Box>
 

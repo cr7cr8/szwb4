@@ -274,7 +274,7 @@ export function ViewerContextProvider({
                         contentId={preHtmlId}
                         key={preHtmlId}
                         peopleList={peopleList}
-                        avatarPeopleList={["Bob"]}
+                        avatarPeopleList={avatarPeopleList}
                         genAvatarLink={genAvatarLink}
                         downloadAvatarUrl={downloadAvatarUrl}
                         userName={userName}
@@ -301,7 +301,7 @@ export function ViewerContextProvider({
                         userName={userName}
                         contentId={preHtmlId} options={options} extractText={extractText}
                         peopleList={peopleList}
-                        avatarPeopleList={["Bob"]}
+                        avatarPeopleList={avatarPeopleList}
                         genAvatarLink={genAvatarLink}
                         downloadAvatarUrl={downloadAvatarUrl}
                         commentArr={commentArr}

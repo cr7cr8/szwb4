@@ -116,42 +116,75 @@ function getPeopleList(req, res, next) {
 
 }
 
-
-export async function getServerSideProps(context) {
-
-    // return { props: {userName: "guest", contentArr: []}}
-
-    const { params, query, req, res, ...props } = context
-    const { themeMode, colorIndex } = await runMiddleware(req, res, checkingCookie)
-
-    const peopleList = await runMiddleware(req, res, getPeopleList)
-
-
+function getTextBlock(req, res, next) {
 
     return TextBlock.find({}).sort({ postDate: -1 }).limit(123).then(docs => {
 
-        return {
-            ...(!req.userName) && {
-                redirect: {
-                    destination: '/auth-page',
-                    permanent: false,
-                }
-            },
-            props: {
-                userName: req?.userName || "guest",
-                colorIndex: colorIndex ?? 5,
-                themeMode: themeMode ?? "light",
-                contentArr: docs.map(doc => {
-                    //  console.log(doc.postDate)
-                    return { _id: doc._id, content: doc.content, ownerName: doc.ownerName, postDate: String(doc.postDate) }
-                }),
-                peopleList: peopleList,
+        const contentArr = docs.map(doc => {
+            //  console.log(doc.postDate)
+            return { _id: doc._id, content: doc.content, ownerName: doc.ownerName, postDate: String(doc.postDate) }
+        })
 
+        next(contentArr)
+    })
+
+}
+
+export async function getServerSideProps(context) {
+
+
+    const { params, query, req, res, ...props } = context
+
+    const { themeMode, colorIndex } = await runMiddleware(req, res, checkingCookie)
+    const peopleList = await runMiddleware(req, res, getPeopleList)
+    const contentArr = await runMiddleware(req, res, getTextBlock)
+
+
+    return {
+        ...(!req.userName) && {
+            redirect: {
+                destination: '/auth-page',
+                permanent: false,
             }
-
+        },
+        props: {
+            userName: req?.userName || "guest",
+            colorIndex: colorIndex ?? 5,
+            themeMode: themeMode ?? "light",
+            contentArr,
+            peopleList,
 
         }
-    })
+
+
+    }
+
+
+
+    // return TextBlock.find({}).sort({ postDate: -1 }).limit(123).then(docs => {
+
+    //     return {
+    //         ...(!req.userName) && {
+    //             redirect: {
+    //                 destination: '/auth-page',
+    //                 permanent: false,
+    //             }
+    //         },
+    //         props: {
+    //             userName: req?.userName || "guest",
+    //             colorIndex: colorIndex ?? 5,
+    //             themeMode: themeMode ?? "light",
+    //             contentArr: docs.map(doc => {
+    //                 //  console.log(doc.postDate)
+    //                 return { _id: doc._id, content: doc.content, ownerName: doc.ownerName, postDate: String(doc.postDate) }
+    //             }),
+    //             peopleList: peopleList,
+
+    //         }
+
+
+    //     }
+    // })
 }
 
 
@@ -208,7 +241,7 @@ export default function App({ userName, contentArr = [], peopleList }) {
                             // }}
                             userName={userName}
                             peopleList={peopleList}
-                            avatarPeopleList={["UweF23", "TonyCerl", "大发发", "m大Gsd哈"]}
+                            avatarPeopleList={["User380"]}
                             downloadAvatarUrl={`https://picsum.photos/200`}
                             genAvatarLink={function (downloadAvatarUrl, personName) {
                                 return downloadAvatarUrl// + personName
@@ -258,7 +291,7 @@ export default function App({ userName, contentArr = [], peopleList }) {
                                     downloadVoteUrl="/api/voteBlock/" // commentOut when local
 
                                     peopleList={peopleList}
-                                    avatarPeopleList={["UweF23", "TonyCerl", "大发发", "m大Gsd哈"]}
+                                    avatarPeopleList={["User380"]}
                                     downloadAvatarUrl={`https://picsum.photos/200`}
                                     genAvatarLink={function (downloadAvatarUrl, personName) {
                                         return downloadAvatarUrl// + personName
