@@ -250,21 +250,21 @@ export function ViewerContextProvider({
 
                 <Box sx={{ display: "flex", px: "0px", py: "0px", alignItems: "center", justifyContent: "space-between", "& .MuiBox-root": { fontSize: theme.sizeObj } }}>
 
-                  
+
 
                     <Button fullWidth variant="clear"
                         onClick={function () {
                             setShowComment(pre => !pre)
                         }}
                         sx={{ bgcolor: "transparent", borderTopLeftRadius: 0, borderTopRightRadius: 0, "&:hover": { bgcolor: theme.colorBgObj } }}>
-                        <ChatBubbleOutline fontSize="small" sx={{ color:theme.palette.text.secondary}} /><Typography sx={{color:theme.palette.text.secondary}}>{commentNum}</Typography>
+                        <ChatBubbleOutline fontSize="small" sx={{ color: theme.palette.text.secondary }} /><Typography sx={{ color: theme.palette.text.secondary }}>{commentNum}</Typography>
                     </Button>
                     <Button fullWidth variant="clear"
                         onClick={function () {
                             setShowEdit(pre => !pre)
                         }}
                         sx={{ bgcolor: "transparent", borderTopLeftRadius: 0, borderTopRightRadius: 0, "&:hover": { bgcolor: theme.colorBgObj } }}>
-                        <Edit fontSize="small"  sx={{ color:theme.palette.text.secondary}} />
+                        <Edit fontSize="small" sx={{ color: theme.palette.text.secondary }} />
                     </Button>
 
                 </Box>
@@ -273,7 +273,7 @@ export function ViewerContextProvider({
                     <SimpleEtx
                         contentId={preHtmlId}
                         key={preHtmlId}
-                        peopleList={["Ada", "分为二分", "Bob", "Cat", "Frank", "就能收到", "的我发dsd"]}
+                        peopleList={peopleList}
                         avatarPeopleList={["Bob"]}
                         genAvatarLink={genAvatarLink}
                         downloadAvatarUrl={downloadAvatarUrl}
@@ -300,7 +300,7 @@ export function ViewerContextProvider({
                     <CommentBlock
                         userName={userName}
                         contentId={preHtmlId} options={options} extractText={extractText}
-                        peopleList={["Ada", "分为二分", "Bob", "Cat", "Frank", "就能收到", "的我发dsd"]}
+                        peopleList={peopleList}
                         avatarPeopleList={["Bob"]}
                         genAvatarLink={genAvatarLink}
                         downloadAvatarUrl={downloadAvatarUrl}
@@ -316,7 +316,7 @@ export function ViewerContextProvider({
 
 
 
-    
+
             </Box>
         </ViewerContext.Provider>
     )

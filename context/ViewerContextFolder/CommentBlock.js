@@ -68,6 +68,7 @@ export default function CommentBlock({ contentId, options,
                         genAvatarLink={genAvatarLink}
                         setCommentArr={setCommentArr}
                         setCommentNum={setCommentNum}
+                        peopleList={peopleList}
                     />
                     // <Box key={comment._id}>
                     //     {parse(comment.content, options)}
@@ -107,7 +108,7 @@ export default function CommentBlock({ contentId, options,
 }
 
 
-function Comment({ comment, userName, options, downloadAvatarUrl, avatarPeopleList, genAvatarLink, setCommentArr, setCommentNum }) {
+function Comment({ comment, peopleList, userName, options, downloadAvatarUrl, avatarPeopleList, genAvatarLink, setCommentArr, setCommentNum }) {
 
     const theme = useTheme()
 
@@ -212,7 +213,7 @@ function Comment({ comment, userName, options, downloadAvatarUrl, avatarPeopleLi
                         <SimpleEtx
                             contentId={comment._id}
 
-                            peopleList={["Ada", "分为二分", "Bob", "Cat", "Frank", "就能收到", "的我发dsd"]}
+                            peopleList={peopleList}
                             avatarPeopleList={["Bob"]}
                             genAvatarLink={genAvatarLink}
                             downloadAvatarUrl={downloadAvatarUrl}

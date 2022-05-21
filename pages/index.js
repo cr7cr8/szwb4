@@ -105,6 +105,16 @@ function checkingCookie(req, res, next) {
 
 }
 
+function getPeopleList(req, res, next) {
+
+    return User.find({}).then(docs => {
+
+        next(docs.map(item => item.userName))
+
+    })
+
+
+}
 
 
 export async function getServerSideProps(context) {
@@ -113,6 +123,10 @@ export async function getServerSideProps(context) {
 
     const { params, query, req, res, ...props } = context
     const { themeMode, colorIndex } = await runMiddleware(req, res, checkingCookie)
+
+    const peopleList = await runMiddleware(req, res, getPeopleList)
+
+
 
     return TextBlock.find({}).sort({ postDate: -1 }).limit(123).then(docs => {
 
@@ -130,7 +144,9 @@ export async function getServerSideProps(context) {
                 contentArr: docs.map(doc => {
                     //  console.log(doc.postDate)
                     return { _id: doc._id, content: doc.content, ownerName: doc.ownerName, postDate: String(doc.postDate) }
-                })
+                }),
+                peopleList: peopleList,
+
             }
 
 
@@ -140,7 +156,7 @@ export async function getServerSideProps(context) {
 
 
 
-export default function App({ userName, contentArr = [] }) {
+export default function App({ userName, contentArr = [], peopleList }) {
 
     const windowObj = (typeof window === "undefined") ? {} : window
     const myLoader = ({ src }) => { return src }
@@ -191,7 +207,7 @@ export default function App({ userName, contentArr = [] }) {
                             //     })
                             // }}
                             userName={userName}
-                            peopleList={["UweF23", "UweF22", "TonyCerl", "JimWil", "大发发", "Jimberg", "m大Gsd哈"]}
+                            peopleList={peopleList}
                             avatarPeopleList={["UweF23", "TonyCerl", "大发发", "m大Gsd哈"]}
                             downloadAvatarUrl={`https://picsum.photos/200`}
                             genAvatarLink={function (downloadAvatarUrl, personName) {
@@ -229,7 +245,7 @@ export default function App({ userName, contentArr = [] }) {
                         return (
                             <NoSsr key={preHtmlObj._id}>
                                 <ViewerCtx
-                                    
+
                                     userName={userName}
                                     ownerName={preHtmlObj.ownerName}
                                     preHtml={preHtmlObj.content}
@@ -241,6 +257,7 @@ export default function App({ userName, contentArr = [] }) {
                                     downloadImageUrl="/api/picture/downloadPicture/" // commentOut when local
                                     downloadVoteUrl="/api/voteBlock/" // commentOut when local
 
+                                    peopleList={peopleList}
                                     avatarPeopleList={["UweF23", "TonyCerl", "大发发", "m大Gsd哈"]}
                                     downloadAvatarUrl={`https://picsum.photos/200`}
                                     genAvatarLink={function (downloadAvatarUrl, personName) {
