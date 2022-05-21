@@ -240,7 +240,14 @@ function Comment({ comment, userName, options, downloadAvatarUrl, avatarPeopleLi
 
 
                             <Collapse in={showSubComment} unmountOnExit={false}>
-                                <Box key={subComment._id} sx={{ bgcolor: theme.isLight ? theme.colorObj[100] : theme.colorObj[900] }}>
+                                <Box key={subComment._id}
+
+                                    sx={{
+                                        //bgcolor: theme.isLight ? theme.colorObj[100] : theme.colorObj[900]
+
+                                        bgcolor: theme.isLight ? "#eeeeee" : "#333333"
+                                        //   bgcolor:theme.palette.background.default
+                                    }}>
                                     <Divider />
                                     <Box sx={{ display: "flex", alignItems: "center", "py": "2px" }}>
                                         <AvatarChip
@@ -261,6 +268,17 @@ function Comment({ comment, userName, options, downloadAvatarUrl, avatarPeopleLi
                                             }}
                                             overtime={true}
                                         />
+
+                                        <IconButton size="small" sx={{ marginLeft: "auto" }} onClick={function () {
+                                            axios.delete(`/api/subCommentBlock/deleteSubComment/${subComment._id}`)
+                                            setSubCommentArr(pre => {
+
+                                                return pre.filter((item) => (item._id !== subComment._id))
+
+                                            })
+                                            setSubCommentNum(pre => pre - 1)
+
+                                        }}><Close fontSize="medium" /></IconButton>
 
 
                                     </Box>
