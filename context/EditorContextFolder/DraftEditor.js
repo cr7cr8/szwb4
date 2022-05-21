@@ -141,7 +141,7 @@ export default function DraftEditor() {
 
 
 
-  const [colorIn, setColorIn] = useState(true)
+  const [colorIn, setColorIn] = useState(false)
 
 
 
@@ -627,26 +627,29 @@ export default function DraftEditor() {
           }}
 
         />
-        <Button variant="clear" fullWidth disabled={disableSubmit} sx={{ boxShadow: 0, borderRadius: 0,"&:hover":{
-         opacity:0.8
+        <Button variant="clear" fullWidth disabled={disableSubmit}
+          sx={{
+            boxShadow: 0, borderRadius: 0,
+            "&:hover": { opacity: 0.8 },
+
+            position: "sticky", bottom: 0, 
+          }}
+          onClick={function () {
+            setDisableSubmit(true)
+            onSubmit && setTimeout(() => {
+              const preHtml = toPreHtml({ editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum })
+
+              const preHtmlObj = {
+                _id: String("content-" + Date.now()),
+                content: preHtml,
+                ownerName: userName,
+                postDate: new Date()
+              }
 
 
-        } }} onClick={function () {
-          setDisableSubmit(true)
-          onSubmit && setTimeout(() => {
-            const preHtml = toPreHtml({ editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum })
-
-            const preHtmlObj = {
-              _id: String("content-" + Date.now()),
-              content: preHtml,
-              ownerName: userName,
-              postDate: new Date()
-            }
-
-
-            onSubmit(preHtmlObj, { editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum, setDisableSubmit, clearState })
-          }, 0);
-        }}>
+              onSubmit(preHtmlObj, { editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum, setDisableSubmit, clearState })
+            }, 0);
+          }}>
           Submit
         </Button>
       </Paper>

@@ -99,7 +99,7 @@ export default function EditingBlock({ VoteBlock, readOnly, setReadOnly, marking
 
 
 
-                            transition: "box-shadow, background-color, transform, 300ms",
+                          //  transition: "box-shadow, background-color, transform, 300ms",
 
                             position: "relative",
                             zIndex: isCurrentRow ? 100 : 0,
@@ -119,7 +119,7 @@ export default function EditingBlock({ VoteBlock, readOnly, setReadOnly, marking
                             ...(blockType === "rightBlock") ? { left: 0 } : { right: 0 },
                             opacity: (isCurrentRow && !Boolean(currentBlockText) && (imageBlockNum < 3) && (blockType !== "imageBlock") && (blockType !== "voteBlock")) ? 1 : 0,
                             transform: (isCurrentRow && !Boolean(currentBlockText) && (imageBlockNum < 3) && (blockType !== "imageBlock") && (blockType !== "voteBlock")) ? "scale(1)" : "scale(0)",
-                            transition: "opacity, 300ms"
+                       //     transition: "opacity 300ms"
 
 
                         }}
@@ -149,7 +149,7 @@ export default function EditingBlock({ VoteBlock, readOnly, setReadOnly, marking
                             transform: (isCurrentRow && !Boolean(currentBlockText) && (blockType !== "imageBlock") && (blockType !== "voteBlock"))
                                 ? `scale(1) translateX(${blockType === "rightBlock" ? "100%" : "-100%"})`
                                 : `scale(0)`,
-                            transition: "opacity, 300ms",
+                           // transition: "opacity 300ms",
                             ...hasVoteBlock && { transform: "scale(0)" }
 
 

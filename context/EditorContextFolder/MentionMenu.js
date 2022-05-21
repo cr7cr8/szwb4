@@ -29,7 +29,7 @@ export default function MentionMenu({ tabIndex, setShowing, setTabName, nameList
     const anchor = useRef()
     useEffect(function () {
         const { x, width } = anchor.current.getBoundingClientRect()
-        if (x + width + 50 > window.innerWidth) {
+        if (x + width + 50 > Math.min(window.innerWidth, (window.innerWidth - 600) / 2 + 600)) { //when in dialog need (window.innerWidth - 600) / 2 + 600)
             setRight(1)
         }
         setOpacity(1)
@@ -49,7 +49,7 @@ export default function MentionMenu({ tabIndex, setShowing, setTabName, nameList
                 zIndex: 500,
                 opacity,
                 ...Boolean(right) && { right: 0 },
-                
+
             }}
         >
 
@@ -89,6 +89,8 @@ export function MentionMenuItem({ name, index, inTab, insertMention }) {
                 justifyContent: "flex-start",
                 zIndex: 1000,
                 backdropFilter: "blur(20px)",
+                bgcolor: theme.isLight ? "lightgray" : "#555",
+
 
                 color: theme.palette.text.secondary,
                 "&:hover": {
@@ -97,7 +99,7 @@ export function MentionMenuItem({ name, index, inTab, insertMention }) {
                     bgcolor: colorBgObj,
                 },
                 ...inTab === index && {
-                
+
                     color: theme.isLight ? colorObj[500] : colorObj[300],
                     bgcolor: colorBgObj,
                 }
@@ -116,7 +118,7 @@ export function MentionMenuItem({ name, index, inTab, insertMention }) {
                             // minWidth:"1.5rem",
                             // minHeight:"1.5rem",
                             transform: "scale(1.3)",
-                
+
                         }
                     }}
                 />}

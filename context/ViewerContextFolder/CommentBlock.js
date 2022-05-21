@@ -123,7 +123,7 @@ function Comment({ comment, peopleList, userName, options, downloadAvatarUrl, av
     useEffect(function () {
 
         axios.get(`/api/subCommentBlock/getSubComment/${comment._id}`).then(response => {
-            console.log(response.data)
+         //   console.log(response.data)
             setSubCommentArr(response.data)
         })
 
