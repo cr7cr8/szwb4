@@ -1,4 +1,4 @@
-const { subCommentBlock } = require("../../../../db/schema")
+const { SubCommentBlock } = require("../../../../db/schema")
 
 
 
@@ -7,7 +7,7 @@ export default function handler(req, res) {
 
     // console.log(req.query.contentId)
 
-    return subCommentBlock.countDocuments({ commentId: req.query.commentId }).then(num => {
+    return SubCommentBlock.countDocuments({ commentId: req.query.commentId }).then(num => {
 
 
 

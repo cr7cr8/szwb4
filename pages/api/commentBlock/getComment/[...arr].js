@@ -1,4 +1,4 @@
-const { commentBlock } = require("../../../../db/schema")
+const { CommentBlock } = require("../../../../db/schema")
 
 
 
@@ -11,7 +11,7 @@ export default function handler(req, res) {
 
  // console.log(beforeTime)
 
-  return commentBlock.find({
+  return CommentBlock.find({
     contentId: contentId,
     postDate: { $lt: beforeTime }
 

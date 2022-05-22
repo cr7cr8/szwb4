@@ -1,4 +1,4 @@
-const { commentBlock } = require("../../../db/schema")
+const { CommentBlock } = require("../../../db/schema")
 
 
 
@@ -6,7 +6,7 @@ const { commentBlock } = require("../../../db/schema")
 export default function handler(req, res) {
 
 
-    return commentBlock.create({
+    return CommentBlock.create({
         ...req.body,
     }).then(doc => {
       //  console.log(doc)

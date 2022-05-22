@@ -1,18 +1,18 @@
-const { commentBlock } = require("../../../../db/schema")
-const { subCommentBlock } = require("../../../../db/schema")
+const { CommentBlock } = require("../../../../db/schema")
+const { SubCommentBlock } = require("../../../../db/schema")
 
 
 
 export default function handler(req, res) {
 
-    subCommentBlock.deleteMany({
+    SubCommentBlock.deleteMany({
         commentId: req.query.commentId
     }).then(doc=>{
         console.log(doc)
     })
 
 
-    return commentBlock.deleteOne({
+    return CommentBlock.deleteOne({
         _id: req.query.commentId
     }).then(docs => {
 

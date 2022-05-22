@@ -1,4 +1,4 @@
-const { subCommentBlock } = require("../../../../db/schema")
+const { SubCommentBlock } = require("../../../../db/schema")
 
 
 
@@ -6,7 +6,7 @@ const { subCommentBlock } = require("../../../../db/schema")
 export default function handler(req, res) {
 
 
-    return subCommentBlock.deleteOne({
+    return SubCommentBlock.deleteOne({
         _id: req.query.subCommentId
     }).then(docs => {
 

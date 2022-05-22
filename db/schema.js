@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
-const { connSzwb4DB } = require("./db")
+
+
+//const { connSzwb4DB } = require("./db")
 
 
 
@@ -80,11 +82,11 @@ const voteBlockSchema = new mongoose.Schema({
     //  timestamps: true, 
 })
 
-const User = connSzwb4DB.model("user", userSchema);
-const VoteBlock = connSzwb4DB.model("voteBlocks", voteBlockSchema);
-const TextBlock = connSzwb4DB.model("textBlocks", textBlockSchema);
-const commentBlock = connSzwb4DB.model("commentBlocks", commentBlockSchema);
-const subCommentBlock = connSzwb4DB.model("subCommentBlocks", subCommentBlockSchema);
+const User = mongoose.models?.User || mongoose.model("User", userSchema);
+const VoteBlock = mongoose.models?.VoteBlock || mongoose.model("VoteBlock", voteBlockSchema);
+const TextBlock = mongoose.models?.TextBlock || mongoose.model("TextBlock", textBlockSchema);
+const CommentBlock = mongoose.models?.CommentBlock || mongoose.model("CommentBlock", commentBlockSchema);
+const SubCommentBlock = mongoose.models?.SubCommentBlock || mongoose.model("SubCommentBlock", subCommentBlockSchema);
 
 
-module.exports = { User, VoteBlock, TextBlock, commentBlock, subCommentBlock }
+module.exports = { User, VoteBlock, TextBlock, CommentBlock, SubCommentBlock }
