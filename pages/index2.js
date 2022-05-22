@@ -122,7 +122,7 @@ function getPeopleList(req, res, next) {
 function getAvatarList(req, res, next) {
 
     return User.find({ hasAvatar: true }).then(docs => {
-
+        console.log(docs)
         next(docs.map(item => item.userName))
 
     })
@@ -468,7 +468,7 @@ export default function App({ userName, contentArr = [], peopleList, avatarList 
 
                                             peopleList={peopleList}
                                             avatarPeopleList={avatarPeopleList}
-                                            downloadAvatarUrl={`/api/picture/downloadPicture/`}
+                                            downloadAvatarUrl={`/api/avatar/downloadAvatar/`}
                                             genAvatarLink={function (downloadAvatarUrl, personName) {
                                                 return downloadAvatarUrl + personName
                                             }}

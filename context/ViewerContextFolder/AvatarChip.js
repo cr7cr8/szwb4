@@ -113,6 +113,7 @@ export default function AvatarChip({ personName, children, bgTrans = false, icon
         : `url(${"data:image/svg+xml;base64," + btoa(multiavatar(personName))})`
 
 
+        
     return (
 
         <Box //contentEditable={false} suppressContentEditableWarning={true}
