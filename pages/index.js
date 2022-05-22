@@ -119,6 +119,23 @@ function getPeopleList(req, res, next) {
 
 }
 
+function getAvatarList(req, res, next) {
+
+    return User.find({ hasAvatar: true }).then(docs => {
+
+        next(docs.map(item => item.userName))
+
+    })
+
+
+}
+
+
+
+
+
+
+
 function getTextBlock(req, res, next) {
 
     return TextBlock.find({}).sort({ postDate: -1 }).limit(123).then(docs => {
@@ -140,8 +157,8 @@ export async function getServerSideProps(context) {
 
     const { themeMode, colorIndex } = await runMiddleware(req, res, checkingCookie)
     const peopleList = await runMiddleware(req, res, getPeopleList)
+    const avatarList = await runMiddleware(req, res, getAvatarList)
     const contentArr = await runMiddleware(req, res, getTextBlock)
-
 
     return {
         ...(!req.userName) && {
@@ -156,7 +173,7 @@ export async function getServerSideProps(context) {
             themeMode: themeMode ?? "light",
             contentArr,
             peopleList,
-
+            avatarList,
         }
 
 
@@ -166,7 +183,7 @@ export async function getServerSideProps(context) {
 
 
 
-export default function App({ userName, contentArr = [], peopleList }) {
+export default function App({ userName, contentArr = [], peopleList, avatarList }) {
 
     const windowObj = (typeof window === "undefined") ? {} : window
     const myLoader = ({ src }) => { return src }
@@ -178,6 +195,8 @@ export default function App({ userName, contentArr = [], peopleList }) {
 
 
     const [postArr, setPostArr] = useState(contentArr)
+    const [avatarPeopleList, setAvatarPeopleList] = useState(avatarList?.length ? avatarList : [])
+    const [showAvatarPanel, setShowAvatarPanel] = useState(false)
 
     const theme = useTheme()
     const breakpointColumnsObj = {
@@ -210,7 +229,9 @@ export default function App({ userName, contentArr = [], peopleList }) {
                 scroll={"body"}
                 sx={{}}
             > */}
-            <ImageAdjuster userName={userName} />
+            {showAvatarPanel && <ImageAdjuster userName={userName} avatarPeopleList={avatarPeopleList}
+                setAvatarPeopleList={setAvatarPeopleList}
+                setShowAvatarPanel={setShowAvatarPanel} />}
             {/* </Dialog> */}
 
 
@@ -220,11 +241,11 @@ export default function App({ userName, contentArr = [], peopleList }) {
 
                 <Avatar
                     alt="Remy Sharp"
-                    src="https://picsum.photos/200"
+                    src={avatarPeopleList.includes(userName) ? "/api/avatar/downloadAvatar/" + userName : ""}
                     sx={{ width: 50, height: 50 }}
 
                     onClick={function () {
-                        alert("ff")
+                        setShowAvatarPanel(true)
                     }}
                 />
 
@@ -293,10 +314,10 @@ export default function App({ userName, contentArr = [], peopleList }) {
                             // }}
                             userName={userName}
                             peopleList={peopleList}
-                            avatarPeopleList={["User380"]}
-                            downloadAvatarUrl={`https://picsum.photos/200`}
+                            avatarPeopleList={avatarPeopleList}
+                            downloadAvatarUrl={`/api/avatar/downloadAvatar/`}
                             genAvatarLink={function (downloadAvatarUrl, personName) {
-                                return downloadAvatarUrl// + personName
+                                return downloadAvatarUrl + personName
                             }}
 
                             onSubmit={function (preHtmlObj, { editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum, setDisableSubmit, clearState }) {
@@ -406,10 +427,10 @@ export default function App({ userName, contentArr = [], peopleList }) {
                                     downloadVoteUrl="/api/voteBlock/" // commentOut when local
 
                                     peopleList={peopleList}
-                                    avatarPeopleList={["User380"]}
-                                    downloadAvatarUrl={`https://picsum.photos/200`}
+                                    avatarPeopleList={avatarPeopleList}
+                                    downloadAvatarUrl={`/api/avatar/downloadAvatar/`}
                                     genAvatarLink={function (downloadAvatarUrl, personName) {
-                                        return downloadAvatarUrl// + personName
+                                        return downloadAvatarUrl + personName
                                     }}
 
                                 />
@@ -577,7 +598,7 @@ function uploadVote({ voteArr, voteTopic, pollDuration, voteId, postId }) {
 
 
 
-function ImageAdjuster({ userName }) {
+function ImageAdjuster({ userName, avatarPeopleList, setAvatarPeopleList, setShowAvatarPanel }) {
 
     const [isPending, startTransition] = useTransition()
     const [crop, setCrop] = useState({ x: 0, y: 0 })
@@ -594,7 +615,9 @@ function ImageAdjuster({ userName }) {
 
     // const avatarString = `https://picsum.photos/200/500`
 
-    const [avatarString, setAvatarString] = useState(`https://picsum.photos/200/500`)
+    const [avatarString, setAvatarString] = useState(avatarPeopleList.includes(userName)
+        ? `/api/avatar/downloadAvatar/${userName}`
+        : "data:image/svg+xml;base64," + btoa(multiavatar(userName)))
 
     function update(e) {
         e.stopPropagation()
@@ -622,11 +645,23 @@ function ImageAdjuster({ userName }) {
                     justifyContent: "center", alignItems: "center",
                     bgcolor: "rgba( 0,0,0,0.5 )",
                     '& div[data-testid*="cropper"]': { borderRadius: "1000px" }
-                }}>
-                <Box sx={{
-                    width: 300, height: 300, position: "relative",// bgcolor: "lightgreen", borderRadius: "1000px" ,
-                    // overflow:"hidden"
-                }}>
+                }}
+
+                onClick={function () {
+                    setShowAvatarPanel(false)
+                }}
+
+            >
+                <Box
+                    onClick={function (e) {
+                        e.stopPropagation()
+                    }}
+
+
+                    sx={{
+                        width: 300, height: 300, position: "relative",// bgcolor: "lightgreen", borderRadius: "1000px" ,
+                        // overflow:"hidden"
+                    }}>
                     <Cropper image={avatarString}
                         aspect={1}
                         crop={crop}
@@ -681,28 +716,34 @@ function ImageAdjuster({ userName }) {
                             )
 
                             // setOpen(false)
-                             setAvatarString(croppedImage)
+                            setAvatarString(croppedImage)
 
-                             setCrop({x:0,y:0})
-                             setZoom(1)
+                            setCrop({ x: 0, y: 0 })
+                            setZoom(1)
 
-                            // fetch(croppedImage)
-                            //     .then(file => {
-                            //         return file.blob()
-                            //     })
-                            //     .then(blobData => {
+                            fetch(croppedImage)
+                                .then(file => {
+                                    return file.blob()
+                                })
+                                .then(blobData => {
 
-                            //         const data = new FormData();
+                                    const data = new FormData();
 
-                            //         data.append("file", new File([blobData], userName, { type: "image/jpeg" }))
-                            //         data.append('obj', JSON.stringify({ ownerName: userName }));
+                                    data.append("file", new File([blobData], userName, { type: "image/jpeg" }))
+                                    data.append('obj', JSON.stringify({ ownerName: userName }));
 
-                            //         return axios.post(`${url}/api/user/uploadBanerPic`, data, {
-                            //             headers: { 'content-type': 'multipart/form-data' },
-                            //         }).then(response => {
-                            //             console.log(response.data)
-                            //         })
-                            //     })
+                                    return axios.post(`/api/avatar/uploadAvatar/${userName}`, data, {
+                                        headers: { 'content-type': 'multipart/form-data' },
+                                    }).then(response => {
+                                        console.log(response.data)
+                                        if (!avatarPeopleList.includes(userName)) {
+                                            setAvatarPeopleList(pre => ([...pre, userName]))
+                                        
+                                        }
+                                        setShowAvatarPanel(false)
+                                        location.reload(); 
+                                    })
+                                })
                         }}
                     >
                         <Crop fontSize="large" sx={{ "&:hover": { bgcolor: "rgba(255,255,255,0.5)", borderRadius: "1000px" } }} />

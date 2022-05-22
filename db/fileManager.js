@@ -21,6 +21,7 @@ function createFileManager(connDB, collectionName) {
     downloadFile: function (req, res, next) { downloadFile(connDB, collectionName, req, res, next) },
     deleteFileByUserName: function (req, res, next) { deleteFileByUserName(connDB, collectionName, req, res, next) },
 
+    deleteFileByFileName: function (req, res, next) { deleteFileByFileName(connDB, collectionName, req, res, next) },
 
     isFileThere: function (req, res, next) { return isFileThere(connDB, collectionName, req, res, next) },
 
@@ -274,6 +275,38 @@ function isFileThere(connDB, collectionName, req, res, next) {
   //  return cursor.hasNext()
 
 
+
+}
+
+
+
+
+function deleteFileByFileName(connDB, collectionName, req, res, next) {
+
+  var gfs = new mongoose.mongo.GridFSBucket(connDB.db, {
+    chunkSizeBytes: 255 * 1024,
+    bucketName: collectionName,
+  });
+  const cursor = gfs.find({ 'filename': req.userName, /* "metadata.owner": req.user.username */ }, { limit: 1000 })
+
+  console.log("------", req.userName)
+
+  cursor.toArray().then(function (fileArr) {
+    if (fileArr.length === 0) { next() }
+    fileArr.forEach(function (doc, index) {
+      gfs.delete(mongoose.Types.ObjectId(doc._id), function (err) {
+        err
+          ? console.log(err)
+          : console.log("file " + doc.filename  + " deleted");
+        if (fileArr.length - 1 === index) {
+          next()
+        }
+
+      })
+
+    })
+
+  })
 
 }
 

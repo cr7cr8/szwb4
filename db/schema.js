@@ -11,7 +11,8 @@ const userSchema = new mongoose.Schema({
     description: { type: String, default: "Nothing wrritten yet ..." },
     colorIndex: { type: Number, default: 5 },
     themeMode: { type: String, default: "light" },
-    createDate: { type: Date, default: Date.now }
+    createDate: { type: Date, default: Date.now },
+    hasAvatar: { type: Boolean, default: false }
 
 }, {
     toObject: { virtuals: true },
