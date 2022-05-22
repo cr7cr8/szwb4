@@ -122,7 +122,7 @@ function getPeopleList(req, res, next) {
 function getAvatarList(req, res, next) {
 
     return User.find({ hasAvatar: true }).then(docs => {
-        console.log(docs)
+
         next(docs.map(item => item.userName))
 
     })
@@ -403,7 +403,7 @@ export default function App({ userName, contentArr = [], peopleList, avatarList 
 
 
 
-{/* 
+                {/* 
                 <Masonry
                     breakpointCols={breakpointColumnsObj}
                     className="my-masonry-grid"
@@ -738,10 +738,10 @@ function ImageAdjuster({ userName, avatarPeopleList, setAvatarPeopleList, setSho
                                         console.log(response.data)
                                         if (!avatarPeopleList.includes(userName)) {
                                             setAvatarPeopleList(pre => ([...pre, userName]))
-                                        
+
                                         }
                                         setShowAvatarPanel(false)
-                                        location.reload(); 
+                                        location.reload();
                                     })
                                 })
                         }}
