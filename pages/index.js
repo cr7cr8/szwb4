@@ -156,7 +156,7 @@ function getTextBlock(req, res, next) {
 }
 
 export async function getServerSideProps(context) {
-     const conn = await dbConnect["default"]() 
+    const conn = await dbConnect["default"]()
 
 
 
@@ -259,7 +259,7 @@ export default function App({ userName, contentArr = [], peopleList, avatarList,
 
                             <Avatar
                                 alt="Remy Sharp"
-                                src={avatarPeopleList.includes(userName) ? "/api/avatar/downloadAvatar/" + userName : ""}
+                                src={avatarPeopleList.includes(userName) ? "/api/avatar/downloadAvatar/" + userName : "data:image/svg+xml;base64," + btoa(multiavatar(userName))} 
                                 sx={{ width: 50, height: 50, "&:hover": { cursor: "pointer" } }}
 
                                 onClick={function () {
