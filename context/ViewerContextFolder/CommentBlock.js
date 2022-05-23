@@ -137,7 +137,7 @@ function Comment({ comment, peopleList, userName, options, downloadAvatarUrl, av
 
 
     return (
-        <>
+   
             <Box key={comment._id} >
                 <Divider />
                 <Box sx={{ display: "flex", alignItems: "center", "py": "2px" }}>
@@ -230,8 +230,8 @@ function Comment({ comment, peopleList, userName, options, downloadAvatarUrl, av
                         return (
 
 
-                            <Collapse in={showSubComment} unmountOnExit={false}>
-                                <Box key={subComment._id}
+                            <Collapse in={showSubComment} unmountOnExit={false}  key={subComment._id}> 
+                                <Box
 
                                     sx={{
                                         //bgcolor: theme.isLight ? theme.colorObj[100] : theme.colorObj[900]
@@ -305,7 +305,7 @@ function Comment({ comment, peopleList, userName, options, downloadAvatarUrl, av
             </Box>
 
 
-        </>
+     
     )
 
 }

@@ -1,4 +1,4 @@
-import React, { useState, createContext, useMemo, useId, useDeferredValue, useCallback, memo, useEffect } from "react"
+import React, { useState, createContext, useMemo, useId, useDeferredValue, useCallback, memo, useEffect, useRef } from "react"
 
 import {
     EditorState, ContentState, ContentBlock, CharacterMetadata, SelectionState, convertToRaw, convertFromRaw,
@@ -45,7 +45,8 @@ export function ViewerContextProvider({
     preHtml,
     setPostArr,
     peopleList = [], avatarPeopleList = [], genAvatarLink = () => { },
-    downloadImageUrl = "", downloadVoteUrl = "", downloadAvatarUrl = ""
+    downloadImageUrl = "", downloadVoteUrl = "", downloadAvatarUrl = "",
+    setPostCount,
 }) {
 
     const theme = useTheme()
@@ -195,6 +196,18 @@ export function ViewerContextProvider({
 
     }, [])
 
+    const contentRef = useRef()
+    const [contentHeight, setContentHeight] = useState(9999)
+
+    useEffect(function () {
+        console.log(window.getComputedStyle(contentRef.current).height)
+
+        if (Number(window.getComputedStyle(contentRef.current).height.replace("px", "")) > 500) {
+
+            setContentHeight(299.123)
+        }
+
+    }, [])
 
     return (
 
@@ -241,14 +254,30 @@ export function ViewerContextProvider({
                     <IconButton size="small" sx={{ marginLeft: "auto" }} onClick={function () {
                         axios.delete(`/api/textBlock/deleteText/${preHtmlId}`)
                         setPostArr(pre => pre.filter(preHtmlObj => preHtmlObj._id !== preHtmlId))
+                        setPostCount(pre => pre - 1)
                     }}>
                         <Close fontSize="medium" />
 
                     </IconButton>
                 </Box>
-                {parse(preHtml, options)}
+                <Box ref={contentRef} sx={{ maxHeight: contentHeight, overflow: "hidden", position: "relative" }} >
 
-                <Box sx={{ display: "flex", px: "0px", py: "0px", alignItems: "center", justifyContent: "space-between", "& .MuiBox-root": { fontSize: theme.sizeObj } }}>
+                    {parse(preHtml, options)}
+                    {contentHeight === 299.123 && <Button fullWidth
+
+                        sx={{
+                            position: "absolute", bottom: 0, bgcolor: theme.colorBgObj,
+                        }}
+                        onClick={function () {
+                            setContentHeight(9999)
+                        }}
+                    >show</Button>}
+                </Box>
+                <Box
+                    sx={{
+                        display: "flex", px: "0px", py: "0px", alignItems: "center", position: "relative",
+                        justifyContent: "space-between", "& .MuiBox-root": { fontSize: theme.sizeObj }
+                    }}>
 
 
 
@@ -256,21 +285,34 @@ export function ViewerContextProvider({
                         onClick={function () {
                             setShowComment(pre => !pre)
                         }}
-                        sx={{ bgcolor: "transparent", borderTopLeftRadius: 0, borderTopRightRadius: 0, "&:hover": { bgcolor: theme.colorBgObj } }}>
+                        sx={{
+                            bgcolor: "transparent",
+                            height: "39px",
+                            bottom: 0, borderTopLeftRadius: 0, borderTopRightRadius: 0,
+                            "&:hover": { bgcolor: theme.isLight ? theme.colorObj[100] : theme.colorObj[800] }
+                        }}
+                    >
                         <ChatBubbleOutline fontSize="small" sx={{ color: theme.palette.text.secondary }} />
                         {commentNum}
-                        
+
                     </Button>
                     <Button fullWidth variant="clear"
                         onClick={function () {
                             setShowEdit(pre => !pre)
                         }}
-                        sx={{ bgcolor: "transparent", borderTopLeftRadius: 0, borderTopRightRadius: 0, "&:hover": { bgcolor: theme.colorBgObj } }}>
+                        sx={{
+                            bgcolor: "transparent",
+                            height: "39px",
+                            borderTopLeftRadius: 0, borderTopRightRadius: 0,
+                            "&:hover": { bgcolor: theme.isLight ? theme.colorObj[100] : theme.colorObj[800] }
+                        }}
+                    >
                         <Edit fontSize="small" sx={{ color: theme.palette.text.secondary }} />
+
                     </Button>
 
                 </Box>
-                {/* {(showComment) && (!showEdit) && <Divider />} */}
+
                 <Collapse in={showEdit} unmountOnExit={true}>
                     <SimpleEtx
                         contentId={preHtmlId}
