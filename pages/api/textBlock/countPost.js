@@ -1,4 +1,4 @@
-const { TextBlock } = require("../../../../db/schema")
+const { TextBlock } = require("../../../db/schema")
 
 
 

@@ -1,10 +1,9 @@
 const multer = require("multer");
 const mongoose = require("mongoose");
 const GridFsStorage = require("multer-gridfs-storage");
-//const { connSzwb4DB } = require("./db")
+
 const Jimp = require('jimp');
 
-const connSzwb4DB = null
 
 function createFileManager(connDB, collectionName) {
 
@@ -12,21 +11,21 @@ function createFileManager(connDB, collectionName) {
 
     return {
   
-      checkConnState: function (req, res, next) { checkConnState(mongoose.connection, collectionName, req, res, next) },
+      checkConnState: function (req, res, next) { checkConnState(connDB, collectionName, req, res, next) },
       getFileArray: multer({ storage: multer.memoryStorage() }).array("file", 789 /*789 is max count,default infinity*/),
   
-      uploadFile: function (req, res, next) { uploadFile(mongoose.connection, collectionName, req, res, next) },
-      downloadFile: function (req, res, next) { downloadFile(mongoose.connection, collectionName, req, res, next) },
-      deleteFileByUserName: function (req, res, next) { deleteFileByUserName(mongoose.connection, collectionName, req, res, next) },
+      uploadFile: function (req, res, next) { uploadFile(connDB, collectionName, req, res, next) },
+      downloadFile: function (req, res, next) { downloadFile(connDB, collectionName, req, res, next) },
+      deleteFileByUserName: function (req, res, next) { deleteFileByUserName(connDB, collectionName, req, res, next) },
   
-      deleteFileByFileName: function (req, res, next) { deleteFileByFileName(mongoose.connection, collectionName, req, res, next) },
+      deleteFileByFileName: function (req, res, next) { deleteFileByFileName(connDB, collectionName, req, res, next) },
   
-      isFileThere: function (req, res, next) { return isFileThere(mongoose.connection, collectionName, req, res, next) },
+      isFileThere: function (req, res, next) { return isFileThere(connDB, collectionName, req, res, next) },
   
-      downloadFileByName: function (req, res, next) { downloadFileByName(mongoose.connection, collectionName, req, res, next) },
-      deleteFileByPostID: function (req, res, next) { deleteFileByPostID(mongoose.connection, collectionName, req, res, next) },
-      getSmallImageArray: function (req, res, next) { return getSmallImageArray(mongoose.connection, collectionName, req, res, next) },
-      getSmallImageArray2: function (req, res, next) { return getSmallImageArray2(mongoose.connection, collectionName, req, res, next) },
+      downloadFileByName: function (req, res, next) { downloadFileByName(connDB, collectionName, req, res, next) },
+      deleteFileByPostID: function (req, res, next) { deleteFileByPostID(connDB, collectionName, req, res, next) },
+      getSmallImageArray: function (req, res, next) { return getSmallImageArray(connDB, collectionName, req, res, next) },
+      getSmallImageArray2: function (req, res, next) { return getSmallImageArray2(connDB, collectionName, req, res, next) },
   
       connDB,
       collectionName,
@@ -36,33 +35,6 @@ function createFileManager(connDB, collectionName) {
 
 
 
-// function createFileManager(connDB, collectionName) {
-
-
-
-//   return {
-
-//     checkConnState: function (req, res, next) { checkConnState(connDB, collectionName, req, res, next) },
-//     getFileArray: multer({ storage: multer.memoryStorage() }).array("file", 789 /*789 is max count,default infinity*/),
-
-//     uploadFile: function (req, res, next) { uploadFile(connDB, collectionName, req, res, next) },
-//     downloadFile: function (req, res, next) { downloadFile(connDB, collectionName, req, res, next) },
-//     deleteFileByUserName: function (req, res, next) { deleteFileByUserName(connDB, collectionName, req, res, next) },
-
-//     deleteFileByFileName: function (req, res, next) { deleteFileByFileName(connDB, collectionName, req, res, next) },
-
-//     isFileThere: function (req, res, next) { return isFileThere(connDB, collectionName, req, res, next) },
-
-//     downloadFileByName: function (req, res, next) { downloadFileByName(connDB, collectionName, req, res, next) },
-//     deleteFileByPostID: function (req, res, next) { deleteFileByPostID(connDB, collectionName, req, res, next) },
-//     getSmallImageArray: function (req, res, next) { return getSmallImageArray(connDB, collectionName, req, res, next) },
-//     getSmallImageArray2: function (req, res, next) { return getSmallImageArray2(connDB, collectionName, req, res, next) },
-
-//     connDB,
-//     collectionName,
-
-//   }
-// }
 
 
 
@@ -530,7 +502,7 @@ function getSmallImageArray2(connDB, collectionName, req, res, next,) {
 module.exports = [
 
   {
-    ...createFileManager(connSzwb4DB, "picture"),
+    ...createFileManager(mongoose.connection, "picture"),
     uploadFile_: uploadFile,
     downloadFile_: downloadFile,
     deleteFileById_: deleteFileById,
@@ -538,7 +510,7 @@ module.exports = [
   },
 
   {
-    ...createFileManager(connSzwb4DB, "avatar"),
+    ...createFileManager(mongoose.connection, "avatar"),
     uploadFile_: uploadFile,
     downloadFile_: downloadFile,
     deleteFileById_: deleteFileById,
@@ -547,7 +519,7 @@ module.exports = [
   },
 
   {
-    ...createFileManager(connSzwb4DB, "banerPic"),
+    ...createFileManager(mongoose.connection, "banerPic"),
     uploadFile_: uploadFile,
     downloadFile_: downloadFile,
     deleteFileById_: deleteFileById,

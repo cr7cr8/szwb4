@@ -156,8 +156,7 @@ function getTextBlock(req, res, next) {
 }
 
 export async function getServerSideProps(context) {
-    // const conn = await dbConnect["default"]()
-
+     const conn = await dbConnect["default"]() 
 
 
 
