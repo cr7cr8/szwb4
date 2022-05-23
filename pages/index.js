@@ -213,9 +213,6 @@ export default function App({ userName, contentArr = [], peopleList, avatarList,
 
     const theme = useTheme()
 
-
-    const [myAvatar, setMyAvatar] = useState()
-
     return (
         <>
             <Head>
