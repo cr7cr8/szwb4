@@ -215,7 +215,7 @@ export default function VoteViewerBlock({ topic, duration, voteArr, voteId, expi
                 {totalVotes} Votes
             </Typography> */}
 
-            <Countdown date={Date.parse(new Date(expireDate))} intervalDelay={1 * 1000}
+            <Countdown date={Date.parse(new Date(expireDate))} intervalDelay={Math.abs((Date.now() - Date.parse(new Date(expireDate)))) > (3600 * 1000 ) ? 3600 * 1000 : 1 * 1000}
                 renderer={function ({ days, hours, minutes, seconds, completed, ...props }) {
                     return <TimeRender  {...{ days, hours, minutes, seconds, completed, expireTime, totalVotes, ...props }} />
                 }}

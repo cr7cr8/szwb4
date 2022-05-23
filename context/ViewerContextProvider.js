@@ -49,6 +49,11 @@ export function ViewerContextProvider({
     setPostCount,
 }) {
 
+    
+
+    const intervalDelay = (Date.now() - postDate) > (3600 * 1000) ? 3600 * 1000 : 60 * 1000
+
+
     const theme = useTheme()
     const colorObj = theme.colorObj
     const colorBgObj = theme.colorBgObj
@@ -243,7 +248,7 @@ export function ViewerContextProvider({
 
 
                     <NoSsr>
-                        <Countdown date={new Date(postDate)} intervalDelay={1 * 1000}
+                        <Countdown date={new Date(postDate)} intervalDelay={intervalDelay}
                             renderer={function ({ days, hours, minutes, seconds, completed, ...props }) {
                                 return <PostTimeRender  {...{ days, hours, minutes, seconds, completed, ...props }} />
                             }}

@@ -168,6 +168,7 @@ export async function getServerSideProps(context) {
     const postNum = await runMiddleware(req, res, getPostNum)
     const contentArr = await runMiddleware(req, res, getTextBlock)
 
+
     return {
         ...(!req.userName) && {
             redirect: {
@@ -222,6 +223,7 @@ export default function App({ userName, contentArr = [], peopleList, avatarList,
     // };
 
 
+    const [myAvatar, setMyAvatar] = useState()
 
     return (
         <>
@@ -259,7 +261,7 @@ export default function App({ userName, contentArr = [], peopleList, avatarList,
 
                             <Avatar
                                 alt="Remy Sharp"
-                                src={avatarPeopleList.includes(userName) ? "/api/avatar/downloadAvatar/" + userName : "data:image/svg+xml;base64," + btoa(multiavatar(userName))} 
+                                src={avatarPeopleList.includes(userName) ? "/api/avatar/downloadAvatar/" + userName : "data:image/svg+xml;base64," + btoa(multiavatar(userName))}
                                 sx={{ width: 50, height: 50, "&:hover": { cursor: "pointer" } }}
 
                                 onClick={function () {
@@ -602,7 +604,7 @@ function ImageAdjuster({ userName, avatarPeopleList, setAvatarPeopleList, setSho
                                 rotation,
                             )
 
-                            // setOpen(false)
+                   
                             setAvatarString(croppedImage)
 
                             setCrop({ x: 0, y: 0 })
@@ -664,7 +666,7 @@ function ImageAdjuster({ userName, avatarPeopleList, setAvatarPeopleList, setSho
 
                         }}
                     />
-
+    <Button fullWidth >upload</Button>
 
                 </Box>
 

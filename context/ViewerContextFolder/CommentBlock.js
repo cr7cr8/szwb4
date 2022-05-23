@@ -40,6 +40,7 @@ export default function CommentBlock({ contentId, options,
     const [disableButton, setDisableButton] = useState(false)
 
 
+
     useEffect(function () {
 
         axios.get(`/api/commentBlock/getComment/${contentId}`).then(response => {
@@ -120,10 +121,12 @@ function Comment({ comment, peopleList, userName, options, downloadAvatarUrl, av
 
     const [disableButton, setDisableButton] = useState(false)
 
+    const intervalDelay = (Date.now() - comment.postDate) > (3600 * 1000) ? 3600 * 1000 : 60 * 1000
+
     useEffect(function () {
 
         axios.get(`/api/subCommentBlock/getSubComment/${comment._id}`).then(response => {
-         //   console.log(response.data)
+            //   console.log(response.data)
             setSubCommentArr(response.data)
         })
 
@@ -137,175 +140,175 @@ function Comment({ comment, peopleList, userName, options, downloadAvatarUrl, av
 
 
     return (
-   
-            <Box key={comment._id} >
-                <Divider />
-                <Box sx={{ display: "flex", alignItems: "center", "py": "2px" }}>
-                    <AvatarChip
-                        bgTrans={true}
-                        personName={comment.ownerName}
-                        downloadAvatarUrl={downloadAvatarUrl}
-                        avatarPeopleList={avatarPeopleList}
-                        genAvatarLink={genAvatarLink}
-                        iconOn={true}
-                    >
-                        <span>{comment.ownerName}</span>
-                    </AvatarChip>
+
+        <Box key={comment._id} >
+            <Divider />
+            <Box sx={{ display: "flex", alignItems: "center", "py": "2px" }}>
+                <AvatarChip
+                    bgTrans={true}
+                    personName={comment.ownerName}
+                    downloadAvatarUrl={downloadAvatarUrl}
+                    avatarPeopleList={avatarPeopleList}
+                    genAvatarLink={genAvatarLink}
+                    iconOn={true}
+                >
+                    <span>{comment.ownerName}</span>
+                </AvatarChip>
 
 
-                    <Countdown date={new Date(comment.postDate)} intervalDelay={1 * 1000}
-                        renderer={function ({ days, hours, minutes, seconds, completed, ...props }) {
-                            return <PostTimeRender  {...{ days, hours, minutes, seconds, completed, ...props }} />
-                        }}
-                        overtime={true}
-                    />
+                <Countdown date={new Date(comment.postDate)} intervalDelay={intervalDelay}
+                    renderer={function ({ days, hours, minutes, seconds, completed, ...props }) {
+                        return <PostTimeRender  {...{ days, hours, minutes, seconds, completed, ...props }} />
+                    }}
+                    overtime={true}
+                />
 
-                    <IconButton size="small" sx={{ marginLeft: "auto" }} onClick={function () {
-                        axios.delete(`/api/commentBlock/deleteComment/${comment._id}`)
-                        setCommentArr(pre => {
+                <IconButton size="small" sx={{ marginLeft: "auto" }} onClick={function () {
+                    axios.delete(`/api/commentBlock/deleteComment/${comment._id}`)
+                    setCommentArr(pre => {
 
-                            return pre.filter((item) => (item._id !== comment._id))
-
-                        })
-                        setCommentNum(pre => pre - 1)
-
-                    }}><Close fontSize="medium" /></IconButton>
-
-                </Box>
-
-
-
-                <Box sx={{ display: "flex", alignItems: "center", paddingBottom: "4px" }}>
-                    {parse(comment.content, options)}
-                </Box>
-
-
-                <Box sx={{ display: "flex", px: "0px", py: "0px", alignItems: "center", justifyContent: "space-between", "& .MuiBox-root": { fontSize: theme.sizeObj } }}>
-
-                    <Button fullWidth variant='clear' sx={{ bgcolor: "transparent" }}
-                        onClick={function () {
-                            setShowSubComment(pre => !pre)
-
-                        }}
-
-                    ><ChatBubbleOutline fontSize="medium" />{subCommentNum}</Button>
-                    <Button fullWidth variant='clear' sx={{ bgcolor: "transparent" }}
-                        onClick={function () {
-                            setShowEdit(pre => !pre)
-
-                        }}
-                    ><Reply fontSize="medium" /></Button>
-                </Box>
-
-
-                <Collapse in={showEdit} unmountOnExit={true}>
-                    <Box sx={{}}>
-                        <SimpleEtx
-                            contentId={comment._id}
-
-                            peopleList={peopleList}
-                            avatarPeopleList={avatarPeopleList}
-                            genAvatarLink={genAvatarLink}
-                            downloadAvatarUrl={downloadAvatarUrl}
-                            userName={userName}
-                            onSubmit={function (newComment) {
-
-                                newComment.commentId = newComment.contentId.replace("content", "subComment")
-                                newComment._id = newComment._id.replace("comment", "subComment")
-                                delete newComment.contentId
-
-                                axios.post(`/api/subCommentBlock/createSubComment`, newComment)
-                                setShowEdit(false)
-                                setSubCommentArr(pre => [newComment, ...pre])
-                                setShowSubComment(true)
-                                setSubCommentNum(pre => pre + 1)
-                            }}
-                        />
-                    </Box>
-                </Collapse>
-
-                {
-                    subCommentArr.map(subComment => {
-
-                        return (
-
-
-                            <Collapse in={showSubComment} unmountOnExit={false}  key={subComment._id}> 
-                                <Box
-
-                                    sx={{
-                                        //bgcolor: theme.isLight ? theme.colorObj[100] : theme.colorObj[900]
-
-                                        bgcolor: theme.isLight ? "#eeeeee" : "#333333"
-                                        //   bgcolor:theme.palette.background.default
-                                    }}>
-                                    <Divider />
-                                    <Box sx={{ display: "flex", alignItems: "center", "py": "2px" }}>
-                                        <AvatarChip
-                                            bgTrans={true}
-                                            personName={subComment.ownerName}
-                                            downloadAvatarUrl={downloadAvatarUrl}
-                                            avatarPeopleList={avatarPeopleList}
-                                            genAvatarLink={genAvatarLink}
-                                            iconOn={true}
-                                        >
-                                            <span>{subComment.ownerName}</span>
-                                        </AvatarChip>
-
-
-                                        <Countdown date={new Date(subComment.postDate)} intervalDelay={1 * 1000}
-                                            renderer={function ({ days, hours, minutes, seconds, completed, ...props }) {
-                                                return <PostTimeRender  {...{ days, hours, minutes, seconds, completed, ...props }} />
-                                            }}
-                                            overtime={true}
-                                        />
-
-                                        <IconButton size="small" sx={{ marginLeft: "auto" }} onClick={function () {
-                                            axios.delete(`/api/subCommentBlock/deleteSubComment/${subComment._id}`)
-                                            setSubCommentArr(pre => {
-
-                                                return pre.filter((item) => (item._id !== subComment._id))
-
-                                            })
-                                            setSubCommentNum(pre => pre - 1)
-
-                                        }}><Close fontSize="medium" /></IconButton>
-
-
-                                    </Box>
-                                    <Box sx={{ display: "flex", alignItems: "center", "px": "4px", paddingBottom: "4px" }}>
-                                        {parse(subComment.content, options)}
-                                    </Box>
-                                </Box>
-                            </Collapse>
-                        )
-
-
+                        return pre.filter((item) => (item._id !== comment._id))
 
                     })
+                    setCommentNum(pre => pre - 1)
 
-                }
-
-                {(subCommentArr.length < subCommentNum) && showSubComment && < Button
-
-                    disabled={disableButton}
-                    sx={{ borderTopLeftRadius: "0px", borderTopRightRadius: "0px" }} fullWidth
-                    onClick={function () {
-                        setDisableButton(true)
-                        axios.get(`/api/subCommentBlock/getSubComment/${comment._id}/${String(subCommentArr.at(-1).postDate)}`).then(response => {
-                            setDisableButton(false)
-                            setSubCommentArr(pre => [...pre, ...response.data])
-                        })
-                    }}
-                >
-                    {subCommentArr.length + "/" + subCommentNum}
-                </Button>
-                }
+                }}><Close fontSize="medium" /></IconButton>
 
             </Box>
 
 
-     
+
+            <Box sx={{ display: "flex", alignItems: "center", paddingBottom: "4px" }}>
+                {parse(comment.content, options)}
+            </Box>
+
+
+            <Box sx={{ display: "flex", px: "0px", py: "0px", alignItems: "center", justifyContent: "space-between", "& .MuiBox-root": { fontSize: theme.sizeObj } }}>
+
+                <Button fullWidth variant='clear' sx={{ bgcolor: "transparent" }}
+                    onClick={function () {
+                        setShowSubComment(pre => !pre)
+
+                    }}
+
+                ><ChatBubbleOutline fontSize="medium" />{subCommentNum}</Button>
+                <Button fullWidth variant='clear' sx={{ bgcolor: "transparent" }}
+                    onClick={function () {
+                        setShowEdit(pre => !pre)
+
+                    }}
+                ><Reply fontSize="medium" /></Button>
+            </Box>
+
+
+            <Collapse in={showEdit} unmountOnExit={true}>
+                <Box sx={{}}>
+                    <SimpleEtx
+                        contentId={comment._id}
+
+                        peopleList={peopleList}
+                        avatarPeopleList={avatarPeopleList}
+                        genAvatarLink={genAvatarLink}
+                        downloadAvatarUrl={downloadAvatarUrl}
+                        userName={userName}
+                        onSubmit={function (newComment) {
+
+                            newComment.commentId = newComment.contentId.replace("content", "subComment")
+                            newComment._id = newComment._id.replace("comment", "subComment")
+                            delete newComment.contentId
+
+                            axios.post(`/api/subCommentBlock/createSubComment`, newComment)
+                            setShowEdit(false)
+                            setSubCommentArr(pre => [newComment, ...pre])
+                            setShowSubComment(true)
+                            setSubCommentNum(pre => pre + 1)
+                        }}
+                    />
+                </Box>
+            </Collapse>
+
+            {
+                subCommentArr.map(subComment => {
+
+                    return (
+
+
+                        <Collapse in={showSubComment} unmountOnExit={false} key={subComment._id}>
+                            <Box
+
+                                sx={{
+                                    //bgcolor: theme.isLight ? theme.colorObj[100] : theme.colorObj[900]
+
+                                    bgcolor: theme.isLight ? "#eeeeee" : "#333333"
+                                    //   bgcolor:theme.palette.background.default
+                                }}>
+                                <Divider />
+                                <Box sx={{ display: "flex", alignItems: "center", "py": "2px" }}>
+                                    <AvatarChip
+                                        bgTrans={true}
+                                        personName={subComment.ownerName}
+                                        downloadAvatarUrl={downloadAvatarUrl}
+                                        avatarPeopleList={avatarPeopleList}
+                                        genAvatarLink={genAvatarLink}
+                                        iconOn={true}
+                                    >
+                                        <span>{subComment.ownerName}</span>
+                                    </AvatarChip>
+
+
+                                    <Countdown date={new Date(subComment.postDate)} intervalDelay={(Date.now() - subComment.postDate) > (3600 * 1000) ? 3600 * 1000 : 60 * 1000}
+                                        renderer={function ({ days, hours, minutes, seconds, completed, ...props }) {
+                                            return <PostTimeRender  {...{ days, hours, minutes, seconds, completed, ...props }} />
+                                        }}
+                                        overtime={true}
+                                    />
+
+                                    <IconButton size="small" sx={{ marginLeft: "auto" }} onClick={function () {
+                                        axios.delete(`/api/subCommentBlock/deleteSubComment/${subComment._id}`)
+                                        setSubCommentArr(pre => {
+
+                                            return pre.filter((item) => (item._id !== subComment._id))
+
+                                        })
+                                        setSubCommentNum(pre => pre - 1)
+
+                                    }}><Close fontSize="medium" /></IconButton>
+
+
+                                </Box>
+                                <Box sx={{ display: "flex", alignItems: "center", "px": "4px", paddingBottom: "4px" }}>
+                                    {parse(subComment.content, options)}
+                                </Box>
+                            </Box>
+                        </Collapse>
+                    )
+
+
+
+                })
+
+            }
+
+            {(subCommentArr.length < subCommentNum) && showSubComment && < Button
+
+                disabled={disableButton}
+                sx={{ borderTopLeftRadius: "0px", borderTopRightRadius: "0px" }} fullWidth
+                onClick={function () {
+                    setDisableButton(true)
+                    axios.get(`/api/subCommentBlock/getSubComment/${comment._id}/${String(subCommentArr.at(-1).postDate)}`).then(response => {
+                        setDisableButton(false)
+                        setSubCommentArr(pre => [...pre, ...response.data])
+                    })
+                }}
+            >
+                {subCommentArr.length + "/" + subCommentNum}
+            </Button>
+            }
+
+        </Box>
+
+
+
     )
 
 }
