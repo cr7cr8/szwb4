@@ -257,7 +257,9 @@ export function ViewerContextProvider({
                             setShowComment(pre => !pre)
                         }}
                         sx={{ bgcolor: "transparent", borderTopLeftRadius: 0, borderTopRightRadius: 0, "&:hover": { bgcolor: theme.colorBgObj } }}>
-                        <ChatBubbleOutline fontSize="small" sx={{ color: theme.palette.text.secondary }} /><Typography sx={{ color: theme.palette.text.secondary }}>{commentNum}</Typography>
+                        <ChatBubbleOutline fontSize="small" sx={{ color: theme.palette.text.secondary }} />
+                        {commentNum}
+                        
                     </Button>
                     <Button fullWidth variant="clear"
                         onClick={function () {

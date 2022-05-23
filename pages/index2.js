@@ -151,9 +151,9 @@ function getTextBlock(req, res, next) {
 }
 
 export async function getServerSideProps(context) {
-    const coon =   await dbConnect["default"]()
+    const conn = await dbConnect["default"]()
 
-    
+
 
 
     const { params, query, req, res, ...props } = context
@@ -223,267 +223,125 @@ export default function App({ userName, contentArr = [], peopleList, avatarList 
             </Head>
 
 
-            {/* <Dialog
-                onBackdropClick={function () { }}
-               // fullWidth={true}
-                //  fullScreen={true}
-                open={true}
-                onClose={function () { }}
-                scroll={"body"}
-                sx={{}}
-            > */}
             {showAvatarPanel && <ImageAdjuster userName={userName} avatarPeopleList={avatarPeopleList}
                 setAvatarPeopleList={setAvatarPeopleList}
                 setShowAvatarPanel={setShowAvatarPanel} />}
-            {/* </Dialog> */}
-
-
-
-            <Box sx={{ display: "flex", bgcolor: theme.colorBgObj, justifyContent: "space-around" }}>
-
-
-                <Avatar
-                    alt="Remy Sharp"
-                    src={avatarPeopleList.includes(userName) ? "/api/avatar/downloadAvatar/" + userName : ""}
-                    sx={{ width: 50, height: 50 }}
-
-                    onClick={function () {
-                        setShowAvatarPanel(true)
-                    }}
-                />
-
-                {userName}
-                <Button onClick={function () { setShowEdit(true) }}>Edit</Button>
-
-            </Box>
-
-            <Dialog
-                onBackdropClick={function () {
-                    //setOpen(false) 
-                    setShowEdit(false)
-                }}
-                fullWidth={true}
-                //  fullScreen={true}
-                open={showEdit}
-                onClose={function () { }}
-                scroll={"paper"}
-
-
-
-                sx={{
-                    "& .MuiDialog-paper": {
-                        width: "100%",
-                        height: "auto",//bgcolor:"transparent",
-                        boxShadow: 0, borderRadius: "4px",
-                        overflowX: "hidden",
-                        //   overflowY:"auto",
-                        //   overflowY: "auto",
-                    },
-
-                    // "& > div > div": {
-                    //     overflowX: "visible",
-                    //     overflowY: "auto",
-                    //     //  overflow: "hidden",
-                    //     // paddingTop: "0px",
-
-                    //     //px: "8px",
-                    //     bgcolor: "pink",
-
-                    //     // width: "100%",
-                    //     // width: { xs: "95%", sm: "95%", md: "95%", lg: "95%", xl: "95%" },
-                    //     // mx: 0,
-
-                    // },
-
-                }}
-            >
-                <Grid container
-                    direction="row"
-                    justifyContent="space-around"
-                    alignItems="flex-start"
-                    spacing={0}
-                    sx={{}}
-                >
-                    <Grid item xs={10} sm={10} md={10} lg={10} xl={10} sx={{}}>
-
-
-                        <EditorCtx
-
-                            // onChange={function (preHtmlObj) {
-                            //     startTransition(function () {
-                            //         // setPreHtml(preHtml)
-                            //         setPostArr(pre => [preHtmlObj])
-                            //     })
-                            // }}
-                            userName={userName}
-                            peopleList={peopleList}
-                            avatarPeopleList={avatarPeopleList}
-                            downloadAvatarUrl={`/api/avatar/downloadAvatar/`}
-                            genAvatarLink={function (downloadAvatarUrl, personName) {
-                                return downloadAvatarUrl + personName
-                            }}
-
-                            onSubmit={function (preHtmlObj, { editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum, setDisableSubmit, clearState }) {
-
-                                //    console.log(preHtmlObj)
-                                const promiseArr = [
-                                    ...uploadPreHtml(preHtmlObj),  // commentOut when local
-                                    ...uploadImage(imageObj), // commentOut when local
-                                    ...uploadVote({ voteArr, voteTopic, pollDuration, voteId, postId: preHtmlObj._id }) // commentOut when local
-                                ]
-
-                                Promise.allSettled(promiseArr).then((arr) => {
-                                    setDisableSubmit(false)
-                                    setPostArr(pre => [preHtmlObj, ...pre])
-                                    setShowEdit(false)
-                                    clearState()
-                                })
-
-
-                            }}
-                        />
-
-                    </Grid>
-                </Grid>
-            </Dialog>
-
 
 
             <Container disableGutters={true} fixed={false} maxWidth={windowObj?.innerWidth >= 3000 ? false : "lg"} sx={{}} >
 
 
+
+
                 <Grid container
                     direction="row"
                     justifyContent="space-around"
                     alignItems="flex-start"
                     spacing={0}
-                    sx={{}}
+                    sx={{ "my": "8px" }}
+
                 >
-                    <Grid item xs={10} sm={10} md={10} lg={10} xl={10} sx={{}}>
+                    <Grid item xs={12} sm={8} md={6} lg={6} xl={6} sx={{}}>
+                        <Box sx={{
+                            display: "flex", bgcolor: theme.colorBgObj, justifyContent: "space-around", alignItems: "center",
+                            "mb": "8px", borderRadius: "4px", boxShadow: 1
+                        }}>
 
 
-                        {/* <EditorCtx
+                            <Avatar
+                                alt="Remy Sharp"
+                                src={avatarPeopleList.includes(userName) ? "/api/avatar/downloadAvatar/" + userName : ""}
+                                sx={{ width: 50, height: 50, "&:hover": { cursor: "pointer" } }}
+
+                                onClick={function () {
+                                    setShowAvatarPanel(true)
+                                }}
+                            />
+
+                            {userName}
+                            <Button
+                                onClick={function () {
+                                    setShowEdit(pre => !pre)
+                                }}
+                            >Edit</Button>
+
+                        </Box>
+
+                        <Collapse in={showEdit} unmountOnExit={true}>
+                            <EditorCtx
+
+                                // onChange={function (preHtmlObj) {
+                                //     startTransition(function () {
+                                //         // setPreHtml(preHtml)
+                                //         setPostArr(pre => [preHtmlObj])
+                                //     })
+                                // }}
+                                userName={userName}
+                                peopleList={peopleList}
+                                avatarPeopleList={avatarPeopleList}
+                                downloadAvatarUrl={`/api/avatar/downloadAvatar/`}
+                                genAvatarLink={function (downloadAvatarUrl, personName) {
+                                    return downloadAvatarUrl + personName
+                                }}
+
+                                onSubmit={function (preHtmlObj, { editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum, setDisableSubmit, clearState }) {
+
+                                    //    console.log(preHtmlObj)
+                                    const promiseArr = [
+                                        ...uploadPreHtml(preHtmlObj),  // commentOut when local
+                                        ...uploadImage(imageObj), // commentOut when local
+                                        ...uploadVote({ voteArr, voteTopic, pollDuration, voteId, postId: preHtmlObj._id }) // commentOut when local
+                                    ]
+
+                                    Promise.allSettled(promiseArr).then((arr) => {
+                                        setDisableSubmit(false)
+                                        setPostArr(pre => [preHtmlObj, ...pre])
+                                        setShowEdit(false)
+                                        clearState()
+                                    })
 
 
-                            // onChange={function (preHtmlObj) {
-                            //     startTransition(function () {
-                            //         // setPreHtml(preHtml)
-                            //         setPostArr(pre => [preHtmlObj])
-                            //     })
-                            // }}
-                            userName={userName}
-                            peopleList={peopleList}
-                            avatarPeopleList={["User380"]}
-                            downloadAvatarUrl={`https://picsum.photos/200`}
-                            genAvatarLink={function (downloadAvatarUrl, personName) {
-                                return downloadAvatarUrl// + personName
-                            }}
+                                }}
+                            />
+                        </Collapse>
+                        <Box sx={{ "my": "8px" }} />
 
-                            onSubmit={function (preHtmlObj, { editorState, theme, voteArr, voteTopic, pollDuration, voteId, imageObj, imageBlockNum, setDisableSubmit, clearState }) {
+                        {postArr.map((preHtmlObj, index) => {
 
-                                //    console.log(preHtmlObj)
-                                const promiseArr = [
-                                    ...uploadPreHtml(preHtmlObj),  // commentOut when local
-                                    ...uploadImage(imageObj), // commentOut when local
-                                    ...uploadVote({ voteArr, voteTopic, pollDuration, voteId, postId: preHtmlObj._id }) // commentOut when local
-                                ]
+                            return (
+                                <NoSsr key={preHtmlObj._id}>
+                                    <ViewerCtx
 
-                                Promise.allSettled(promiseArr).then((arr) => {
-                                    setDisableSubmit(false)
-                                    clearState()
-                                    setPostArr(pre => [preHtmlObj, ...pre])
-                                })
-                            }}
+                                        userName={userName}
+                                        ownerName={preHtmlObj.ownerName}
+                                        preHtml={preHtmlObj.content}
+                                        preHtmlId={preHtmlObj._id}
+                                        postDate={Date.parse(preHtmlObj.postDate)}
 
-                        /> */}
+                                        setPostArr={setPostArr}
+
+                                        downloadImageUrl="/api/picture/downloadPicture/" // commentOut when local
+                                        downloadVoteUrl="/api/voteBlock/" // commentOut when local
+
+                                        peopleList={peopleList}
+                                        avatarPeopleList={avatarPeopleList}
+                                        downloadAvatarUrl={`/api/avatar/downloadAvatar/`}
+                                        genAvatarLink={function (downloadAvatarUrl, personName) {
+                                            return downloadAvatarUrl + personName
+                                        }}
+
+                                    />
+                                </NoSsr>
+                            )
+                        })}
+
                     </Grid>
                 </Grid>
 
 
 
 
-                <Divider sx={{ margin: "8px", opacity: 0 }} />
 
-
-
-                {/* 
-                <Masonry
-                    breakpointCols={breakpointColumnsObj}
-                    className="my-masonry-grid"
-                    columnClassName="my-masonry-grid_column"
-                >
-                    {postArr.map((preHtmlObj, index) => {
-
-                        return (
-                            <NoSsr key={preHtmlObj._id}>
-                                <ViewerCtx
-
-                                    userName={userName}
-                                    ownerName={preHtmlObj.ownerName}
-                                    preHtml={preHtmlObj.content}
-                                    preHtmlId={preHtmlObj._id}
-                                    postDate={Date.parse(preHtmlObj.postDate)}
-
-                                    setPostArr={setPostArr}
-
-                                    downloadImageUrl="/api/picture/downloadPicture/" // commentOut when local
-                                    downloadVoteUrl="/api/voteBlock/" // commentOut when local
-
-                                    peopleList={peopleList}
-                                    avatarPeopleList={avatarPeopleList}
-                                    downloadAvatarUrl={`/api/avatar/downloadAvatar/`}
-                                    genAvatarLink={function (downloadAvatarUrl, personName) {
-                                        return downloadAvatarUrl + personName
-                                    }}
-
-                                />
-                            </NoSsr>
-                        )
-                    })}
-                </Masonry> */}
-
-
-                <Box sx={{ display: "flex", flexDirection: "column" }}>
-                    <Grid container
-                        direction="row"
-                        justifyContent="space-around"
-                        alignItems="flex-start"
-                        spacing={0}
-                        sx={{}}
-                    >
-                        <Grid item xs={12} sm={8} md={6} lg={6} xl={6} sx={{}}>
-                            {postArr.map((preHtmlObj, index) => {
-
-                                return (
-                                    <NoSsr key={preHtmlObj._id}>
-                                        <ViewerCtx
-
-                                            userName={userName}
-                                            ownerName={preHtmlObj.ownerName}
-                                            preHtml={preHtmlObj.content}
-                                            preHtmlId={preHtmlObj._id}
-                                            postDate={Date.parse(preHtmlObj.postDate)}
-
-                                            setPostArr={setPostArr}
-
-                                            downloadImageUrl="/api/picture/downloadPicture/" // commentOut when local
-                                            downloadVoteUrl="/api/voteBlock/" // commentOut when local
-
-                                            peopleList={peopleList}
-                                            avatarPeopleList={avatarPeopleList}
-                                            downloadAvatarUrl={`/api/avatar/downloadAvatar/`}
-                                            genAvatarLink={function (downloadAvatarUrl, personName) {
-                                                return downloadAvatarUrl + personName
-                                            }}
-
-                                        />
-                                    </NoSsr>
-                                )
-                            })}
-                        </Grid>
-
-                    </Grid>
-                </Box>
 
             </Container>
         </>
@@ -646,7 +504,7 @@ function ImageAdjuster({ userName, avatarPeopleList, setAvatarPeopleList, setSho
                     zIndex: 1000, overflow: "hidden",
                     position: "fixed", display: "flex",
                     justifyContent: "center", alignItems: "center",
-                    bgcolor: "rgba( 0,0,0,0.5 )",
+                    bgcolor: "rgba( 0,0,0,0.7 )",
                     '& div[data-testid*="cropper"]': { borderRadius: "1000px" }
                 }}
 
@@ -662,7 +520,10 @@ function ImageAdjuster({ userName, avatarPeopleList, setAvatarPeopleList, setSho
 
 
                     sx={{
-                        width: 300, height: 300, position: "relative",// bgcolor: "lightgreen", borderRadius: "1000px" ,
+                        width: 300, height: 300, position: "relative",
+
+
+                        // bgcolor: "lightgreen", borderRadius: "1000px" ,
                         // overflow:"hidden"
                     }}>
                     <Cropper image={avatarString}
