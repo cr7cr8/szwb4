@@ -212,15 +212,6 @@ export default function App({ userName, contentArr = [], peopleList, avatarList,
     const [disableCountButton, setDisableCountButton] = useState(false)
 
     const theme = useTheme()
-    // const breakpointColumnsObj = {
-    //     default: 1,
-    //     [theme.breakpoints.values.xs]: 1,
-    //     [theme.breakpoints.values.sm]: 1,
-    //     [theme.breakpoints.values.md]: 2,
-    //     [theme.breakpoints.values.lg]: 3,
-    //     [theme.breakpoints.values.xl]: 4,
-    //     2000: 4, 3000: 5, 4000: 6, 5000: 7, 6000: 8, 7000: 9, 9999999: 10,
-    // };
 
 
     const [myAvatar, setMyAvatar] = useState()
@@ -234,9 +225,22 @@ export default function App({ userName, contentArr = [], peopleList, avatarList,
             </Head>
 
 
-            {showAvatarPanel && <ImageAdjuster userName={userName} avatarPeopleList={avatarPeopleList}
+            {/* {showAvatarPanel && <ImageAdjuster userName={userName} avatarPeopleList={avatarPeopleList}
                 setAvatarPeopleList={setAvatarPeopleList}
-                setShowAvatarPanel={setShowAvatarPanel} />}
+                setShowAvatarPanel={setShowAvatarPanel} />} */}
+
+
+            <Dialog open={showAvatarPanel}
+
+                sx={{ '& div[data-testid*="cropper"]': { borderRadius: "1000px" } }}
+                onClose={function () {
+                    setShowAvatarPanel(false)
+                }}>
+                <ImageAdjuster userName={userName} avatarPeopleList={avatarPeopleList}
+                    setAvatarPeopleList={setAvatarPeopleList}
+                    setShowAvatarPanel={setShowAvatarPanel} />
+
+            </Dialog>
 
 
             <Container disableGutters={true} fixed={false} maxWidth={windowObj?.innerWidth >= 3000 ? false : "lg"} sx={{}} >
@@ -523,155 +527,154 @@ function ImageAdjuster({ userName, avatarPeopleList, setAvatarPeopleList, setSho
                 onChange={update}
             />
 
+
             <Box
+                onClick={function (e) {
+                    e.stopPropagation()
+                }}
+
+
                 sx={{
-                    width: "100vw", height: "100vh",
-                    zIndex: 1000, overflow: "hidden",
-                    position: "fixed", display: "flex",
-                    justifyContent: "center", alignItems: "center",
-                    bgcolor: "rgba( 0,0,0,0.7 )",
-                    '& div[data-testid*="cropper"]': { borderRadius: "1000px" }
-                }}
+                    width: 300, height: 300, position: "relative",
 
-                onClick={function () {
-                    setShowAvatarPanel(false)
-                }}
 
-            >
-                <Box
-                    onClick={function (e) {
-                        e.stopPropagation()
+                    // bgcolor: "lightgreen", borderRadius: "1000px" ,
+                    // overflow:"hidden"
+                }}>
+                <Cropper image={avatarString}
+                    aspect={1}
+                    crop={crop}
+
+                    //     style={{ height: "100%", width: "100%", display: "block" }}
+                    rotation={rotation}
+                    zoom={zoom}
+                    onCropChange={setCrop}
+
+
+                    onRotationChange={setRotation}
+                    onCropComplete={onCropComplete}
+
+                    onZoomChange={setZoom}
+
+                />
+
+
+                <IconButton sx={{
+                    fontSize: "2rem", width: "2.5rem", height: "2.5rem",
+                    position: "absolute", top: 8, left: 8,
+                    zIndex: 80,
+                    bgcolor: "rgba(255,255,255,0.3)"
+                }}
+                    size="small"
+                    contentEditable={false} suppressContentEditableWarning={true}
+                    onClick={async function (e) {
+
+                        inputRef.current.click()
+
                     }}
+                >
+                    <AccountCircleOutlined fontSize="large" sx={{ "&:hover": { bgcolor: "rgba(255,255,255,0.5)", borderRadius: "1000px" } }} />
+                </IconButton>
 
 
+                <IconButton sx={{
+                    fontSize: "2rem", width: "2.5rem", height: "2.5rem",
+                    position: "absolute", top: 8, right: 8,
+                    zIndex: 80,
+                    bgcolor: "rgba(255,255,255,0.3)"
+                }}
+                    size="small"
+                    onClick={async function () {
+
+                        if (!avatarString) return
+
+                        const croppedImage = await getCroppedImg(
+                            avatarString,
+                            croppedAreaPixels,
+                            rotation,
+                        )
+
+
+                        setAvatarString(croppedImage)
+
+                        setCrop({ x: 0, y: 0 })
+                        setZoom(1)
+
+                  
+                    }}
+                >
+                    <Crop fontSize="large" sx={{ "&:hover": { bgcolor: "rgba(255,255,255,0.5)", borderRadius: "1000px" } }} />
+                </IconButton >
+
+
+
+
+                <Slider
+                    size="medium"
+                    value={zoom}
+                    min={1}
+                    max={3}
+                    step={0.1}
+                    aria-labelledby="Zoom"
+                    //  classes={{ root: classes.slider }}
+                    onChange={(e, zoom) => setZoom(zoom)}
                     sx={{
-                        width: 300, height: 300, position: "relative",
+                        //  padding: '22px 0px',
+                        //  marginLeft: "",
+                        marginLeft: "20px",
+                        marginRight: "20px",
+                        position: "absolute",
+                        bottom: 10,
+                        left: 0,
+                        right: 0,
+                        my: "0",
+                        width: "85%",
+                        mx: "auto",
+                        color: "skyblue",
 
-
-                        // bgcolor: "lightgreen", borderRadius: "1000px" ,
-                        // overflow:"hidden"
-                    }}>
-                    <Cropper image={avatarString}
-                        aspect={1}
-                        crop={crop}
-
-                        //     style={{ height: "100%", width: "100%", display: "block" }}
-                        rotation={rotation}
-                        zoom={zoom}
-                        onCropChange={setCrop}
-
-
-                        onRotationChange={setRotation}
-                        onCropComplete={onCropComplete}
-
-                        onZoomChange={setZoom}
-
-                    />
-
-
-                    <IconButton sx={{
-                        fontSize: "2rem", width: "2.5rem", height: "2.5rem",
-                        position: "absolute", top: 8, left: 8,
-                        zIndex: 80,
-                        bgcolor: "rgba(255,255,255,0.3)"
                     }}
-                        size="small"
-                        contentEditable={false} suppressContentEditableWarning={true}
-                        onClick={async function (e) {
-
-                            inputRef.current.click()
-
-                        }}
-                    >
-                        <AccountCircleOutlined fontSize="large" sx={{ "&:hover": { bgcolor: "rgba(255,255,255,0.5)", borderRadius: "1000px" } }} />
-                    </IconButton>
-
-
-                    <IconButton sx={{
-                        fontSize: "2rem", width: "2.5rem", height: "2.5rem",
-                        position: "absolute", top: 8, right: 8,
-                        zIndex: 80,
-                        bgcolor: "rgba(255,255,255,0.3)"
-                    }}
-                        size="small"
-                        onClick={async function () {
-
-                            if (!avatarString) return
-
-                            const croppedImage = await getCroppedImg(
-                                avatarString,
-                                croppedAreaPixels,
-                                rotation,
-                            )
-
-                   
-                            setAvatarString(croppedImage)
-
-                            setCrop({ x: 0, y: 0 })
-                            setZoom(1)
-
-                            fetch(croppedImage)
-                                .then(file => {
-                                    return file.blob()
-                                })
-                                .then(blobData => {
-
-                                    const data = new FormData();
-
-                                    data.append("file", new File([blobData], userName, { type: "image/jpeg" }))
-                                    data.append('obj', JSON.stringify({ ownerName: userName }));
-
-                                    return axios.post(`/api/avatar/uploadAvatar/${userName}`, data, {
-                                        headers: { 'content-type': 'multipart/form-data' },
-                                    }).then(response => {
-                                        console.log(response.data)
-                                        if (!avatarPeopleList.includes(userName)) {
-                                            setAvatarPeopleList(pre => ([...pre, userName]))
-
-                                        }
-                                        setShowAvatarPanel(false)
-                                        location.reload();
-                                    })
-                                })
-                        }}
-                    >
-                        <Crop fontSize="large" sx={{ "&:hover": { bgcolor: "rgba(255,255,255,0.5)", borderRadius: "1000px" } }} />
-                    </IconButton >
-
-
-
-
-                    <Slider
-                        size="medium"
-                        value={zoom}
-                        min={1}
-                        max={3}
-                        step={0.1}
-                        aria-labelledby="Zoom"
-                        //  classes={{ root: classes.slider }}
-                        onChange={(e, zoom) => setZoom(zoom)}
-                        sx={{
-                            //  padding: '22px 0px',
-                            //  marginLeft: "",
-                            marginLeft: "20px",
-                            marginRight: "20px",
-                            position: "absolute",
-                            bottom: 10,
-                            left: 0,
-                            right: 0,
-                            my: "0",
-                            width: "85%",
-                            mx: "auto",
-                            color: "skyblue",
-
-                        }}
-                    />
-    <Button fullWidth >upload</Button>
-
-                </Box>
+                />
 
 
             </Box>
+
+            <Button fullWidth onClick={async function () {
+
+                const croppedImage = await getCroppedImg(
+                    avatarString,
+                    croppedAreaPixels,
+                    rotation,
+                )
+
+                setShowAvatarPanel(false)
+                fetch(croppedImage)
+                    .then(file => {
+                        return file.blob()
+                    })
+                    .then(blobData => {
+
+                        const data = new FormData();
+
+                        data.append("file", new File([blobData], userName, { type: "image/jpeg" }))
+                        data.append('obj', JSON.stringify({ ownerName: userName }));
+
+                        return axios.post(`/api/avatar/uploadAvatar/${userName}`, data, {
+                            headers: { 'content-type': 'multipart/form-data' },
+                        }).then(response => {
+                            console.log(response.data)
+                            if (!avatarPeopleList.includes(userName)) {
+                                setAvatarPeopleList(pre => ([...pre, userName]))
+
+                            }
+                         
+                            location.reload();
+                        })
+                    })
+
+
+            }}  >upload</Button>
+
+
 
         </>
     )
