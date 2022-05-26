@@ -88,7 +88,7 @@ export default function ThemeContextProvider({ cssBaseLine = true, colorIndex, t
                 colorArr,
                 colorObj, setColorObj,
                 colorBgObj,
-              
+
 
                 setMode,
                 scaleSizeObj,
