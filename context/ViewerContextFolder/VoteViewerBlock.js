@@ -15,7 +15,7 @@ export default function VoteViewerBlock({ topic, duration, voteArr, voteId, expi
     const colorObj = theme.colorObj
 
 
-
+    
 
     const [expireTime, setExpireTime] = useState("")
 
