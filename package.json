@@ -2,6 +2,9 @@
   "name": "szwb4",
   "version": "0.1.0",
   "private": false,
+  "engines": {
+    "node": "16.14.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
