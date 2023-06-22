@@ -7,6 +7,7 @@ const nextConfig = {
     loader: "custom",
     path: "/",
   },
+
 }
 
 module.exports = nextConfig 

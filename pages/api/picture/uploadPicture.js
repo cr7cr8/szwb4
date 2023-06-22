@@ -21,7 +21,7 @@ const multer = require("multer");
 
 const tofileArr = multer({ storage: multer.memoryStorage() }).array("file", 789 /*789 is max count,default infinity*/)
 
-export const config = { api: { bodyParser: false } }
+export const config = { api: { bodyParser: false } }  //disabled it when uploading binary data like picutres
 
 export default async function handler(req, res) {
 

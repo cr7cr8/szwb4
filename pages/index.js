@@ -1,3 +1,5 @@
+/** @jsxRuntime classic */
+/** @jsx jsx */
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
@@ -40,6 +42,17 @@ import getCroppedImg from '../context/EditorContextFolder/cropImage';
 import { Crop, DoneRounded, Close, AddCircleOutline, AddAPhoto, AccountCircleOutlined } from '@mui/icons-material';
 import Masonry from 'react-masonry-css';
 import multiavatar from '@multiavatar/multiavatar';
+
+import { css, jsx } from '@emotion/react'
+
+const cssObj = [{
+    backgroundColor: 'hotpink',
+    '&:hover': {
+        color: 'lightgreen',
+        backgroundColor: "gray",
+    }
+}, { height: "300px" }]
+
 ///////////////////////////////////////import { TextBlock } from "../db/schema"
 const { TextBlock, User } = require("../db/schema");
 const signer = require('cookie-signature');
@@ -170,12 +183,12 @@ export async function getServerSideProps(context) {
 
 
     return {
-        ...(!req.userName) && {
-            redirect: {
-                destination: '/auth-page',
-                permanent: false,
-            }
-        },
+        // ...(!req.userName) && {
+        //     redirect: {
+        //         destination: '/auth-page',
+        //         permanent: false,
+        //     }
+        // },
         props: {
             userName: req?.userName || "guest",
             colorIndex: colorIndex ?? 5,
@@ -215,6 +228,15 @@ export default function App({ userName, contentArr = [], peopleList, avatarList,
 
     return (
         <>
+
+<div>aaaaaaaaaaaaaaa</div>
+
+            <div
+                css={cssObj}
+            >
+                This has a hotpink background.
+            </div>
+
             <Head>
                 <title>Draft Page</title>
                 <meta name="Dafter editor" content="Draf Editor" />
@@ -597,7 +619,7 @@ function ImageAdjuster({ userName, avatarPeopleList, setAvatarPeopleList, setSho
                         setCrop({ x: 0, y: 0 })
                         setZoom(1)
 
-                  
+
                     }}
                 >
                     <Crop fontSize="large" sx={{ "&:hover": { bgcolor: "rgba(255,255,255,0.5)", borderRadius: "1000px" } }} />
@@ -663,7 +685,7 @@ function ImageAdjuster({ userName, avatarPeopleList, setAvatarPeopleList, setSho
                                 setAvatarPeopleList(pre => ([...pre, userName]))
 
                             }
-                         
+
                             location.reload();
                         })
                     })

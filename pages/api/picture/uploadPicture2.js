@@ -18,7 +18,7 @@ function runMiddleware(req, res, fn) {
     })
 }
 
-export const config = { api: { bodyParser: false }}
+export const config = { api: { bodyParser: false }}  //disabled it when uploading binary data like picutres
 export default async function handler(req, res) {
 
     await runMiddleware(req, res, function (req, res, next) {

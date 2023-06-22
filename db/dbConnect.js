@@ -8,6 +8,8 @@ if (!MONGODB_URI) {
   )
 }
 
+//https://github.com/netlify/netlify-plugin-nextjs/issues/191
+
 /**
  * Global is used here to maintain a cached connection across hot reloads
  * in development. This prevents connections growing exponentially
